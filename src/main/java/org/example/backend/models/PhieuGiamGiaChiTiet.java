@@ -3,6 +3,8 @@ package org.example.backend.models;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -26,6 +28,7 @@ import java.util.UUID;
 @Table(name = "phieu_giam_gia_chi_tiet")
 public class PhieuGiamGiaChiTiet {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @ColumnDefault("newid()")
     @Column(name = "id", nullable = false)
     private UUID id;

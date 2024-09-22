@@ -2,6 +2,8 @@ package org.example.backend.models;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
@@ -26,6 +28,7 @@ import java.util.UUID;
 @Table(name = "dot_giam_gia")
 public class DotGiamGia {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @ColumnDefault("newid()")
     @Column(name = "id", nullable = false)
     private UUID id;
@@ -79,4 +82,22 @@ public class DotGiamGia {
     @Column(name = "trang_thai")
     private String trangThai;
 
+    @Override
+    public String toString() {
+        return "DotGiamGia{" +
+                "id=" + id +
+                ", ma='" + ma + '\'' +
+                ", ten='" + ten + '\'' +
+                ", giaTri=" + giaTri +
+                ", ngayBatDau=" + ngayBatDau +
+                ", ngayKetThuc=" + ngayKetThuc +
+                ", loai=" + loai +
+                ", nguoiSua='" + nguoiSua + '\'' +
+                ", nguoiTao='" + nguoiTao + '\'' +
+                ", ngayTao=" + ngayTao +
+                ", ngaySua=" + ngaySua +
+                ", deleted=" + deleted +
+                ", trangThai='" + trangThai + '\'' +
+                '}';
+    }
 }

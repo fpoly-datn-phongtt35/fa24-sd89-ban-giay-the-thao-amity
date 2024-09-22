@@ -1,6 +1,6 @@
-package org.example.backend.constant.api;
+package org.example.backend.constants.api;
 
-import static org.example.backend.constant.api.ApiUrl.API_BASE;
+import static org.example.backend.constants.api.ApiUrl.API_BASE;
 
 public class Admin {
     public static final String BASE = API_BASE + "/admin";

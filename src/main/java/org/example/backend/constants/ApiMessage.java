@@ -1,4 +1,4 @@
-package org.example.backend.constant;
+package org.example.backend.constants;
 
 public class ApiMessage {
     // Thông báo chung

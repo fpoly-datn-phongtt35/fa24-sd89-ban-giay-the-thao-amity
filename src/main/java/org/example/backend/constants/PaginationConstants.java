@@ -1,4 +1,4 @@
-package org.example.backend.constant;
+package org.example.backend.constants;
 
 public class PaginationConstants {
     public static final int DEFAULT_PAGE_SIZE = 10;
