@@ -2,6 +2,8 @@ package org.example.backend.models;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
@@ -26,6 +28,7 @@ import java.util.UUID;
 @Table(name = "phieu_giam_gia")
 public class PhieuGiamGia {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @ColumnDefault("newid()")
     @Column(name = "id", nullable = false)
     private UUID id;
