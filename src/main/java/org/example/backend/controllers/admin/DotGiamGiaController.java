@@ -1,6 +1,6 @@
 package org.example.backend.controllers.admin;
 
-import org.example.backend.dto.request.DotGiamGiaRequest;
+import org.example.backend.dto.request.dotGiamGia.DotGiamGiaRequest;
 import org.example.backend.mapper.DotGiamGiaMapper;
 import org.example.backend.models.DotGiamGia;
 import org.example.backend.services.DotGiamGiaService;

@@ -1,4 +1,4 @@
-package org.example.backend.dto.request;
+package org.example.backend.dto.request.dotGiamGia;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,7 +8,6 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.Instant;
-import java.util.UUID;
 
 @Getter
 @Setter
