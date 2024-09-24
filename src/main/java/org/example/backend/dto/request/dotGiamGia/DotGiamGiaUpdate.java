@@ -1,35 +1,21 @@
-package org.example.backend.dto.response.dotGiamGia;
-
-import lombok.Builder;
+package org.example.backend.dto.request.dotGiamGia;
 
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.UUID;
 
-@Builder
-public class DotGiamGiaGetAll {
+import static org.example.backend.constants.Constant.CURRENT_TIME;
+
+public class DotGiamGiaUpdate {
     private UUID id;
     private String ma;
     private String ten;
     private BigDecimal giaTri;
     private Instant ngayBatDau;
     private Instant ngayKetThuc;
+    private Instant ngaySua = CURRENT_TIME;
     private Boolean loai;
     private String trangThai;
-
-    public DotGiamGiaGetAll() {
-    }
-
-    public DotGiamGiaGetAll(UUID id, String ma, String ten, BigDecimal giaTri, Instant ngayBatDau, Instant ngayKetThuc, Boolean loai, String trangThai) {
-        this.id = id;
-        this.ma = ma;
-        this.ten = ten;
-        this.giaTri = giaTri;
-        this.ngayBatDau = ngayBatDau;
-        this.ngayKetThuc = ngayKetThuc;
-        this.loai = loai;
-        this.trangThai = trangThai;
-    }
 
     public UUID getId() {
         return id;
@@ -79,6 +65,14 @@ public class DotGiamGiaGetAll {
         this.ngayKetThuc = ngayKetThuc;
     }
 
+    public Instant getNgaySua() {
+        return ngaySua;
+    }
+
+    public void setNgaySua(Instant ngaySua) {
+        this.ngaySua = ngaySua;
+    }
+
     public Boolean getLoai() {
         return loai;
     }
@@ -93,5 +87,20 @@ public class DotGiamGiaGetAll {
 
     public void setTrangThai(String trangThai) {
         this.trangThai = trangThai;
+    }
+
+    public DotGiamGiaUpdate(UUID id, String ma, String ten, BigDecimal giaTri, Instant ngayBatDau, Instant ngayKetThuc, Instant ngaySua, Boolean loai, String trangThai) {
+        this.id = id;
+        this.ma = ma;
+        this.ten = ten;
+        this.giaTri = giaTri;
+        this.ngayBatDau = ngayBatDau;
+        this.ngayKetThuc = ngayKetThuc;
+        this.ngaySua = ngaySua;
+        this.loai = loai;
+        this.trangThai = trangThai;
+    }
+
+    public DotGiamGiaUpdate() {
     }
 }
