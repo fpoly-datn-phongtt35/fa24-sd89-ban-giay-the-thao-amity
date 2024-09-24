@@ -18,18 +18,17 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Nationalized;
 
 import java.util.UUID;
-
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @Entity
-@Table(name = "dot_giam_gia_chi_tiet")
-public class DotGiamGiaChiTiet {
+@Table(name = "dot_giam_gia_spct")
+public class DotGiamGiaSpct {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     @ColumnDefault("newid()")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
     private UUID id;
 

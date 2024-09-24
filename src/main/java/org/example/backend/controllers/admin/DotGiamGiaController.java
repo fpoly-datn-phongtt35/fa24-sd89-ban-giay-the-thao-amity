@@ -1,6 +1,6 @@
 package org.example.backend.controllers.admin;
 
-import org.example.backend.dto.request.dotGiamGia.DotGiamGiaRequest;
+import org.example.backend.dto.request.dotGiamGia.DotGiamGiaCreate;
 import org.example.backend.mapper.DotGiamGiaMapper;
 import org.example.backend.models.DotGiamGia;
 import org.example.backend.services.DotGiamGiaService;
@@ -23,7 +23,7 @@ import static org.example.backend.constants.api.Admin.SALE_UPDATE;
 
 @RestController
 public class DotGiamGiaController {
-     final DotGiamGiaService dotGiamGiaService;
+    final DotGiamGiaService dotGiamGiaService;
 
     public DotGiamGiaController(DotGiamGiaService dotGiamGiaService, DotGiamGiaMapper dotGiamGiaMapper) {
         this.dotGiamGiaService = dotGiamGiaService;
@@ -34,21 +34,21 @@ public class DotGiamGiaController {
 
     @GetMapping(SALE_GET_ALL)
     public ResponseEntity<?> getAllSale(){
-        return ResponseEntity.ok().body(dotGiamGiaService.findAll());
+        return ResponseEntity.ok().body(dotGiamGiaService.getDotGiamGiaGetAll());
     }
 
     @PostMapping(SALE_CREATE)
-    public ResponseEntity<?> createSale(@RequestBody DotGiamGiaRequest dotGiamGiaRequest){
+    public ResponseEntity<?> createSale(@RequestBody DotGiamGiaCreate dotGiamGiaCreate){
         DotGiamGia d = new DotGiamGia();
-        System.out.println("dd >>>>>>>>>>>>>>>>>"+d);
-        System.out.println(dotGiamGiaRequest);
-        DotGiamGia dotGiamGia = dotGiamGiaMapper.toDotGiamGia(dotGiamGiaRequest);
-        System.out.println(dotGiamGia);
-        return ResponseEntity.ok().body(dotGiamGiaService.save(dotGiamGia));
+        System.out.println("..............d: "+d);
+        d = dotGiamGiaMapper.toDotGiamGia(dotGiamGiaCreate);
+        System.out.println("..........................d: "+d);
+
+        return ResponseEntity.ok().body(dotGiamGiaService.save(d));
     }
 
     @PutMapping(SALE_UPDATE)
-    public ResponseEntity<?> updateSale(@RequestBody DotGiamGiaRequest dto, @PathVariable UUID id){
+    public ResponseEntity<?> updateSale(@RequestBody DotGiamGiaCreate dto, @PathVariable UUID id){
 //        Optional<DotGiamGia> dotGiamGia = dotGiamGiaService.findById(id);
 //        if (dotGiamGia.isPresent()) {
 //            return ResponseEntity.ok().body(dotGiamGiaService.save(dotGiamGiaMapper.toDotGiamGia(dto)));
