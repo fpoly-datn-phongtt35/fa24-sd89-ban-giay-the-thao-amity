@@ -15,18 +15,16 @@ public class DotGiamGiaCreate {
     private BigDecimal giaTri;
     private Instant ngayBatDau;
     private Instant ngayKetThuc;
-    private Instant ngayTao = CURRENT_TIME;
     private Boolean loai;
     private String trangThai;
 
 
-    public DotGiamGiaCreate(String ma, String ten, BigDecimal giaTri, Instant ngayBatDau, Instant ngayKetThuc, Instant ngayTao, Boolean loai,String trangThai) {
+    public DotGiamGiaCreate(String ma, String ten, BigDecimal giaTri, Instant ngayBatDau, Instant ngayKetThuc, Boolean loai,String trangThai) {
         this.ma = ma;
         this.ten = ten;
         this.giaTri = giaTri;
         this.ngayBatDau = ngayBatDau;
         this.ngayKetThuc = ngayKetThuc;
-        this.ngayTao = ngayTao;
         this.loai = loai;
         this.trangThai = trangThai;
     }
@@ -91,18 +89,10 @@ public class DotGiamGiaCreate {
                 ", giaTri=" + giaTri +
                 ", ngayBatDau=" + ngayBatDau +
                 ", ngayKetThuc=" + ngayKetThuc +
-                ", ngaySua=" + ngayTao +
                 ", loai=" + loai +
                 '}';
     }
 
-    public Instant getNgayTao() {
-        return ngayTao;
-    }
-
-    public void setNgayTao(Instant ngayTao) {
-        this.ngayTao = ngayTao;
-    }
 
     public String getTrangThai() {
         return trangThai;
