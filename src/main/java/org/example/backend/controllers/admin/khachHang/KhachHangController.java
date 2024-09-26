@@ -18,12 +18,11 @@ import static org.example.backend.constants.api.Admin.*;
 @RestController
 public class KhachHangController {
 final KhachHangService khachHangService;
-final KhachHangMapper khachHangMapper;
+
 private final NguoiDungRepository nguoiDungRepository;
 
-public KhachHangController(KhachHangService khachHangService, KhachHangMapper khachHangMapper, NguoiDungRepository nguoiDungRepository){
+public KhachHangController(KhachHangService khachHangService, NguoiDungRepository nguoiDungRepository){
     this.khachHangService = khachHangService;
-    this.khachHangMapper = khachHangMapper;
     this.nguoiDungRepository = nguoiDungRepository;
 }
 @GetMapping(CUSTOMER_GET_ALL)
@@ -33,7 +32,7 @@ public KhachHangController(KhachHangService khachHangService, KhachHangMapper kh
 @PostMapping(CUSTOMER_CREATE)
     public ResponseEntity<?> createCustomer(@RequestBody KhachHangCreate khachHangCreate){
     NguoiDung nguoiDung = new NguoiDung();
-    khachHangMapper.createToKhachHang(khachHangCreate);
+//    khachHangMapper.createToKhachHang(khachHangCreate);
     return ResponseEntity.ok().body(khachHangService.save(nguoiDung));
 }
 @PutMapping(CUSTOMER_UPDATE)
@@ -45,7 +44,7 @@ public KhachHangController(KhachHangService khachHangService, KhachHangMapper kh
         return ResponseEntity.notFound().build();
     }
     NguoiDung nd = exitNguoiDung.get();
-    khachHangMapper.updateToKhachHang(khachHangUpdate,nd);
+//    khachHangMapper.updateToKhachHang(khachHangUpdate,nd);
     return ResponseEntity.ok().body(khachHangService.save(nd));
 
 }

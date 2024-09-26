@@ -6,7 +6,7 @@ import org.example.backend.dto.response.khachHang.KhachHangResponse;
 import org.example.backend.models.NguoiDung;
 import org.mapstruct.Mapper;
 
-@Mapper(componentModel = "spring")
+//@Mapper(componentModel = "spring")
 public interface KhachHangMapper {
     KhachHangCreate toKhachHangCreate(NguoiDung nguoiDung);
     NguoiDung createToKhachHang(KhachHangCreate dtoreq);
