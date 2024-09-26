@@ -2,11 +2,11 @@ package org.example.backend.controllers.admin.khachHang;
 
 import org.example.backend.dto.request.khachHang.KhachHangCreate;
 import org.example.backend.dto.request.khachHang.KhachHangUpdate;
-import org.example.backend.mapper.KhachHangMapper;
+import org.example.backend.mapper.khachHang.KhachHangMapper;
 import org.example.backend.models.NguoiDung;
 import org.example.backend.repositories.NguoiDungRepository;
 import org.example.backend.services.KhachHangService;
-import org.example.backend.services.NguoiDungService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,13 +17,16 @@ import static org.example.backend.constants.api.Admin.*;
 
 @RestController
 public class KhachHangController {
+    final
+    KhachHangMapper khachHangMapper;
 final KhachHangService khachHangService;
 
 private final NguoiDungRepository nguoiDungRepository;
 
-public KhachHangController(KhachHangService khachHangService, NguoiDungRepository nguoiDungRepository){
+public KhachHangController(KhachHangService khachHangService, NguoiDungRepository nguoiDungRepository, KhachHangMapper khachHangMapper){
     this.khachHangService = khachHangService;
     this.nguoiDungRepository = nguoiDungRepository;
+    this.khachHangMapper = khachHangMapper;
 }
 @GetMapping(CUSTOMER_GET_ALL)
     public ResponseEntity<?> getAllCustomer(){
@@ -32,7 +35,7 @@ public KhachHangController(KhachHangService khachHangService, NguoiDungRepositor
 @PostMapping(CUSTOMER_CREATE)
     public ResponseEntity<?> createCustomer(@RequestBody KhachHangCreate khachHangCreate){
     NguoiDung nguoiDung = new NguoiDung();
-//    khachHangMapper.createToKhachHang(khachHangCreate);
+    khachHangMapper.createNguoiDungFromDto(khachHangCreate,nguoiDung);
     return ResponseEntity.ok().body(khachHangService.save(nguoiDung));
 }
 @PutMapping(CUSTOMER_UPDATE)
@@ -44,13 +47,20 @@ public KhachHangController(KhachHangService khachHangService, NguoiDungRepositor
         return ResponseEntity.notFound().build();
     }
     NguoiDung nd = exitNguoiDung.get();
-//    khachHangMapper.updateToKhachHang(khachHangUpdate,nd);
+    khachHangMapper.updateNguoiDungFromDto(khachHangUpdate,nd);
     return ResponseEntity.ok().body(khachHangService.save(nd));
 
 }
-@GetMapping(CUSTOMER_DELETE)
+@DeleteMapping(CUSTOMER_DELETE)
     public ResponseEntity<?> deleteCustomer(@PathVariable UUID id){
-    khachHangService.setDeletedKhachHang(id);
-    return ResponseEntity.ok().body(khachHangService.getAllKhachHang());
+    NguoiDung nd = khachHangService.findById(id).orElse(null);
+
+    if(nd != null){
+        khachHangService.setDeletedKhachHang(id);
+        return ResponseEntity.ok().body("Deleted id: " + id);
+    }
+    return ResponseEntity.notFound().build();
+
 }
+
 }

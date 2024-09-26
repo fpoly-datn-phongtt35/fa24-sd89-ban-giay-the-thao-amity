@@ -13,10 +13,6 @@ public class KhachHangUpdate {
     private Instant ngaySinh;
     private String gioiTinh;
     private Integer diem;
-    private String nguoiTao;
-    private String nguoiSua;
-    private Instant ngayTao;
-    private Instant ngaySua;
     private String trangThai;
     private Boolean deleted;
 
@@ -95,37 +91,7 @@ public class KhachHangUpdate {
         this.diem = diem;
     }
 
-    public String getNguoiTao() {
-        return nguoiTao;
-    }
 
-    public void setNguoiTao(String nguoiTao) {
-        this.nguoiTao = nguoiTao;
-    }
-
-    public String getNguoiSua() {
-        return nguoiSua;
-    }
-
-    public void setNguoiSua(String nguoiSua) {
-        this.nguoiSua = nguoiSua;
-    }
-
-    public Instant getNgayTao() {
-        return ngayTao;
-    }
-
-    public void setNgayTao(Instant ngayTao) {
-        this.ngayTao = ngayTao;
-    }
-
-    public Instant getNgaySua() {
-        return ngaySua;
-    }
-
-    public void setNgaySua(Instant ngaySua) {
-        this.ngaySua = ngaySua;
-    }
 
     public String getTrangThai() {
         return trangThai;
@@ -143,7 +109,7 @@ public class KhachHangUpdate {
         this.deleted = deleted;
     }
 
-    public KhachHangUpdate(UUID id, String ma, String email, String sdt, String ten, String diaChi, Instant ngaySinh, String gioiTinh, Integer diem, String nguoiTao, String nguoiSua, Instant ngayTao, Instant ngaySua, String trangThai, Boolean deleted) {
+    public KhachHangUpdate(UUID id, String ma, String email, String sdt, String ten, String diaChi, Instant ngaySinh, String gioiTinh, Integer diem, String trangThai, Boolean deleted) {
         this.id = id;
         this.ma = ma;
         this.email = email;
@@ -153,10 +119,6 @@ public class KhachHangUpdate {
         this.ngaySinh = ngaySinh;
         this.gioiTinh = gioiTinh;
         this.diem = diem;
-        this.nguoiTao = nguoiTao;
-        this.nguoiSua = nguoiSua;
-        this.ngayTao = ngayTao;
-        this.ngaySua = ngaySua;
         this.trangThai = trangThai;
         this.deleted = deleted;
     }
