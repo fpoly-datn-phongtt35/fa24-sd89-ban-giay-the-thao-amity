@@ -1,8 +1,6 @@
 package org.example.backend.services;
 
 import org.example.backend.dto.response.khachHang.KhachHangResponse;
-import org.example.backend.mapper.KhachHangMapper;
-import org.example.backend.mapper.NhanVienMapper;
 import org.example.backend.models.NguoiDung;
 import org.example.backend.repositories.NguoiDungRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
