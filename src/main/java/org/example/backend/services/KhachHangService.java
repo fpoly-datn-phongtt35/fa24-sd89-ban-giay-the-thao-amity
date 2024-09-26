@@ -12,14 +12,17 @@ import java.util.List;
 import java.util.UUID;
 @Service
 public class KhachHangService extends GenericServiceImpl<NguoiDung, UUID>{
-    private final KhachHangMapper khachHangMapper;
-public KhachHangService(JpaRepository<NguoiDung, UUID> repository, NguoiDungRepository khachHangRespository, KhachHangMapper  khachHangMapper){
+
+public KhachHangService(JpaRepository<NguoiDung, UUID> repository, NguoiDungRepository khachHangRespository){
     super(repository);
     this.khachHangRespository = khachHangRespository;
-    this.khachHangMapper = khachHangMapper;
+
 }
 private final NguoiDungRepository khachHangRespository;
 public List<KhachHangResponse> getAllKhachHang(){
     return  khachHangRespository.getAllKhachHang();
 }
+    public void setDeletedKhachHang(UUID id){
+khachHangRespository.deletedKhachHangStatus(id);
+    }
 }
