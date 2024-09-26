@@ -35,15 +35,15 @@ public class NhanVienRequestUpdate {
 
     private String cccd;
 
-    private Integer diem;
-
-    private String nguoiTao;
-
-    private String nguoiSua;
-
-    private Instant ngayTao;
-
-    private Instant ngaySua;
+//    private Integer diem;
+//
+//    private String nguoiTao;
+//
+//    private String nguoiSua;
+//
+//    private Instant ngayTao;
+//
+//    private Instant ngaySua;
 
     private String chucVu;
 
