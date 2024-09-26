@@ -32,5 +32,7 @@ public class NguoiDungService extends GenericServiceImpl<NguoiDung , UUID> {
     public List<NhanVienRespon> getAllNhanVien(){
         return nhanVienRespository.getAllNhanVien();
     }
-
+    public void setDeletedNhanVien(UUID id){
+        nhanVienRespository.deleteNhanVienStatus(id);
+    }
 }

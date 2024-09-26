@@ -9,13 +9,16 @@ import org.example.backend.models.DotGiamGia;
 import org.example.backend.models.NguoiDung;
 
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring")
 public interface NhanVienMapper {
-    NhanVienRequestAdd toNhanVienRequest(NguoiDung nguoiDung);
-    NguoiDung createToNhanVien(NhanVienRequestAdd dtoreq);
-    NguoiDung updateToNhanVien(NhanVienRequestUpdate dtoreq);
-    NhanVienRequestUpdate toDotGiamGiaResponse(NguoiDung dto);
-    NguoiDung getAllNhanVien(NhanVienRespon dtoreq);
-    NhanVienRespon getAllNhanVienRespon(NguoiDung dto);
+//
+    @Mapping(target = "id" , ignore = true)
+    void createToNhanVien(NhanVienRequestAdd dto, @MappingTarget NguoiDung entity);
+    @Mapping(target = "id" , ignore = true)
+    void updateToNhanVien(NhanVienRequestUpdate dto , @MappingTarget NguoiDung entity);
+
+    void getDtoFormNhanVien(@MappingTarget NhanVienRespon dto , NguoiDung entity) ;
 }
