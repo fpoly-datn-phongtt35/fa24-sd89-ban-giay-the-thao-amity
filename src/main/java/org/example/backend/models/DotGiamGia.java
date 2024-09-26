@@ -6,12 +6,15 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.example.backend.constants.Status;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Nationalized;
 
@@ -31,9 +34,8 @@ import static org.example.backend.constants.Constant.CURRENT_TIME;
 public class DotGiamGia {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @ColumnDefault("newid()")
     @Column(name = "id", nullable = false)
-    private UUID id;
+    private UUID id = UUID.randomUUID();
 
     @Nationalized
     @Column(name = "ma", length = 50)
@@ -83,6 +85,20 @@ public class DotGiamGia {
     @Nationalized
     @Column(name = "trang_thai")
     private String trangThai;
+
+    @PrePersist
+    public void prePersist() {
+        // Set default creation and modification dates
+        this.ngayTao = CURRENT_TIME;
+        this.deleted = Boolean.FALSE;
+        this.trangThai = Status.HOAT_DONG;
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        // Update modification date when the record is updated
+        this.ngaySua = CURRENT_TIME;
+    }
 
     @Override
     public String toString() {

@@ -64,6 +64,7 @@ public class Admin {
     public static final String SALE_CREATE = SALE + "/create";
     public static final String SALE_UPDATE = SALE + "/update/{id}";
     public static final String SALE_DELETE = SALE + "/delete/{id}";
+    public static final String SALE_SET_DELETE = SALE + "/deleted/{id}";
 
     // Endpoint SALE_DETAIL
     public static final String SALE_DETAIL = BASE + "/sale-detail";

@@ -48,5 +48,5 @@ public class NhanVienRespon {
 
 //    private String trangThai;
 //
-//    private Boolean deleted;
+    private Boolean deleted;
 }
