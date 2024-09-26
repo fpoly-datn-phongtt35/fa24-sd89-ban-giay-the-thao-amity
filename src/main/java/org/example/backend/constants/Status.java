@@ -1,6 +1,9 @@
 package org.example.backend.constants;
 
 public class Status {
+    public static final int DIEU_KIEN = -1;
+    public static final String TAT_CA = "Tất cả";
+
     public static final String HOAT_DONG = "Hoạt động";
     public static final String NGUNG_HOAT_DONG = "Ngưng hoạt động";
     public static final String HET_HAN = "Hết hạn";

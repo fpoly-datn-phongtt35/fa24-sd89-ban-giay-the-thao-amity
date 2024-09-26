@@ -16,11 +16,10 @@ public class DotGiamGiaResponse {
     private Instant ngayKetThuc;
     private Boolean loai;
     private String trangThai;
+    private String hinhThuc;
+    private Integer dieuKien;
 
-    public DotGiamGiaResponse() {
-    }
-
-    public DotGiamGiaResponse(UUID id, String ma, String ten, BigDecimal giaTri, Instant ngayBatDau, Instant ngayKetThuc, Boolean loai, String trangThai) {
+    public DotGiamGiaResponse(UUID id, String ma, String ten, BigDecimal giaTri, Instant ngayBatDau, Instant ngayKetThuc, Boolean loai, String trangThai, String hinhThuc, Integer dieuKien) {
         this.id = id;
         this.ma = ma;
         this.ten = ten;
@@ -29,6 +28,27 @@ public class DotGiamGiaResponse {
         this.ngayKetThuc = ngayKetThuc;
         this.loai = loai;
         this.trangThai = trangThai;
+        this.hinhThuc = hinhThuc;
+        this.dieuKien = dieuKien;
+    }
+
+    public DotGiamGiaResponse() {
+    }
+
+    public String getHinhThuc() {
+        return hinhThuc;
+    }
+
+    public void setHinhThuc(String hinhThuc) {
+        this.hinhThuc = hinhThuc;
+    }
+
+    public Integer getDieuKien() {
+        return dieuKien;
+    }
+
+    public void setDieuKien(Integer dieuKien) {
+        this.dieuKien = dieuKien;
     }
 
     public UUID getId() {
