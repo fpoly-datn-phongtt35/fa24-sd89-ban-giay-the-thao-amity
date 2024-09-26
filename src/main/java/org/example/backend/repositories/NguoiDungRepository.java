@@ -17,12 +17,6 @@ public interface NguoiDungRepository extends JpaRepository<NguoiDung, UUID> {
     from NguoiDung nd where nd.chucVu = 'nhanvien' and nd.deleted = true
 """)
     List<NhanVienRespon> getAllNhanVien();
-//    KhachHang
-    @Query("""
-    select new org.example.backend.dto.response.khachHang.KhachHangResponse(nd.ma,nd.email,nd.sdt,nd.ten,nd.diaChi,nd.ngaySinh,nd.gioiTinh,nd.diem,nd.nguoiTao,nd.nguoiSua, nd.ngayTao, nd.ngaySua,nd.trangThai,nd.deleted)
-    from NguoiDung nd where nd.chucVu = 'khachhang'
-""")
-    List<KhachHangResponse> getAllKhachHang();
 
     @Transactional
     @Modifying
@@ -33,4 +27,18 @@ public interface NguoiDungRepository extends JpaRepository<NguoiDung, UUID> {
 """)
     void deleteNhanVienStatus(UUID id);
 
+    //    KhachHang
+    @Query("""
+    select new org.example.backend.dto.response.khachHang.KhachHangResponse(nd.ma,nd.email,nd.sdt,nd.ten,nd.diaChi,nd.ngaySinh,nd.gioiTinh,nd.diem,nd.nguoiTao,nd.nguoiSua, nd.ngayTao, nd.ngaySua,nd.trangThai,nd.deleted)
+    from NguoiDung nd where nd.chucVu = 'khachhang'
+""")
+    List<KhachHangResponse> getAllKhachHang();
+    @Transactional
+    @Modifying
+    @Query("""
+    update NguoiDung nd
+    set nd.deleted=false 
+    where nd.id=:id
+""")
+    void deletedKhachHangStatus(UUID id);
 }

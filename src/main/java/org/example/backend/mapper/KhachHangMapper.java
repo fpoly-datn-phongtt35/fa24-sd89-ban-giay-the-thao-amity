@@ -10,7 +10,7 @@ import org.mapstruct.Mapper;
 public interface KhachHangMapper {
     KhachHangCreate toKhachHangCreate(NguoiDung nguoiDung);
     NguoiDung createToKhachHang(KhachHangCreate dtoreq);
-    NguoiDung updateToKhachHang(KhachHangUpdate dtoreq);
+    NguoiDung updateToKhachHang(KhachHangUpdate dtoreq, NguoiDung nd);
     KhachHangUpdate toKhachHangResponse(NguoiDung dto);
     NguoiDung getAllKhachHang(KhachHangResponse dtoreq);
     KhachHangResponse getAllKhachHangRespon(NguoiDung dto);
