@@ -12,7 +12,13 @@ public class Admin {
     public static final String USER_CREATE = USER + "/create";
     public static final String USER_UPDATE = USER + "/update/{id}";
     public static final String USER_DELETE = USER + "/delete/{id}";
-
+    // Endpoint CUSTOMER
+    public static final String CUSTOMER = BASE + "/customer";
+    public static final String CUSTOMER_GET_ALL = CUSTOMER + "/all";
+    public static final String CUSTOMER_GET_BY_ID = CUSTOMER + "/{id}";
+    public static final String CUSTOMER_CREATE = CUSTOMER + "/create";
+    public static final String CUSTOMER_UPDATE = CUSTOMER + "/update/{id}";
+    public static final String CUSTOMER_DELETE = CUSTOMER + "/delete/{id}";
     // Endpoint PRODUCT
     public static final String PRODUCT = BASE + "/product";
     public static final String PRODUCT_GET_ALL = PRODUCT + "/all";
