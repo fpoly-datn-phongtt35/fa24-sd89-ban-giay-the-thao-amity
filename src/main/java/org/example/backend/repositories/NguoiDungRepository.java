@@ -1,6 +1,7 @@
 package org.example.backend.repositories;
 
 import org.example.backend.dto.response.NhanVien.NhanVienRespon;
+import org.example.backend.dto.response.khachHang.KhachHangResponse;
 import org.example.backend.models.NguoiDung;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -14,4 +15,10 @@ public interface NguoiDungRepository extends JpaRepository<NguoiDung, UUID> {
     from NguoiDung nd where nd.chucVu = 'nhanvien'
 """)
     List<NhanVienRespon> getAllNhanVien();
+//    KhachHang
+    @Query("""
+    select new org.example.backend.dto.response.khachHang.KhachHangResponse(nd.ma,nd.email,nd.sdt,nd.ten,nd.diaChi,nd.ngaySinh,nd.gioiTinh,nd.diem,nd.nguoiTao,nd.nguoiSua, nd.ngayTao, nd.ngaySua,nd.trangThai,nd.deleted)
+    from NguoiDung nd where nd.chucVu = 'khachhang'
+""")
+    List<KhachHangResponse> getAllKhachHang();
 }
