@@ -21,6 +21,7 @@ public class Admin {
     public static final String PRODUCT_UPDATE = PRODUCT + "/update/{id}";
     public static final String PRODUCT_DELETE = PRODUCT + "/delete/{id}";
 
+
     // Endpoint PRODUCT_DETAIL
     public static final String PRODUCT_DETAIL = BASE + "/product_detail";
     public static final String PRODUCT_DETAIL_GET_ALL = PRODUCT_DETAIL + "/all";
@@ -28,6 +29,14 @@ public class Admin {
     public static final String PRODUCT_DETAIL_CREATE = PRODUCT_DETAIL + "/create";
     public static final String PRODUCT_DETAIL_UPDATE = PRODUCT_DETAIL + "/update/{id}";
     public static final String PRODUCT_DETAIL_DELETE = PRODUCT_DETAIL + "/delete/{id}";
+
+    // Endpoint COMPANY
+    public static final String COMPANY = BASE + "/company";
+    public static final String COMPANY_GET_ALL = COMPANY + "/all";
+    public static final String COMPANY_GET_BY_ID = COMPANY + "/{id}";
+    public static final String COMPANY_CREATE = COMPANY + "/create";
+    public static final String COMPANY_UPDATE = COMPANY + "/update/{id}";
+    public static final String COMPANY_DELETE = COMPANY + "/delete/{id}";
     // Endpoint BILL
     public static final String BILL = BASE + "/bill";
     public static final String BILL_GET_ALL = BILL + "/all";
