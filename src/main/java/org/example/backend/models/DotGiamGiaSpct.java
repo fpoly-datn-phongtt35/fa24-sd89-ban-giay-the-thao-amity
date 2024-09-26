@@ -8,16 +8,23 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.example.backend.constants.Status;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Nationalized;
 
 import java.util.UUID;
+
+import static org.example.backend.constants.Constant.CURRENT_TIME;
+import static org.example.backend.constants.Constant.CURRENT_UUID;
+
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -30,7 +37,7 @@ public class DotGiamGiaSpct {
     @ColumnDefault("newid()")
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
-    private UUID id;
+    private UUID id=CURRENT_UUID;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_spct")
@@ -47,5 +54,11 @@ public class DotGiamGiaSpct {
     @ColumnDefault("0")
     @Column(name = "deleted")
     private Boolean deleted;
+
+    @PrePersist
+    public void prePersist() {
+        this.deleted = Boolean.FALSE;
+        this.trangThai = Status.HOAT_DONG;
+    }
 
 }

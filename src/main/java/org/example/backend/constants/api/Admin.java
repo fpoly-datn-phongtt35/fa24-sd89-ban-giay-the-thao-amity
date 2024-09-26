@@ -67,6 +67,9 @@ public class Admin {
     public static final String SALE_DETAIL_CREATE = SALE_DETAIL + "/create";
     public static final String SALE_DETAIL_UPDATE = SALE_DETAIL + "/update/{id}";
     public static final String SALE_DETAIL_DELETE = SALE_DETAIL + "/delete/{id}";
+    public static final String SALE_DETAIL_SET_DELETE = SALE_DETAIL + "/deleted/{id}";
+    public static final String SALE_DETAIL_GET_BY_ID_DGG = SALE_DETAIL + "/sale/{id}";
+    public static final String SALE_DETAIL_GET_BY_ID_SPCT = SALE_DETAIL + "/product_detail/{id}";
 
     // Endpoint MATERIAL
     public static final String MATERIAL = BASE + "/material";
