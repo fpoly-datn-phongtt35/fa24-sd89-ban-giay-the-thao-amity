@@ -22,4 +22,7 @@ private final NguoiDungRepository khachHangRespository;
 public List<KhachHangResponse> getAllKhachHang(){
     return  khachHangRespository.getAllKhachHang();
 }
+    public void setDeletedKhachHang(UUID id){
+khachHangRespository.deletedKhachHangStatus(id);
+    }
 }
