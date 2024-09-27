@@ -1,8 +1,11 @@
 package org.example.backend.repositories;
 
+
 import org.example.backend.models.Hang;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.annotation.Native;
 import java.util.List;
@@ -12,6 +15,10 @@ public interface HangRepository extends JpaRepository<Hang, UUID> {
     @Query(value="select * from hang\n" +
             "where deleted=0",nativeQuery = true)
     List<Hang> getAll();
+
+    @Modifying
+    @Transactional
+
     @Query("""
         update Hang h set h.deleted=:deleted where h.id=:id
 """)

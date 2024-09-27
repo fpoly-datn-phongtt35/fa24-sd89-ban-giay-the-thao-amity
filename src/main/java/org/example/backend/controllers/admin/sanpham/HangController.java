@@ -32,7 +32,7 @@ public class HangController {
         HangRepository.save(hang);
         return "redirect:/api/v1/admin/company/all";
     }
-    @PutMapping(Admin.COMPANY_UPDATE)
+    @GetMapping(Admin.COMPANY_UPDATE)
     public String update(@PathVariable UUID id, @ModelAttribute("hang") Hang hang) {
         Hang newHang = HangRepository.findById(id).orElse(null);
         if(newHang != null) {
