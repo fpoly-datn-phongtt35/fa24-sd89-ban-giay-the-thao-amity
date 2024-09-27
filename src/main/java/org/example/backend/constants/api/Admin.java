@@ -49,6 +49,8 @@ public class Admin {
     public static final String COMPANY_CREATE = COMPANY + "/create";
     public static final String COMPANY_UPDATE = COMPANY + "/update/{id}";
     public static final String COMPANY_DELETE = COMPANY + "/delete/{id}";
+
+
     // Endpoint BILL
     public static final String BILL = BASE + "/bill";
     public static final String BILL_GET_ALL = BILL + "/all";
