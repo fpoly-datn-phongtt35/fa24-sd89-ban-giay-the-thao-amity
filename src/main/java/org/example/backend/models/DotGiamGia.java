@@ -23,6 +23,7 @@ import java.time.Instant;
 import java.util.UUID;
 
 import static org.example.backend.constants.Constant.CURRENT_TIME;
+import static org.example.backend.constants.Constant.CURRENT_UUID;
 
 @Builder
 @AllArgsConstructor
@@ -35,7 +36,7 @@ public class DotGiamGia {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
-    private UUID id = UUID.randomUUID();
+    private UUID id = CURRENT_UUID;
 
     @Nationalized
     @Column(name = "ma", length = 50)
@@ -86,12 +87,22 @@ public class DotGiamGia {
     @Column(name = "trang_thai")
     private String trangThai;
 
+    @Nationalized
+    @Column(name = "hinh_thuc")
+    private String hinhThuc;
+
+    @Nationalized
+    @Column(name = "dieu_kien")
+    private Integer dieuKien;
+
     @PrePersist
     public void prePersist() {
         // Set default creation and modification dates
         this.ngayTao = CURRENT_TIME;
         this.deleted = Boolean.FALSE;
         this.trangThai = Status.HOAT_DONG;
+        this.hinhThuc = Status.TAT_CA;
+        this.dieuKien = Status.DIEU_KIEN;
     }
 
     @PreUpdate

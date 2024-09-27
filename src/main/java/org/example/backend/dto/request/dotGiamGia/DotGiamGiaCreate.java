@@ -17,9 +17,11 @@ public class DotGiamGiaCreate {
     private Instant ngayKetThuc;
     private Boolean loai;
     private String trangThai;
+    private String hinhThuc;
+    private Integer dieuKien;
 
 
-    public DotGiamGiaCreate(String ma, String ten, BigDecimal giaTri, Instant ngayBatDau, Instant ngayKetThuc, Boolean loai,String trangThai) {
+    public DotGiamGiaCreate(String ma, String ten, BigDecimal giaTri, Instant ngayBatDau, Instant ngayKetThuc, Boolean loai, String trangThai, String hinhThuc, Integer dieuKien) {
         this.ma = ma;
         this.ten = ten;
         this.giaTri = giaTri;
@@ -27,6 +29,8 @@ public class DotGiamGiaCreate {
         this.ngayKetThuc = ngayKetThuc;
         this.loai = loai;
         this.trangThai = trangThai;
+        this.hinhThuc = hinhThuc;
+        this.dieuKien = dieuKien;
     }
 
     public DotGiamGiaCreate() {
@@ -100,5 +104,21 @@ public class DotGiamGiaCreate {
 
     public void setTrangThai(String trangThai) {
         this.trangThai = trangThai;
+    }
+
+    public String getHinhThuc() {
+        return hinhThuc;
+    }
+
+    public void setHinhThuc(String hinhThuc) {
+        this.hinhThuc = hinhThuc;
+    }
+
+    public Integer getDieuKien() {
+        return dieuKien;
+    }
+
+    public void setDieuKien(Integer dieuKien) {
+        this.dieuKien = dieuKien;
     }
 }

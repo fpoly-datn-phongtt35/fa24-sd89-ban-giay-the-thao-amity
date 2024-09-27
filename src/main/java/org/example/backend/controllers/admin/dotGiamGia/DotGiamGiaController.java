@@ -3,7 +3,7 @@ package org.example.backend.controllers.admin.dotGiamGia;
 import org.example.backend.dto.request.dotGiamGia.DotGiamGiaCreate;
 import org.example.backend.dto.request.dotGiamGia.DotGiamGiaUpdate;
 import org.example.backend.dto.response.dotGiamGia.DotGiamGiaResponse;
-import org.example.backend.mapper.DotGiamGiaMapper;
+import org.example.backend.mapper.dotGiamGia.DotGiamGiaMapper;
 import org.example.backend.models.DotGiamGia;
 import org.example.backend.services.DotGiamGiaService;
 import org.springframework.http.ResponseEntity;
@@ -91,6 +91,7 @@ public class DotGiamGiaController {
             dotGiamGiaService.setDeletedDotGiamGia(!d.getDeleted(), id);
             return ResponseEntity.ok().body("Set deleted id: " + id);
         }
+        System.out.println("hehe");
         return ResponseEntity.notFound().build();
     }
 

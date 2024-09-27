@@ -12,8 +12,18 @@ public class Admin {
     public static final String USER_CREATE = USER + "/create";
     public static final String USER_UPDATE = USER + "/update/{id}";
     public static final String USER_DELETE = USER + "/delete/{id}";
+
     public static final String PAGE_USER = USER + "/page";
     public static final String USER_GET_BY_NV = USER + "/{name}";
+
+
+    // Endpoint CUSTOMER
+    public static final String CUSTOMER = BASE + "/customer";
+    public static final String CUSTOMER_GET_ALL = CUSTOMER + "/all";
+    public static final String CUSTOMER_GET_BY_ID = CUSTOMER + "/{id}";
+    public static final String CUSTOMER_CREATE = CUSTOMER + "/create";
+    public static final String CUSTOMER_UPDATE = CUSTOMER + "/update/{id}";
+    public static final String CUSTOMER_DELETE = CUSTOMER + "/delete/{id}";
 
     // Endpoint PRODUCT
     public static final String PRODUCT = BASE + "/product";
@@ -23,6 +33,7 @@ public class Admin {
     public static final String PRODUCT_UPDATE = PRODUCT + "/update/{id}";
     public static final String PRODUCT_DELETE = PRODUCT + "/delete/{id}";
 
+
     // Endpoint PRODUCT_DETAIL
     public static final String PRODUCT_DETAIL = BASE + "/product_detail";
     public static final String PRODUCT_DETAIL_GET_ALL = PRODUCT_DETAIL + "/all";
@@ -30,6 +41,14 @@ public class Admin {
     public static final String PRODUCT_DETAIL_CREATE = PRODUCT_DETAIL + "/create";
     public static final String PRODUCT_DETAIL_UPDATE = PRODUCT_DETAIL + "/update/{id}";
     public static final String PRODUCT_DETAIL_DELETE = PRODUCT_DETAIL + "/delete/{id}";
+
+    // Endpoint COMPANY
+    public static final String COMPANY = BASE + "/company";
+    public static final String COMPANY_GET_ALL = COMPANY + "/all";
+    public static final String COMPANY_GET_BY_ID = COMPANY + "/{id}";
+    public static final String COMPANY_CREATE = COMPANY + "/create";
+    public static final String COMPANY_UPDATE = COMPANY + "/update/{id}";
+    public static final String COMPANY_DELETE = COMPANY + "/delete/{id}";
     // Endpoint BILL
     public static final String BILL = BASE + "/bill";
     public static final String BILL_GET_ALL = BILL + "/all";
@@ -69,6 +88,9 @@ public class Admin {
     public static final String SALE_DETAIL_CREATE = SALE_DETAIL + "/create";
     public static final String SALE_DETAIL_UPDATE = SALE_DETAIL + "/update/{id}";
     public static final String SALE_DETAIL_DELETE = SALE_DETAIL + "/delete/{id}";
+    public static final String SALE_DETAIL_SET_DELETE = SALE_DETAIL + "/deleted/{id}";
+    public static final String SALE_DETAIL_GET_BY_ID_DGG = SALE_DETAIL + "/sale/{id}";
+    public static final String SALE_DETAIL_GET_BY_ID_SPCT = SALE_DETAIL + "/product_detail/{id}";
 
     // Endpoint MATERIAL
     public static final String MATERIAL = BASE + "/material";

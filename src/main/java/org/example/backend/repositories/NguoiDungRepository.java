@@ -2,6 +2,7 @@ package org.example.backend.repositories;
 
 import jakarta.transaction.Transactional;
 import org.example.backend.dto.response.NhanVien.NhanVienRespon;
+import org.example.backend.dto.response.khachHang.KhachHangResponse;
 import org.example.backend.models.NguoiDung;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -28,11 +29,27 @@ public interface NguoiDungRepository extends JpaRepository<NguoiDung, UUID> {
 """)
     void deleteNhanVienStatus(UUID id);
 
+
     @Query("""
         select new org.example.backend.dto.response.NhanVien.NhanVienRespon(nd.id, nd.ma, nd.email, nd.sdt, nd.matKhau, nd.ten, nd.diaChi, nd.ngaySinh, nd.gioiTinh, nd.hinhAnh, nd.cccd, nd.chucVu, nd.trangThai, nd.deleted)
         from NguoiDung nd 
         where nd.chucVu = 'nhanvien' and nd.deleted = true
     """)
     Page<NhanVienRespon> getAllNhanVienPage(Pageable pageable);
+
+    //    KhachHang
+    @Query("""
+    select new org.example.backend.dto.response.khachHang.KhachHangResponse(nd.id,nd.ma,nd.email,nd.sdt,nd.ten,nd.diaChi,nd.ngaySinh,nd.gioiTinh,nd.diem,nd.trangThai, nd.deleted, nd.chucVu)
+    from NguoiDung nd where nd.chucVu = 'khachhang' and nd.deleted = false
+""")
+    List<KhachHangResponse> getAllKhachHang();
+    @Transactional
+    @Modifying
+    @Query("""
+    update NguoiDung nd
+    set nd.deleted=true 
+    where nd.id=:id
+""")
+    void deletedKhachHangStatus(UUID id);
 
 }

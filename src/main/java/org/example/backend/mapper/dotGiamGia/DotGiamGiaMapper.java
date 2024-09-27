@@ -1,4 +1,4 @@
-package org.example.backend.mapper;
+package org.example.backend.mapper.dotGiamGia;
 
 import org.example.backend.dto.request.dotGiamGia.DotGiamGiaCreate;
 import org.example.backend.dto.request.dotGiamGia.DotGiamGiaUpdate;
@@ -18,4 +18,6 @@ public interface DotGiamGiaMapper {
     void createDotGiamGiaFromDto(DotGiamGiaCreate dto, @MappingTarget DotGiamGia entity);
 
     void getDtoFromDotGiamGia(@MappingTarget DotGiamGiaResponse dto, DotGiamGia entity);
+
+    DotGiamGiaCreate switchDotGiamGiaCreateFromUpdate(DotGiamGiaUpdate entity);
 }
