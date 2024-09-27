@@ -91,6 +91,7 @@ public class DotGiamGiaController {
             dotGiamGiaService.setDeletedDotGiamGia(!d.getDeleted(), id);
             return ResponseEntity.ok().body("Set deleted id: " + id);
         }
+        System.out.println("hehe");
         return ResponseEntity.notFound().build();
     }
 
