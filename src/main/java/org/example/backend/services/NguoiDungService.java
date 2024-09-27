@@ -6,6 +6,8 @@ import org.example.backend.dto.response.NhanVien.NhanVienRespon;
 import org.example.backend.mapper.NhanVienMapper;
 import org.example.backend.models.NguoiDung;
 import org.example.backend.repositories.NguoiDungRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -32,7 +34,12 @@ public class NguoiDungService extends GenericServiceImpl<NguoiDung , UUID> {
     public List<NhanVienRespon> getAllNhanVien(){
         return nhanVienRespository.getAllNhanVien();
     }
+    public List<NhanVienRespon> getAllNhanVienPage(Pageable pageable){
+        Page<NhanVienRespon> nhanVienPage = nhanVienRespository.getAllNhanVienPage(pageable);
+        return nhanVienPage.getContent();
+    }
     public void setDeletedNhanVien(UUID id){
         nhanVienRespository.deleteNhanVienStatus(id);
     }
+
 }

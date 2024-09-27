@@ -12,6 +12,8 @@ public class Admin {
     public static final String USER_CREATE = USER + "/create";
     public static final String USER_UPDATE = USER + "/update/{id}";
     public static final String USER_DELETE = USER + "/delete/{id}";
+    public static final String PAGE_USER = USER + "/page";
+    public static final String USER_GET_BY_NV = USER + "/{name}";
 
     // Endpoint PRODUCT
     public static final String PRODUCT = BASE + "/product";

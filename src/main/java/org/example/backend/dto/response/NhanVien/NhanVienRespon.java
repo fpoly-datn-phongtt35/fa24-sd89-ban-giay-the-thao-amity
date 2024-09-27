@@ -46,7 +46,7 @@ public class NhanVienRespon {
 
     private String chucVu;
 
-//    private String trangThai;
+    private String trangThai;
 //
     private Boolean deleted;
 }
