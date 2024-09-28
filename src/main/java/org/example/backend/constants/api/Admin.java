@@ -93,7 +93,7 @@ public class Admin {
     public static final String MATERIAL_GET_ALL = MATERIAL + "/all";
     public static final String MATERIAL_GET_BY_ID = MATERIAL + "/{id}";
     public static final String MATERIAL_CREATE = MATERIAL + "/create";
-    public static final String MATERIAL_UPDATE = MATERIAL + "/update/{id}";
+    public static final String MATERIAL_SET_UPDATE = MATERIAL + "/update/{id}";
     public static final String MATERIAL_DELETE = MATERIAL + "/delete/{id}";
 
     // Endpoint LINING
@@ -101,14 +101,14 @@ public class Admin {
     public static final String LINING_GET_ALL = LINING + "/all";
     public static final String LINING_GET_BY_ID = LINING + "/{id}";
     public static final String LINING_CREATE = LINING + "/create";
-    public static final String LINING_UPDATE = LINING + "/update/{id}";
+    public static final String LINING_SET_UPDATE = LINING + "/update/{id}";
     public static final String LINING_DELETE = LINING + "/delete/{id}";
     // Endpoint LIST
     public static final String LIST = BASE + "/list";
     public static final String LIST_GET_ALL = LIST + "/all";
     public static final String LIST_GET_BY_ID = LIST + "/{id}";
     public static final String LIST_CREATE = LIST + "/create";
-    public static final String LIST_UPDATE = LIST + "/update/{id}";
+    public static final String LIST_SET_UPDATE = LIST + "/update/{id}";
     public static final String LIST_DELETE = LIST + "/delete/{id}";
 
     // Endpoint SOLE
@@ -116,7 +116,7 @@ public class Admin {
     public static final String SOLE_GET_ALL = SOLE + "/all";
     public static final String SOLE_GET_BY_ID = SOLE + "/{id}";
     public static final String SOLE_CREATE = SOLE + "/create";
-    public static final String SOLE_UPDATE = SOLE + "/update/{id}";
+    public static final String SOLE_SET_UPDATE = SOLE + "/update/{id}";
     public static final String SOLE_DELETE = SOLE + "/delete/{id}";
 
     // Endpoint ADDRESS
@@ -156,7 +156,7 @@ public class Admin {
     public static final String IMAGE_GET_ALL = IMAGE + "/all";
     public static final String IMAGE_GET_BY_ID = IMAGE + "/{id}";
     public static final String IMAGE_CREATE = IMAGE + "/create";
-    public static final String IMAGE_UPDATE = IMAGE + "/update/{id}";
+    public static final String IMAGE_SET_UPDATE = IMAGE + "/update/{id}";
     public static final String IMAGE_DELETE = IMAGE + "/delete/{id}";
 
     // Endpoint SIZE

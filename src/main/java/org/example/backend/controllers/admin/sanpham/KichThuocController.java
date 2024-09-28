@@ -4,33 +4,37 @@ import org.example.backend.constants.api.Admin;
 import org.example.backend.models.KichThuoc;
 import org.example.backend.repositories.KichThuocRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
-@Controller
+@RestController
 public class KichThuocController {
     @Autowired
     KichThuocRepository kichThuocRepository;
     @GetMapping(Admin.SIZE_GET_ALL)
-    public String getAllKichThuoc(Model model) {
-        model.addAttribute("list", kichThuocRepository.getAllKichThuoc());
-        model.addAttribute("kichthuoc", new KichThuoc());
-        return "sanpham/KichThuoc";
+    public ResponseEntity<?> getAllKichThuoc() {
+       return ResponseEntity.ok(kichThuocRepository.getAllKichThuoc());
     }
     @PostMapping(Admin.SIZE_CREATE)
-    public String create(@ModelAttribute("kichthuoc") KichThuoc kichThuoc) {
-        kichThuocRepository.save(kichThuoc);
-        return "redirect:/api/v1/admin/size/all";
+    public ResponseEntity<?> createKichThuoc(@RequestBody KichThuoc kichThuoc) {
+        KichThuoc kt = new KichThuoc();
+        kt.setMa(kichThuoc.getMa());
+        kt.setTen(kichThuoc.getTen());
+        kt.setTrangThai(kichThuoc.getTrangThai());
+        return ResponseEntity.ok(kichThuocRepository.save(kt));
     }
-    @GetMapping(Admin.SIZE_UPDATE)
-    public String update(@PathVariable UUID id, @ModelAttribute("kichthuoc") KichThuoc kichThuoc) {
-        KichThuoc kt1 = kichThuocRepository.findById(id).orElse(null);
-        if (kt1 != null) {
-            kichThuocRepository.deletedKichThuoc(!kt1.getDeleted(), kichThuoc.getId());
+    @PutMapping(Admin.SIZE_UPDATE)
+    public ResponseEntity<?> update (@PathVariable UUID id) {
+        KichThuoc kt = kichThuocRepository.findById(id).orElse(null);
+        if (kt != null) {
+            kichThuocRepository.deletedKichThuoc(!kt.getDeleted(),id);
+            return ResponseEntity.ok("set deleted id " +id );
         }
-        return "redirect:/api/v1/admin/size/all";
+        return ResponseEntity.notFound().build();
     }
+
 }
