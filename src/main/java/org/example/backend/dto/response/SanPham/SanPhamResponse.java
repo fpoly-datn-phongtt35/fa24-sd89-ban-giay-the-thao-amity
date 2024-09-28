@@ -1,21 +1,24 @@
 package org.example.backend.dto.response.SanPham;
 
+import java.time.Instant;
+
 public class SanPhamResponse {
     private String ma;
     private String ten;
-    private String ngayTao;
-    private int soLuong;
+    private Instant ngayTao;
+    private String tenChatLieu;
+    private String tenLopLot;
     private String trangThai;
 
-    public SanPhamResponse(String ma) {
-        this.ma = ma;
+    public SanPhamResponse() {
     }
 
-    public SanPhamResponse(String ma, String ten, String ngayTao, int soLuong, String trangThai) {
+    public SanPhamResponse(String ma, String ten, Instant ngayTao, String tenChatLieu, String tenLopLot, String trangThai) {
         this.ma = ma;
         this.ten = ten;
         this.ngayTao = ngayTao;
-        this.soLuong = soLuong;
+        this.tenChatLieu = tenChatLieu;
+        this.tenLopLot = tenLopLot;
         this.trangThai = trangThai;
     }
 
@@ -35,20 +38,28 @@ public class SanPhamResponse {
         this.ten = ten;
     }
 
-    public String getNgayTao() {
+    public Instant getNgayTao() {
         return ngayTao;
     }
 
-    public void setNgayTao(String ngayTao) {
+    public void setNgayTao(Instant ngayTao) {
         this.ngayTao = ngayTao;
     }
 
-    public int getSoLuong() {
-        return soLuong;
+    public String getTenChatLieu() {
+        return tenChatLieu;
     }
 
-    public void setSoLuong(int soLuong) {
-        this.soLuong = soLuong;
+    public void setTenChatLieu(String tenChatLieu) {
+        this.tenChatLieu = tenChatLieu;
+    }
+
+    public String getTenLopLot() {
+        return tenLopLot;
+    }
+
+    public void setTenLopLot(String tenLopLot) {
+        this.tenLopLot = tenLopLot;
     }
 
     public String getTrangThai() {

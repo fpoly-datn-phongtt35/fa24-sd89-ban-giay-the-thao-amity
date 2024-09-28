@@ -62,6 +62,8 @@ public class ChatLieu {
     @Column(name = "deleted")
     private Boolean deleted;
 
+
+    
     @PrePersist
     public void prePersist() {
         // Set default creation and modification dates
