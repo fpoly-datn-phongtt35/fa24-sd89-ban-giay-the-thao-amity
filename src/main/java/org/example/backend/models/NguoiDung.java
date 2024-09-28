@@ -109,6 +109,7 @@ public class NguoiDung {
         this.ngayTao = CURRENT_TIME;
         this.deleted = Boolean.FALSE;
         this.trangThai = Status.HOAT_DONG;
+
     }
 
     @PreUpdate

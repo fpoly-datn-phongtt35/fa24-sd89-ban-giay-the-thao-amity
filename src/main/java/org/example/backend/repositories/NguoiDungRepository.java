@@ -16,7 +16,7 @@ import java.util.UUID;
 public interface NguoiDungRepository extends JpaRepository<NguoiDung, UUID> {
     @Query("""
     select new org.example.backend.dto.response.NhanVien.NhanVienRespon(nd.id,nd.ma,nd.email,nd.sdt,nd.matKhau,nd.ten,nd.diaChi,nd.ngaySinh,nd.gioiTinh,nd.hinhAnh,nd.cccd,nd.chucVu,nd.trangThai,nd.deleted)
-    from NguoiDung nd where nd.chucVu = 'nhanvien' and nd.deleted = true
+    from NguoiDung nd where nd.chucVu = 'nhanvien' and nd.deleted = false   
 """)
     List<NhanVienRespon> getAllNhanVien();
 
@@ -24,7 +24,7 @@ public interface NguoiDungRepository extends JpaRepository<NguoiDung, UUID> {
     @Modifying
     @Query("""
     update NguoiDung nd
-    set nd.deleted=false 
+    set nd.deleted=true 
     where nd.id=:id
 """)
     void deleteNhanVienStatus(UUID id);
