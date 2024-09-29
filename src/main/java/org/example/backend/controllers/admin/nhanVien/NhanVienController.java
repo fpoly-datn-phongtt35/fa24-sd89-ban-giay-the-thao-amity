@@ -41,7 +41,7 @@ public class NhanVienController {
         NguoiDung nd = new NguoiDung();
 
         nhanVienMapper.createToNhanVien(nhanVienRequestAdd,nd);
-
+        System.out.println(nd);
         return ResponseEntity.ok().body(nhanVienService.save(nd));
     }
     @PutMapping(USER_UPDATE)
