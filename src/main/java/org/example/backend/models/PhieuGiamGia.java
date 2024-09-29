@@ -6,18 +6,23 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.example.backend.constants.Status;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Nationalized;
 
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.UUID;
+
+import static org.example.backend.constants.Constant.CURRENT_TIME;
 
 @Builder
 @AllArgsConstructor
@@ -96,5 +101,21 @@ public class PhieuGiamGia {
     @ColumnDefault("0")
     @Column(name = "deleted")
     private Boolean deleted;
+
+    @PrePersist
+    public void prePersist() {
+        // Set default creation and modification dates
+        this.ngayTao = CURRENT_TIME;
+        this.deleted = Boolean.FALSE;
+        this.trangThai = Status.HOAT_DONG;
+//        this.hinhThuc = Status.TAT_CA;
+//        this.dieuKien = Status.DIEU_KIEN;
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        // Update modification date when the record is updated
+        this.ngaySua = CURRENT_TIME;
+    }
 
 }
