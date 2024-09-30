@@ -18,6 +18,6 @@ public class KhachHangCreate {
     private Instant ngaySinh;
     private String gioiTinh;
     private Integer diem;
-    private String chucVu;
+    private String chucVu="khachhang";
 
 }

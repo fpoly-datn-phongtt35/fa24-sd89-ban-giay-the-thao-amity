@@ -13,8 +13,7 @@ public class KhachHangUpdate {
     private Instant ngaySinh;
     private String gioiTinh;
     private Integer diem;
-    private String trangThai;
-    private Boolean deleted;
+    private String trangThai="khachhang";
 
     public KhachHangUpdate() {
     }
@@ -101,15 +100,9 @@ public class KhachHangUpdate {
         this.trangThai = trangThai;
     }
 
-    public Boolean getDeleted() {
-        return deleted;
-    }
 
-    public void setDeleted(Boolean deleted) {
-        this.deleted = deleted;
-    }
 
-    public KhachHangUpdate(UUID id, String ma, String email, String sdt, String ten, String diaChi, Instant ngaySinh, String gioiTinh, Integer diem, String trangThai, Boolean deleted) {
+    public KhachHangUpdate(UUID id, String ma, String email, String sdt, String ten, String diaChi, Instant ngaySinh, String gioiTinh, Integer diem, String trangThai) {
         this.id = id;
         this.ma = ma;
         this.email = email;
@@ -120,6 +113,5 @@ public class KhachHangUpdate {
         this.gioiTinh = gioiTinh;
         this.diem = diem;
         this.trangThai = trangThai;
-        this.deleted = deleted;
     }
 }
