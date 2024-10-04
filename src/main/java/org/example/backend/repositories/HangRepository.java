@@ -1,6 +1,7 @@
 package org.example.backend.repositories;
 
 
+import org.example.backend.dto.response.SanPham.HangRespon;
 import org.example.backend.models.Hang;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -12,15 +13,19 @@ import java.util.List;
 import java.util.UUID;
 
 public interface HangRepository extends JpaRepository<Hang, UUID> {
-    @Query(value="select * from hang\n" +
-            "where deleted=0",nativeQuery = true)
-    List<Hang> getAll();
+    @Query("""
+        select new org.example.backend.dto.response.SanPham.HangRespon(h.id,h.ma,h.ten,h.trangThai)
+        from Hang h 
+        where h.deleted= false 
+""")
+    List<HangRespon> getAll();
 
     @Modifying
     @Transactional
 
     @Query("""
         update Hang h set h.deleted=:deleted where h.id=:id
+        
 """)
     void deletedHang(Boolean deleted,UUID id);
 

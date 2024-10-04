@@ -5,21 +5,18 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.Instant;
 import java.util.UUID;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-public class SanPhamResponse {
+public class HinhAnhRespon {
     private UUID id;
     private String ma;
     private String ten;
-    private Instant ngayTao;
-    private String tenChatLieu;
-    private String tenLopLot;
+    private String url;
     private String trangThai;
-
 
 
 }

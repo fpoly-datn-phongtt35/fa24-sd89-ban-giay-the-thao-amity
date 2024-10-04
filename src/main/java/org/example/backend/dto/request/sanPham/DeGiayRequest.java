@@ -1,32 +1,18 @@
 package org.example.backend.dto.request.sanPham;
 
-import jakarta.persistence.*;
-import org.example.backend.models.ChatLieu;
-import org.example.backend.models.LopLot;
-import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.Nationalized;
-
 import java.time.Instant;
-import java.util.UUID;
 
-public class SanPhamRequest {
-
-    private UUID id;
-
-    private ChatLieu idChatLieu;
-
-
-    private LopLot idLopLot;
-
+public class DeGiayRequest {
     private String ma;
 
+
     private String ten;
+
 
     private Instant ngayTao;
 
 
     private Instant ngaySua;
-
 
     private String nguoiTao;
 
@@ -34,16 +20,10 @@ public class SanPhamRequest {
 
     private String trangThai;
 
-    private Boolean deleted;
-
-    public SanPhamRequest(UUID id) {
-        this.id = id;
+    public DeGiayRequest() {
     }
 
-    public SanPhamRequest(UUID id, ChatLieu idChatLieu, LopLot idLopLot, String ma, String ten, Instant ngayTao, Instant ngaySua, String nguoiTao, String nguoiSua, String trangThai, Boolean deleted) {
-        this.id = id;
-        this.idChatLieu = idChatLieu;
-        this.idLopLot = idLopLot;
+    public DeGiayRequest(String ma, String ten, Instant ngayTao, Instant ngaySua, String nguoiTao, String nguoiSua, String trangThai) {
         this.ma = ma;
         this.ten = ten;
         this.ngayTao = ngayTao;
@@ -51,31 +31,6 @@ public class SanPhamRequest {
         this.nguoiTao = nguoiTao;
         this.nguoiSua = nguoiSua;
         this.trangThai = trangThai;
-        this.deleted = deleted;
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public ChatLieu getIdChatLieu() {
-        return idChatLieu;
-    }
-
-    public void setIdChatLieu(ChatLieu idChatLieu) {
-        this.idChatLieu = idChatLieu;
-    }
-
-    public LopLot getIdLopLot() {
-        return idLopLot;
-    }
-
-    public void setIdLopLot(LopLot idLopLot) {
-        this.idLopLot = idLopLot;
     }
 
     public String getMa() {
@@ -132,13 +87,5 @@ public class SanPhamRequest {
 
     public void setTrangThai(String trangThai) {
         this.trangThai = trangThai;
-    }
-
-    public Boolean getDeleted() {
-        return deleted;
-    }
-
-    public void setDeleted(Boolean deleted) {
-        this.deleted = deleted;
     }
 }
