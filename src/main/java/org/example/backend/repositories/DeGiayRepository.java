@@ -13,7 +13,7 @@ import java.util.UUID;
 public interface DeGiayRepository extends JpaRepository<DeGiay, UUID> {
 
     @Query("""
-    select new org.example.backend.dto.response.SanPham.DeGiayRepon(b.ma,b.ten,b.trangThai)
+    select new org.example.backend.dto.response.SanPham.DeGiayRepon(b.id,b.ma,b.ten,b.trangThai)
     from DeGiay b 
     where b.deleted=false 
 """)

@@ -18,11 +18,9 @@ public class SanPhamRequest {
 
     private LopLot idLopLot;
 
-
     private String ma;
 
     private String ten;
-
 
     private Instant ngayTao;
 

@@ -12,7 +12,7 @@ import java.util.UUID;
 
 public interface LopLotRepository extends JpaRepository<LopLot, UUID> {
     @Query("""
-        select new org.example.backend.dto.response.SanPham.LopLotRepon(l.ma,l.ten,l.trangThai)
+        select new org.example.backend.dto.response.SanPham.LopLotRepon(l.id,l.ma,l.ten,l.trangThai)
         from LopLot l 
         where l.deleted=false 
 """)

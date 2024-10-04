@@ -1,6 +1,7 @@
 package org.example.backend.controllers.admin.sanpham;
 
 import org.example.backend.constants.api.Admin;
+import org.example.backend.dto.request.sanPham.HangRequest;
 import org.example.backend.models.Hang;
 import org.example.backend.repositories.HangRepository;
 import org.hibernate.annotations.Parameter;
@@ -29,7 +30,7 @@ public class HangController {
        return ResponseEntity.ok(HangRepository.getAll());
     }
     @PostMapping(Admin.COMPANY_CREATE)
-    public ResponseEntity<?> create(@RequestBody Hang hang) {
+    public ResponseEntity<?> create(@RequestBody HangRequest hang) {
         Hang h = new Hang();
         h.setMa(hang.getMa());
         h.setTen(hang.getTen());

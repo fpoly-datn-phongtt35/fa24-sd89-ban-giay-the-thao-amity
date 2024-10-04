@@ -12,7 +12,7 @@ import java.util.UUID;
 
 public interface ChatLieuRepository extends JpaRepository<ChatLieu, UUID> {
     @Query("""
-    select new org.example.backend.dto.response.SanPham.ChatLieuRespon(l.ma,l.ten,l.trangThai)
+    select new org.example.backend.dto.response.SanPham.ChatLieuRespon(l.id,l.ma,l.ten,l.trangThai)
     from ChatLieu l 
     where l.deleted=false 
 """)

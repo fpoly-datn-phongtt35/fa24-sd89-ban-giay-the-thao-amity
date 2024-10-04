@@ -12,7 +12,7 @@ import java.util.UUID;
 
 public interface KichThuocRepository extends JpaRepository<KichThuoc, UUID> {
     @Query("""
-       select new org.example.backend.dto.response.SanPham.KichThuocRespon(k.ma,k.ten,k.trangThai)
+       select new org.example.backend.dto.response.SanPham.KichThuocRespon(k.id,k.ma,k.ten,k.trangThai)
        from KichThuoc k
        where k.deleted=false 
     """)

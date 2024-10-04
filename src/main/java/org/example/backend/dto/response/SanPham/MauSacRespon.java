@@ -1,40 +1,20 @@
 package org.example.backend.dto.response.SanPham;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.util.UUID;
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 public class MauSacRespon {
+    private UUID id;
     private String ma;
     private String ten;
     private String trangThai;
 
-    public MauSacRespon() {
-    }
 
-    public MauSacRespon(String ma, String ten, String trangThai) {
-        this.ma = ma;
-        this.ten = ten;
-        this.trangThai = trangThai;
-    }
-
-    public String getMa() {
-        return ma;
-    }
-
-    public void setMa(String ma) {
-        this.ma = ma;
-    }
-
-    public String getTen() {
-        return ten;
-    }
-
-    public void setTen(String ten) {
-        this.ten = ten;
-    }
-
-    public String getTrangThai() {
-        return trangThai;
-    }
-
-    public void setTrangThai(String trangThai) {
-        this.trangThai = trangThai;
-    }
 }

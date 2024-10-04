@@ -12,7 +12,7 @@ import java.util.UUID;
 
 public interface DanhMucRepository extends JpaRepository<DanhMuc, UUID> {
     @Query("""
-        select new org.example.backend.dto.response.SanPham.DanhMucRespon(d.ma,d.ten,d.trangThai)
+        select new org.example.backend.dto.response.SanPham.DanhMucRespon(d.id,d.ma,d.ten,d.trangThai)
         from DanhMuc d 
         where d.deleted=false 
 """)

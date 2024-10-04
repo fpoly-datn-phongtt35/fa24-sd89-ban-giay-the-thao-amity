@@ -14,7 +14,7 @@ import java.util.UUID;
 
 public interface HangRepository extends JpaRepository<Hang, UUID> {
     @Query("""
-        select new org.example.backend.dto.response.SanPham.HangRespon(h.ma,h.ten,h.trangThai)
+        select new org.example.backend.dto.response.SanPham.HangRespon(h.id,h.ma,h.ten,h.trangThai)
         from Hang h 
         where h.deleted= false 
 """)

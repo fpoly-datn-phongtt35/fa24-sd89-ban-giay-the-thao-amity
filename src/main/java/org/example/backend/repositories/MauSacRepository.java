@@ -12,7 +12,7 @@ import java.util.UUID;
 
 public interface MauSacRepository extends JpaRepository<MauSac, UUID> {
     @Query("""
-        select new org.example.backend.dto.response.SanPham.MauSacRespon(m.ma,m.ten,m.trangThai)
+        select new org.example.backend.dto.response.SanPham.MauSacRespon(m.id,m.ma,m.ten,m.trangThai)
         from MauSac m
         where m.deleted=false 
 """)

@@ -1,8 +1,7 @@
-package org.example.backend.dto.request.sanPham;
+package org.example.backend.controllers.admin.sanpham;
 
 import org.example.backend.constants.api.Admin;
 import org.example.backend.models.HinhAnh;
-import org.example.backend.models.MauSac;
 import org.example.backend.repositories.HinhAnhRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
