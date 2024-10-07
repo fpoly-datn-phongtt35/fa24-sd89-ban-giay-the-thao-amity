@@ -101,8 +101,6 @@ public class DotGiamGia {
         this.ngayTao = CURRENT_TIME;
         this.deleted = Boolean.FALSE;
         this.trangThai = Status.HOAT_DONG;
-        this.hinhThuc = Status.TAT_CA;
-        this.dieuKien = Status.DIEU_KIEN;
     }
 
     @PreUpdate
