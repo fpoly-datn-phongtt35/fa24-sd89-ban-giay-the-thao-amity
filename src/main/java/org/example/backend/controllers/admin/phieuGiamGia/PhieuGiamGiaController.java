@@ -15,12 +15,14 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 import static org.example.backend.constants.api.Admin.VOUCHER_CREATE;
 import static org.example.backend.constants.api.Admin.VOUCHER_DELETE;
 import static org.example.backend.constants.api.Admin.VOUCHER_GET_BY_ID;
+import static org.example.backend.constants.api.Admin.VOUCHER_SEARCH;
 import static org.example.backend.constants.api.Admin.VOUCHER_UPDATE;
 
 @RestController
@@ -90,5 +92,21 @@ public class PhieuGiamGiaController {
             return ResponseEntity.ok().body("Set deleted id: " + id);
         }
         return ResponseEntity.notFound().build();
+    }
+
+    @GetMapping(VOUCHER_SEARCH)
+    public ResponseEntity<?> SearchPGG(@PathVariable String find,
+                                       @PathVariable String filterType
+    ){
+//        String filter = "";
+//        if(filterType.equals("tienMat")) filter = "and p.loai = true ";
+//        if(filterType.equals("phanTram")) filter = "and p.loai = false";
+//        if(filterType.equals("dangHoatDong")) filter = "and p.trangThai like \"%Hoạt Động%\"";
+//        if(filterType.equals("ngungHoatDong")) filter = "and p.trangThai like \"%ngừng hoạt động%\"";
+        List<phieuGiamGiaReponse> result = PGGService.searchPGG("%"+find+"%" , filterType);
+        if(result.isEmpty()){
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(result);
     }
 }
