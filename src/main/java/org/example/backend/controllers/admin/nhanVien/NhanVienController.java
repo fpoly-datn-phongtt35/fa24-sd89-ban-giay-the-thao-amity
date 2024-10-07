@@ -127,9 +127,11 @@ public class NhanVienController {
 
     @GetMapping(USER_GET_BY_NV)
     public ResponseEntity<List<NhanVienRespon>> searchUserNhanVien(
-            @RequestParam(value = "name") String name
+            @RequestParam(value = "keyword",defaultValue = "") String keyword,
+            @RequestParam(value = "gioiTinh",defaultValue = "") String gioiTinh,
+            @RequestParam(value = "trangThai",defaultValue = "") String trangThai
          ) {
-        List<NhanVienRespon> result = nhanVienService.searchNhanVien("%"+name+"%");
+        List<NhanVienRespon> result = nhanVienService.searchNhanVien(keyword, gioiTinh, trangThai);
         if (result.isEmpty()) {
             return ResponseEntity.noContent().build();
         }

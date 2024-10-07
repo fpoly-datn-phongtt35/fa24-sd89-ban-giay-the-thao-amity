@@ -46,14 +46,46 @@ public interface NguoiDungRepository extends JpaRepository<NguoiDung, UUID> {
     """)
     Page<NhanVienRespon> getAllNhanVienPage(Pageable pageable);
 
+//    @Query("""
+//    SELECT new org.example.backend.dto.response.dotGiamGia.DotGiamGiaResponse(
+//           d.id, d.ma, d.ten, d.giaTri, d.ngayBatDau, d.ngayKetThuc, d.loai, d.trangThai, d.hinhThuc, d.dieuKien)
+//    FROM DotGiamGia d
+//    WHERE d.deleted = false
+//    AND (COALESCE(:#{#dotGiamGiaSearch.value}, '') = '' OR d.ma LIKE %:#{#dotGiamGiaSearch.value}% OR d.ten LIKE %:#{#dotGiamGiaSearch.value}%)
+//    AND (COALESCE(:#{#dotGiamGiaSearch.minNgay}, null) IS NULL OR d.ngayBatDau >= :#{#dotGiamGiaSearch.minNgay})
+//    AND (COALESCE(:#{#dotGiamGiaSearch.maxNgay}, null) IS NULL OR d.ngayKetThuc <= :#{#dotGiamGiaSearch.maxNgay})
+//    AND (COALESCE(:#{#dotGiamGiaSearch.trangThai}, null) IS NULL OR d.trangThai = :#{#dotGiamGiaSearch.trangThai})
+//    AND (COALESCE(:#{#dotGiamGiaSearch.minGia}, null) IS NULL OR d.giaTri >= :#{#dotGiamGiaSearch.minGia})
+//    AND (COALESCE(:#{#dotGiamGiaSearch.maxGia}, null) IS NULL OR d.giaTri <= :#{#dotGiamGiaSearch.maxGia})
+//    """)
+//    Page<DotGiamGiaResponse> searchDotGiamGiaPaginate(Pageable pageable, DotGiamGiaSearch dotGiamGiaSearch);
+//
+//    @Query("""
+//    select new org.example.backend.dto.response.NhanVien.NhanVienRespon(nd.id, nd.ma, nd.email, nd.sdt, nd.matKhau, nd.ten, nd.diaChi, nd.ngaySinh, nd.gioiTinh, nd.hinhAnh, nd.cccd, nd.chucVu, nd.trangThai, nd.deleted)
+//    from NguoiDung nd
+//    where (nd.ma like :name or nd.ten like :name or nd.sdt like :name)
+//      and nd.chucVu = 'nhanvien'
+//      and nd.deleted = false
+//""")
+//    List<NhanVienRespon> searchUserNhanVien(String name);
     @Query("""
-    select new org.example.backend.dto.response.NhanVien.NhanVienRespon(nd.id, nd.ma, nd.email, nd.sdt, nd.matKhau, nd.ten, nd.diaChi, nd.ngaySinh, nd.gioiTinh, nd.hinhAnh, nd.cccd, nd.chucVu, nd.trangThai, nd.deleted)
-    from NguoiDung nd
-    where (nd.ma like :name or nd.ten like :name or nd.sdt like :name) 
-      and nd.chucVu = 'nhanvien' 
-      and nd.deleted = false
-""")
-    List<NhanVienRespon> searchUserNhanVien(String name);
+        select new org.example.backend.dto.response.NhanVien.NhanVienRespon(
+            nd.id, nd.ma, nd.email, nd.sdt, nd.matKhau, nd.ten, nd.diaChi, nd.ngaySinh, nd.gioiTinh, nd.hinhAnh, nd.cccd, nd.chucVu, nd.trangThai, nd.deleted)
+        from NguoiDung nd
+        where nd.chucVu = 'nhanvien' 
+        and nd.deleted = false
+        and (
+            (:keyword is null or :keyword = '' or 
+            lower(nd.ten) like lower(concat('%', :keyword, '%')) or
+            lower(nd.ma) like lower(concat('%', :keyword, '%')) or
+            lower(nd.sdt) like lower(concat('%', :keyword, '%')))
+        )
+        and (:gioiTinh is null or :gioiTinh = '' or nd.gioiTinh = :gioiTinh)
+        and (:trangThai is null or :trangThai = '' or nd.trangThai = :trangThai)
+    """)
+    List<NhanVienRespon> searchUserNhanVien(String keyword, String gioiTinh, String trangThai);
+
+
 
     @Query("""
     select new org.example.backend.dto.response.NhanVien.NhanVienRespon(nd.id, nd.ma, nd.email, nd.sdt, nd.matKhau, nd.ten, nd.diaChi, nd.ngaySinh, nd.gioiTinh, nd.hinhAnh, nd.cccd, nd.chucVu, nd.trangThai, nd.deleted)
