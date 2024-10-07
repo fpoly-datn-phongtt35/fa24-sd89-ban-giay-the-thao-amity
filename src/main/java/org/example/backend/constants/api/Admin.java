@@ -33,6 +33,7 @@ public class Admin {
     public static final String PRODUCT_CREATE = PRODUCT + "/create";
     public static final String PRODUCT_UPDATE = PRODUCT + "/update/{id}";
     public static final String PRODUCT_SET_DELETE = PRODUCT + "/delete/{id}";
+    public static final String PRODUCT_SEARCH= PRODUCT + "/search";
 
 
     // Endpoint PRODUCT_DETAIL
@@ -42,7 +43,9 @@ public class Admin {
     public static final String PRODUCT_DETAIL_CREATE = PRODUCT_DETAIL + "/create";
     public static final String PRODUCT_DETAIL_UPDATE = PRODUCT_DETAIL + "/update/{id}";
     public static final String PRODUCT_DETAIL_SET_DELETE = PRODUCT_DETAIL + "/delete/{id}";
-    public static final String PRODUCT_DETAIL_BY = PRODUCT_DETAIL + "/delete/{id}";
+    public static final String PRODUCT_DETAIL_DETAIL = PRODUCT_DETAIL + "/detail/{id}";
+    public static final String PRODUCT_DETAIL_SEARCH = PRODUCT_DETAIL + "/search";
+
 
 
     // Endpoint COMPANY
@@ -52,6 +55,7 @@ public class Admin {
     public static final String COMPANY_CREATE = COMPANY + "/create";
     public static final String COMPANY_UPDATE = COMPANY + "/update/{id}";
     public static final String COMPANY_DELETE = COMPANY + "/delete/{id}";
+    public static final String COMPANY_SEARCH = COMPANY + "/search";
 
 
     // Endpoint BILL
@@ -104,6 +108,7 @@ public class Admin {
     public static final String MATERIAL_CREATE = MATERIAL + "/create";
     public static final String MATERIAL_SET_UPDATE = MATERIAL + "/update/{id}";
     public static final String MATERIAL_DELETE = MATERIAL + "/delete/{id}";
+    public static final String MATERIAL_SEARCH = MATERIAL + "/search";
 
     // Endpoint LINING
     public static final String LINING = BASE + "/lining";
@@ -112,6 +117,7 @@ public class Admin {
     public static final String LINING_CREATE = LINING + "/create";
     public static final String LINING_SET_UPDATE = LINING + "/update/{id}";
     public static final String LINING_DELETE = LINING + "/delete/{id}";
+    public static final String LINING_SEARCH = LINING + "/search";
     // Endpoint LIST
     public static final String LIST = BASE + "/list";
     public static final String LIST_GET_ALL = LIST + "/all";
@@ -119,6 +125,7 @@ public class Admin {
     public static final String LIST_CREATE = LIST + "/create";
     public static final String LIST_SET_UPDATE = LIST + "/update/{id}";
     public static final String LIST_DELETE = LIST + "/delete/{id}";
+    public static final String LIST_SEARCH = LIST + "/search";
 
     // Endpoint SOLE
     public static final String SOLE = BASE + "/sole";
@@ -127,6 +134,7 @@ public class Admin {
     public static final String SOLE_CREATE = SOLE + "/create";
     public static final String SOLE_SET_UPDATE = SOLE + "/update/{id}";
     public static final String SOLE_DELETE = SOLE + "/delete/{id}";
+    public static final String SOLE_SEARCH = SOLE + "/search";
 
     // Endpoint ADDRESS
     public static final String ADDRESS = BASE + "/address";
@@ -175,6 +183,7 @@ public class Admin {
     public static final String SIZE_CREATE = SIZE + "/create";
     public static final String SIZE_UPDATE = SIZE + "/update/{id}";
     public static final String SIZE_DELETE = SIZE + "/delete/{id}";
+    public static final String SIZE_SEARCH = SIZE + "/search";
 
     // Endpoint BILL_HISTORY
     public static final String BILL_HISTORY = BASE + "/bill-history";
@@ -191,6 +200,7 @@ public class Admin {
     public static final String COLOR_CREATE = COLOR + "/create";
     public static final String COLOR_UPDATE = COLOR + "/update/{id}";
     public static final String COLOR_DELETE = COLOR + "/delete/{id}";
+    public static final String COLOR_SEARCH = COLOR + "/search";
 
     // Endpoint PAY
     public static final String PAY = BASE + "/pay";

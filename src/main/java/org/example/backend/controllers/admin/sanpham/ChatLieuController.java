@@ -36,4 +36,9 @@ public class ChatLieuController {
         }
         return ResponseEntity.notFound().build();
     }
+
+    @GetMapping(Admin.MATERIAL_SEARCH)
+    public ResponseEntity<?> Search(@RequestParam(value="ten" ,defaultValue = "") String ten){
+        return ResponseEntity.ok(chatLieuRepository.search("%"+ten+"%"));
+    }
 }

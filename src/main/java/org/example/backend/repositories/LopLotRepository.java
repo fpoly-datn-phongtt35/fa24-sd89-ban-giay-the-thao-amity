@@ -24,4 +24,11 @@ public interface LopLotRepository extends JpaRepository<LopLot, UUID> {
         update LopLot l set l.deleted=:deleted where l.id=:id 
 """)
     void setdeleted(Boolean deleted,UUID id);
+
+    @Query("""
+        select new org.example.backend.dto.response.SanPham.LopLotRepon(l.id,l.ma,l.ten,l.trangThai)
+        from LopLot l 
+        where l.deleted=false and l.ten Like :ten
+""")
+    List<LopLotRepon> search(String ten);
 }

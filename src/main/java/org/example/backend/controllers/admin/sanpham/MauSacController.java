@@ -35,4 +35,8 @@ public class MauSacController {
         }
         return ResponseEntity.notFound().build();
     }
+    @GetMapping(Admin.COLOR_SEARCH)
+    public ResponseEntity<?> Search(@RequestParam(value="ten" ,defaultValue = "") String ten){
+        return ResponseEntity.ok(mauSacRepository.search("%"+ten+"%"));
+    }
 }

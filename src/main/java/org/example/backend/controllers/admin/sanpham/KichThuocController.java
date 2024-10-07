@@ -37,4 +37,9 @@ public class KichThuocController {
         return ResponseEntity.notFound().build();
     }
 
+    @GetMapping(Admin.SIZE_SEARCH)
+    public ResponseEntity<?> Search(@RequestParam(value="ten" ,defaultValue = "") String ten){
+        return ResponseEntity.ok(kichThuocRepository.search("%"+ten+"%"));
+    }
+
 }

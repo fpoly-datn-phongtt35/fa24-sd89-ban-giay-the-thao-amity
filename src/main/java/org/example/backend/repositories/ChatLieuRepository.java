@@ -23,4 +23,11 @@ public interface ChatLieuRepository extends JpaRepository<ChatLieu, UUID> {
         update ChatLieu l set l.deleted=:deleted where l.id=:id
 """)
     void setdeleted(boolean deleted,UUID id);
+
+    @Query("""
+    select new org.example.backend.dto.response.SanPham.ChatLieuRespon(l.id,l.ma,l.ten,l.trangThai)
+    from ChatLieu l 
+    where l.deleted=false and l.ten Like :ten
+""")
+    List<ChatLieuRespon> search(String ten);
 }

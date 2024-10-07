@@ -25,4 +25,11 @@ public interface DeGiayRepository extends JpaRepository<DeGiay, UUID> {
            update DeGiay d set d.deleted=:deleted where d.id=:id
 """)
     void setdeleted(Boolean deleted,UUID id);
+
+    @Query("""
+    select new org.example.backend.dto.response.SanPham.DeGiayRepon(b.id,b.ma,b.ten,b.trangThai)
+    from DeGiay b 
+    where b.deleted=false and b.ten Like :ten
+""")
+    List<DeGiayRepon> search(String ten);
 }

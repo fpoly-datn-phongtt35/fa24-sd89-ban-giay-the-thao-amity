@@ -24,4 +24,11 @@ public interface DanhMucRepository extends JpaRepository<DanhMuc, UUID> {
     update DanhMuc d set d.deleted=:deleted where d.id=:id
     """)
     void setdeleted(Boolean deleted,UUID id);
+
+    @Query("""
+        select new org.example.backend.dto.response.SanPham.DanhMucRespon(d.id,d.ma,d.ten,d.trangThai)
+        from DanhMuc d 
+        where d.deleted=false  and d.ten Like :ten
+""")
+    List<DanhMucRespon> search(String ten);
 }

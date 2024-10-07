@@ -13,7 +13,7 @@ import java.util.UUID;
 @Getter
 @Setter
 public class SanPhamChiTietRespon {
-    private UUID uuid;
+    private UUID id;
     private String ten;
     private String hang;
     private String danhMuc;
