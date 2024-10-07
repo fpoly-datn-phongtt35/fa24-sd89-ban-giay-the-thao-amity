@@ -7,6 +7,8 @@ import org.example.backend.models.MauSac;
 import org.example.backend.models.SanPham;
 import org.example.backend.repositories.SanPhamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,6 +23,14 @@ public class SanPhamController {
     public ResponseEntity<?> getAll() {
         return ResponseEntity.ok(sanPhamRepository.getAll());
     }
+
+
+//    @GetMapping(Admin.PRODUCT_GET_ALL)
+//    public ResponseEntity<?> phanTrang(@RequestParam(value ="page",defaultValue = "0") Integer page) {
+//        Pageable pageable = PageRequest.of(page, 5);
+//        return ResponseEntity.ok(sanPhamRepository.phanTrang(pageable).getContent());
+//    }
+
     @PostMapping(Admin.PRODUCT_CREATE)
     public ResponseEntity<?> create(@RequestBody SanPhamRequest sanPhamRequest) {
         SanPham sp = new SanPham();
@@ -51,20 +61,7 @@ public class SanPhamController {
         return ResponseEntity.ok(sanPhamRepository.save(sanPham));
     }
 
-    @GetMapping(Admin.PRODUCT_DETAIL_BY_ID)
-    public ResponseEntity<?> get(@PathVariable UUID id) {
 
-
-        List<SanPhamDetailRespon> productDetails = sanPhamRepository.getAllCTSPByIdSp(id);
-
-
-        if (productDetails == null || productDetails.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-
-
-        return ResponseEntity.ok(productDetails);
-    }
     @PutMapping(Admin.PRODUCT_SET_DELETE)
     public ResponseEntity<?>  updateSanPham(@PathVariable UUID id) {
         SanPham m = sanPhamRepository.findById(id).orElse(null);
@@ -73,5 +70,12 @@ public class SanPhamController {
             return ResponseEntity.ok("set deleted successfully id "+id);
         }
         return ResponseEntity.notFound().build();
+    }
+
+
+
+    @GetMapping(Admin.PRODUCT_SEARCH)
+    public ResponseEntity<?> Search(@RequestParam(value="ten" ,defaultValue = "") String ten){
+        return ResponseEntity.ok(sanPhamRepository.search("%"+ten+"%"));
     }
 }

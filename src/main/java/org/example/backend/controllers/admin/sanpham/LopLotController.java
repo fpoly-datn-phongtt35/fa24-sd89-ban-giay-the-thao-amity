@@ -37,4 +37,9 @@ public class LopLotController {
         }
         return ResponseEntity.notFound().build();
     }
+
+    @GetMapping(Admin.LINING_SEARCH)
+    public ResponseEntity<?> Search(@RequestParam(value="ten" ,defaultValue = "") String ten){
+        return ResponseEntity.ok(lopLotRepository.search("%"+ten+"%"));
+    }
 }

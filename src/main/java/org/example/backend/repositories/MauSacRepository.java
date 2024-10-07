@@ -23,4 +23,11 @@ public interface MauSacRepository extends JpaRepository<MauSac, UUID> {
         update MauSac m set m.deleted=:deleted where m.id=:id
 """)
     void setDeleted(Boolean deleted,UUID id);
+
+    @Query("""
+        select new org.example.backend.dto.response.SanPham.MauSacRespon(m.id,m.ma,m.ten,m.trangThai)
+        from MauSac m
+        where m.deleted=false  and m.ten Like :ten
+""")
+    List<MauSacRespon> search(String ten);
 }

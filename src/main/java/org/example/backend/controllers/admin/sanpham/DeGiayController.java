@@ -36,4 +36,8 @@ public class DeGiayController {
         }
         return ResponseEntity.notFound().build();
     }
+    @GetMapping(Admin.SOLE_SEARCH)
+    public ResponseEntity<?> Search(@RequestParam(value="ten" ,defaultValue = "") String ten){
+        return ResponseEntity.ok(deGiayRepository.search("%"+ten+"%"));
+    }
 }

@@ -37,4 +37,9 @@ public class DanhMucController {
         return ResponseEntity.notFound().build();
     }
 
+    @GetMapping(Admin.LIST_SEARCH)
+    public ResponseEntity<?> Search(@RequestParam(value="ten" ,defaultValue = "") String ten){
+        return ResponseEntity.ok(danhMucRepository.search("%"+ten+"%"));
+    }
+
 }

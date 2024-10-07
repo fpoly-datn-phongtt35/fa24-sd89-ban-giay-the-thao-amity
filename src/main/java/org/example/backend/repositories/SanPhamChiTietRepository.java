@@ -12,8 +12,8 @@ import java.util.UUID;
 
 public interface SanPhamChiTietRepository extends JpaRepository<SanPhamChiTiet, UUID> {
     @Query("""
-        select new org.example.backend.dto.response.SanPham.SanPhamChiTietRespon(
-        s.id,s.ten,s.idHang.ten,s.idDanhMuc.ten,s.idDeGiay.ten,s.idSanPham.idChatLieu.ten,s.idMauSac.ten,s.idKichThuoc.ten,
+        select new org.example.backend.dto.response.SanPham.SanPhamChiTietRespon(s.id,
+        s.idSanPham.ten,s.idHang.ten,s.idDanhMuc.ten,s.idDeGiay.ten,s.idSanPham.idChatLieu.ten,s.idMauSac.ten,s.idKichThuoc.ten,
         s.idSanPham.idLopLot.ten,s.soLuong,s.giaBan,s.giaNhap,s.trangThai,s.hinhAnh
         )
         from SanPhamChiTiet  s
@@ -28,4 +28,13 @@ public interface SanPhamChiTietRepository extends JpaRepository<SanPhamChiTiet, 
 """)
     void setDeleted(Boolean deleted,UUID id);
 
+    @Query("""
+        select new org.example.backend.dto.response.SanPham.SanPhamChiTietRespon(s.id,
+        s.idSanPham.ten,s.idHang.ten,s.idDanhMuc.ten,s.idDeGiay.ten,s.idSanPham.idChatLieu.ten,s.idMauSac.ten,s.idKichThuoc.ten,
+        s.idSanPham.idLopLot.ten,s.soLuong,s.giaBan,s.giaNhap,s.trangThai,s.hinhAnh
+        )
+        from SanPhamChiTiet  s
+        where s.deleted=false  and s.idSanPham.ten like :ten
+""")
+    List<SanPhamChiTietRespon> search(String ten);
 }

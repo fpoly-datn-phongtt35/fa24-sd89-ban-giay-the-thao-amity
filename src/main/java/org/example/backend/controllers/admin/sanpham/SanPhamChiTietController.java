@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -38,11 +39,11 @@ public class SanPhamChiTietController {
         s.setHinhAnh(request.getHinhAnh());
         return ResponseEntity.ok(sanPhamChiTietRepository.save(s));
     }
-    @PostMapping(Admin.PRODUCT_DETAIL_UPDATE)
+    @PutMapping(Admin.PRODUCT_DETAIL_UPDATE)
     public ResponseEntity<?> update(@PathVariable UUID id, @RequestBody SanPhamChiTietRequest request) {
         SanPhamChiTiet s = sanPhamChiTietRepository.findById(id).orElse(null);
         if(s != null){
-            s.setId(request.getId());
+
             s.setTen(request.getTen());
             s.setIdHang(request.getIdHang());
             s.setIdDanhMuc(request.getIdDanhMuc());
@@ -80,6 +81,22 @@ public class SanPhamChiTietController {
             return ResponseEntity.ok("set deleted successfully id "+id);
         }
         return ResponseEntity.notFound().build();
+    }
+
+//    public NhanVien detail(@PathVariable Integer id){
+//
+//        return NhanVienRepository.findById(id).get();
+//
+//    }
+    @GetMapping(Admin.PRODUCT_DETAIL_DETAIL)
+    public ResponseEntity<?>  detail(@PathVariable UUID id) {
+        return ResponseEntity.ok(sanPhamChiTietRepository.findById(id).orElse(null));
+    }
+
+
+    @GetMapping(Admin.PRODUCT_DETAIL_SEARCH)
+    public ResponseEntity<?>  search(@RequestParam(value="ten" ,defaultValue = "") String ten) {
+        return ResponseEntity.ok(sanPhamChiTietRepository.search("%"+ten+"%"));
     }
 
 
