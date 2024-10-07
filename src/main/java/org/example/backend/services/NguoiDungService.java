@@ -47,10 +47,11 @@ public class NguoiDungService extends GenericServiceImpl<NguoiDung , UUID> {
                 .build();
     }
 
-    public List<NhanVienRespon> getAllNhanVienPage(Pageable pageable){
-        Page<NhanVienRespon> nhanVienPage = nhanVienRespository.getAllNhanVienPage(pageable);
-        return nhanVienPage.getContent();
+    public Page<NhanVienRespon> getAllNhanVienPage(Pageable pageable){
+        return nhanVienRespository.getAllNhanVienPage(pageable);
     }
+
+
     public void setDeletedNhanVien(UUID id){
         nhanVienRespository.deleteNhanVienStatus(id);
     }
