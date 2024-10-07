@@ -1,5 +1,10 @@
 package org.example.backend.controllers.admin.nhanVien;
 
+
+
+
+//import jakarta.validation.Valid;
+
 import org.example.backend.common.PageResponse;
 import org.example.backend.common.ResponseData;
 import org.example.backend.dto.request.nhanVien.NhanVienRequestAdd;
@@ -9,6 +14,7 @@ import org.example.backend.mapper.NhanVienMapper;
 import org.example.backend.models.NguoiDung;
 import org.example.backend.repositories.NguoiDungRepository;
 import org.example.backend.services.NguoiDungService;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -96,14 +102,29 @@ public class NhanVienController {
     }
 
     @GetMapping(PAGE_USER)
-    public ResponseEntity<?> getAllUserPage(
-            @RequestParam(value = "itemsPerPage" , defaultValue = "5") int itemsPerPage,
+    public ResponseEntity<ResponseData<PageResponse<List<NhanVienRespon>>>> getAllUserPage(
+            @RequestParam(value = "itemsPerPage", defaultValue = "5") int itemsPerPage,
             @RequestParam(value = "page", defaultValue = "0") int page
     ) {
-        Pageable phanTrang = PageRequest.of(page,5);
-        List<NhanVienRespon> users = nhanVienService.getAllNhanVienPage(phanTrang);
-        return ResponseEntity.ok().body(users);
+        Pageable phanTrang = PageRequest.of(page, itemsPerPage);
+        Page<NhanVienRespon> nhanVienPage = nhanVienService.getAllNhanVienPage(phanTrang);
+
+        PageResponse<List<NhanVienRespon>> pageResponse = PageResponse.<List<NhanVienRespon>>builder()
+                .page(nhanVienPage.getNumber())
+                .size(nhanVienPage.getSize())
+                .totalPage(nhanVienPage.getTotalPages())
+                .items(nhanVienPage.getContent())
+                .build();
+
+        ResponseData<PageResponse<List<NhanVienRespon>>> responseData = ResponseData.<PageResponse<List<NhanVienRespon>>>builder()
+                .message("Get paginated users done")
+                .status(HttpStatus.OK.value())
+                .data(pageResponse)
+                .build();
+
+        return ResponseEntity.ok(responseData);
     }
+
 
     @GetMapping(USER_GET_BY_NV)
     public ResponseEntity<List<NhanVienRespon>> searchUserNhanVien(

@@ -2,6 +2,8 @@ package org.example.backend.repositories;
 
 import org.example.backend.dto.response.dotGiamGia.DotGiamGiaResponse;
 import org.example.backend.models.DotGiamGia;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -28,4 +30,9 @@ public interface DotGiamGiaRepository extends JpaRepository<DotGiamGia, UUID> {
     @Transactional
     void updateDetailDotGiamGia(Boolean deleted, UUID id);
 
+    @Query("""
+    select new org.example.backend.dto.response.dotGiamGia.DotGiamGiaResponse(d.id, d.ma, d.ten, d.giaTri, d.ngayBatDau, d.ngayKetThuc, d.loai, d.trangThai, d.hinhThuc, d.dieuKien)
+    from DotGiamGia d where d.deleted=false 
+""")
+    Page<DotGiamGiaResponse> getAllDotGiamGiaPaginate(Pageable pageable);
 }
