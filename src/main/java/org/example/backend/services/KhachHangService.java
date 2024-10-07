@@ -1,5 +1,6 @@
 package org.example.backend.services;
 
+import org.example.backend.dto.response.NhanVien.NhanVienRespon;
 import org.example.backend.dto.response.khachHang.KhachHangResponse;
 import org.example.backend.models.NguoiDung;
 import org.example.backend.repositories.NguoiDungRepository;
@@ -22,5 +23,9 @@ public List<KhachHangResponse> getAllKhachHang(){
 }
     public void setDeletedKhachHang(UUID id){
 khachHangRespository.deletedKhachHangStatus(id);
+    }
+    public List<KhachHangResponse> searchKhachHang(String name){
+        return khachHangRespository.searchUserKhachHang(name);
+
     }
 }

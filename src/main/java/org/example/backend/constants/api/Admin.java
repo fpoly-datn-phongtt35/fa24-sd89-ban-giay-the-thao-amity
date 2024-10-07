@@ -24,6 +24,9 @@ public class Admin {
     public static final String CUSTOMER_CREATE = CUSTOMER + "/create";
     public static final String CUSTOMER_UPDATE = CUSTOMER + "/update/{id}";
     public static final String CUSTOMER_DELETE = CUSTOMER + "/delete/{id}";
+    public static final String CUSTOMER_SORT = CUSTOMER + "/sort";
+    public static final String PAGE_CUSTOMER = CUSTOMER + "/page";
+    public static final String CUSTOMER_GET_BY_KH = CUSTOMER + "/search";
 
     // Endpoint PRODUCT
     public static final String PRODUCT = BASE + "/product";
@@ -86,6 +89,7 @@ public class Admin {
     public static final String SALE_UPDATE = SALE + "/update/{id}";
     public static final String SALE_DELETE = SALE + "/delete/{id}";
     public static final String SALE_SET_DELETE = SALE + "/deleted/{id}";
+    public static final String SALE_SEARCH_VALUE = SALE + "/search";
 
     // Endpoint SALE_DETAIL
     public static final String SALE_DETAIL = BASE + "/sale-detail";
