@@ -16,15 +16,15 @@ import java.util.UUID;
 @Repository
 public interface DotGiamGiaRepository extends JpaRepository<DotGiamGia, UUID> {
     @Query("""
-    select new org.example.backend.dto.response.dotGiamGia.DotGiamGiaResponse(d.id, d.ma, d.ten, d.giaTri, d.ngayBatDau, d.ngayKetThuc, d.loai, d.trangThai, d.hinhThuc, d.dieuKien)
-    from DotGiamGia d where d.deleted=false 
-""")
+                select new org.example.backend.dto.response.dotGiamGia.DotGiamGiaResponse(d.id, d.ma, d.ten, d.giaTri, d.ngayBatDau, d.ngayKetThuc, d.loai, d.trangThai, d.hinhThuc, d.dieuKien)
+                from DotGiamGia d where d.deleted=false 
+            """)
     List<DotGiamGiaResponse> getAllDotGiamGia();
 
     @Query("""
-    update DotGiamGia d 
-    set d.deleted=:deleted where d.id=:id 
-""")
+                update DotGiamGia d 
+                set d.deleted=:deleted where d.id=:id 
+            """)
 
     @Modifying
     @Transactional

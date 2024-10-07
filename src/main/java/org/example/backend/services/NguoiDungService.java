@@ -1,5 +1,6 @@
 package org.example.backend.services;
 
+import org.example.backend.common.PageResponse;
 import org.example.backend.constants.api.Admin;
 import org.example.backend.dto.request.nhanVien.NhanVienRequestAdd;
 import org.example.backend.dto.response.NhanVien.NhanVienRespon;
@@ -7,6 +8,7 @@ import org.example.backend.mapper.NhanVienMapper;
 import org.example.backend.models.NguoiDung;
 import org.example.backend.repositories.NguoiDungRepository;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.http.ResponseEntity;
@@ -23,23 +25,43 @@ import static org.example.backend.constants.api.Admin.USER_CREATE;
 @Service
 public class NguoiDungService extends GenericServiceImpl<NguoiDung , UUID> {
     private final NhanVienMapper nhanVienMapper;
+    private final NguoiDungRepository nguoiDungRepository;
 
-    public NguoiDungService(JpaRepository<NguoiDung, UUID> repository , NguoiDungRepository nhanVienRespository, NhanVienMapper nhanVienMapper) {
+    public NguoiDungService(JpaRepository<NguoiDung, UUID> repository , NguoiDungRepository nhanVienRespository, NhanVienMapper nhanVienMapper, NguoiDungRepository nguoiDungRepository) {
         super(repository);
         this.nhanVienRespository = nhanVienRespository;
         this.nhanVienMapper = nhanVienMapper;
+        this.nguoiDungRepository = nguoiDungRepository;
     }
     private final NguoiDungRepository nhanVienRespository;
 
-    public List<NhanVienRespon> getAllNhanVien(){
-        return nhanVienRespository.getAllNhanVien();
+    public PageResponse<List<NhanVienRespon>> getAllNhanVien(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<NhanVienRespon> nhanVienPage = nguoiDungRepository.getAllNhanVien(pageable);
+
+        return PageResponse.<List<NhanVienRespon>>builder()
+                .page(nhanVienPage.getNumber())
+                .size(nhanVienPage.getSize())
+                .totalPage(nhanVienPage.getTotalPages())
+                .items(nhanVienPage.getContent())
+                .build();
     }
+
     public List<NhanVienRespon> getAllNhanVienPage(Pageable pageable){
         Page<NhanVienRespon> nhanVienPage = nhanVienRespository.getAllNhanVienPage(pageable);
         return nhanVienPage.getContent();
     }
     public void setDeletedNhanVien(UUID id){
         nhanVienRespository.deleteNhanVienStatus(id);
+    }
+
+    public List<NhanVienRespon> searchNhanVien(String name){
+        return nhanVienRespository.searchUserNhanVien(name);
+
+    }
+
+    public List<NhanVienRespon> sortNhanVien(){
+        return nhanVienRespository.sortNhanVien();
     }
 
 }
