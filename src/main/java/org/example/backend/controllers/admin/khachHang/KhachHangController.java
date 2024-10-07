@@ -2,6 +2,8 @@ package org.example.backend.controllers.admin.khachHang;
 
 import org.example.backend.dto.request.khachHang.KhachHangCreate;
 import org.example.backend.dto.request.khachHang.KhachHangUpdate;
+import org.example.backend.dto.response.NhanVien.NhanVienRespon;
+import org.example.backend.dto.response.khachHang.KhachHangResponse;
 import org.example.backend.mapper.khachHang.KhachHangMapper;
 import org.example.backend.models.NguoiDung;
 import org.example.backend.repositories.NguoiDungRepository;
@@ -10,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -62,5 +65,16 @@ public KhachHangController(KhachHangService khachHangService, NguoiDungRepositor
     return ResponseEntity.notFound().build();
 
 }
+
+    @GetMapping(CUSTOMER_GET_BY_KH)
+    public ResponseEntity<List<KhachHangResponse>> searchUserKhachHang(
+            @RequestParam(value = "name") String name
+    ) {
+        List<KhachHangResponse> result = khachHangService.searchKhachHang("%"+name+"%");
+        if (result.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(result);
+    }
 
 }

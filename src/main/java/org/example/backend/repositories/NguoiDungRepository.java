@@ -119,4 +119,12 @@ public interface NguoiDungRepository extends JpaRepository<NguoiDung, UUID> {
 """)
     void deletedKhachHangStatus(UUID id);
 
+    @Query("""
+    select new org.example.backend.dto.response.khachHang.KhachHangResponse(nd.id,nd.ma,nd.email,nd.sdt,nd.ten,nd.diaChi,nd.ngaySinh,nd.gioiTinh,nd.diem,nd.trangThai, nd.deleted, nd.chucVu)    from NguoiDung nd
+    where (nd.ma like :name or nd.ten like :name or nd.sdt like :name) 
+      and nd.chucVu = 'khachhang' 
+      and nd.deleted = false
+""")
+    List<KhachHangResponse> searchUserKhachHang(String name);
+
 }
