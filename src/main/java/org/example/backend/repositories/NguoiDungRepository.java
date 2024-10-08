@@ -46,20 +46,8 @@ public interface NguoiDungRepository extends JpaRepository<NguoiDung, UUID> {
     """)
     Page<NhanVienRespon> getAllNhanVienPage(Pageable pageable);
 
-//    @Query("""
-//    SELECT new org.example.backend.dto.response.dotGiamGia.DotGiamGiaResponse(
-//           d.id, d.ma, d.ten, d.giaTri, d.ngayBatDau, d.ngayKetThuc, d.loai, d.trangThai, d.hinhThuc, d.dieuKien)
-//    FROM DotGiamGia d
-//    WHERE d.deleted = false
-//    AND (COALESCE(:#{#dotGiamGiaSearch.value}, '') = '' OR d.ma LIKE %:#{#dotGiamGiaSearch.value}% OR d.ten LIKE %:#{#dotGiamGiaSearch.value}%)
-//    AND (COALESCE(:#{#dotGiamGiaSearch.minNgay}, null) IS NULL OR d.ngayBatDau >= :#{#dotGiamGiaSearch.minNgay})
-//    AND (COALESCE(:#{#dotGiamGiaSearch.maxNgay}, null) IS NULL OR d.ngayKetThuc <= :#{#dotGiamGiaSearch.maxNgay})
-//    AND (COALESCE(:#{#dotGiamGiaSearch.trangThai}, null) IS NULL OR d.trangThai = :#{#dotGiamGiaSearch.trangThai})
-//    AND (COALESCE(:#{#dotGiamGiaSearch.minGia}, null) IS NULL OR d.giaTri >= :#{#dotGiamGiaSearch.minGia})
-//    AND (COALESCE(:#{#dotGiamGiaSearch.maxGia}, null) IS NULL OR d.giaTri <= :#{#dotGiamGiaSearch.maxGia})
-//    """)
-//    Page<DotGiamGiaResponse> searchDotGiamGiaPaginate(Pageable pageable, DotGiamGiaSearch dotGiamGiaSearch);
-//
+
+
 //    @Query("""
 //    select new org.example.backend.dto.response.NhanVien.NhanVienRespon(nd.id, nd.ma, nd.email, nd.sdt, nd.matKhau, nd.ten, nd.diaChi, nd.ngaySinh, nd.gioiTinh, nd.hinhAnh, nd.cccd, nd.chucVu, nd.trangThai, nd.deleted)
 //    from NguoiDung nd
@@ -94,6 +82,27 @@ public interface NguoiDungRepository extends JpaRepository<NguoiDung, UUID> {
     order by nd.ten DESC 
 """)
     List<NhanVienRespon>  sortNhanVien();
+
+//    @Transactional
+//    @Modifying
+//    @Query("""
+//    update NguoiDung nd
+//    set nd.trangThai = 'Hoat dong'
+//    where nd.id = :id
+//""")
+//    void resetNhanVienStatusHoatDong(@Param("id") UUID id);
+//
+//    @Transactional
+//    @Modifying
+//    @Query("""
+//    update NguoiDung nd
+//    set nd.trangThai = 'Ngung hoat dong'
+//    where nd.id = :id
+//""")
+//    void resetNhanVienStatusNgungHoatDong(@Param("id") UUID id);
+
+
+
 
 
 

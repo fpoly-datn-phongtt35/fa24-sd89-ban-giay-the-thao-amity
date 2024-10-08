@@ -50,7 +50,7 @@ public class NhanVienRequestUpdate {
 
     private String chucVu=NHAN_VIEN;
 
-    private String trangThai=TRANG_THAI_NHAN_VIEN;
+    private String trangThai;
 
     private Boolean deleted;
 }
