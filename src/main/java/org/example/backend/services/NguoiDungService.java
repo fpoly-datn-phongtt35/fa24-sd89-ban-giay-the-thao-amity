@@ -64,5 +64,4 @@ public class NguoiDungService extends GenericServiceImpl<NguoiDung , UUID> {
     public List<NhanVienRespon> sortNhanVien(){
         return nhanVienRespository.sortNhanVien();
     }
-
 }
