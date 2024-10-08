@@ -55,7 +55,10 @@ public interface SanPhamRepository extends JpaRepository<SanPham, UUID> {
         select new org.example.backend.dto.response.SanPham.SanPhamResponse(s.id,s.ma,s.ten,s.ngayTao,s.idChatLieu.ten,s.idLopLot.ten,s.trangThai)
         from SanPham s
          where s.deleted= false  
+         order by s.ngayTao DESC 
         
     """)
     Page<SanPhamResponse> phanTrang(Pageable pageable);
+
+
 }
