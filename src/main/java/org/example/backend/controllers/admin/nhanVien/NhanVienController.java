@@ -13,13 +13,19 @@ import org.example.backend.mapper.NhanVienMapper;
 import org.example.backend.models.NguoiDung;
 import org.example.backend.repositories.NguoiDungRepository;
 import org.example.backend.services.NguoiDungService;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -127,9 +133,11 @@ public class NhanVienController {
 
     @GetMapping(USER_GET_BY_NV)
     public ResponseEntity<List<NhanVienRespon>> searchUserNhanVien(
-            @RequestParam(value = "name") String name
+            @RequestParam(value = "keyword",defaultValue = "") String keyword,
+            @RequestParam(value = "gioiTinh",defaultValue = "") String gioiTinh,
+            @RequestParam(value = "trangThai",defaultValue = "") String trangThai
          ) {
-        List<NhanVienRespon> result = nhanVienService.searchNhanVien("%"+name+"%");
+        List<NhanVienRespon> result = nhanVienService.searchNhanVien(keyword, gioiTinh, trangThai);
         if (result.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
@@ -146,4 +154,7 @@ public class NhanVienController {
         }
         return ResponseEntity.ok(result);
     }
+
+
+
 }

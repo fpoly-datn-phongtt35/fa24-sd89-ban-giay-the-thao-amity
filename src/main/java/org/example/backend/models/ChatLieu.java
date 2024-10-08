@@ -69,7 +69,7 @@ public class ChatLieu {
         // Set default creation and modification dates
         this.ngayTao = CURRENT_TIME;
         this.deleted = Boolean.FALSE;
-        this.trangThai = Status.HOAT_DONG;
+//        this.trangThai = Status.HOAT_DONG;
 
     }
 

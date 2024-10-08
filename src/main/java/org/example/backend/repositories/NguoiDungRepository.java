@@ -46,14 +46,34 @@ public interface NguoiDungRepository extends JpaRepository<NguoiDung, UUID> {
     """)
     Page<NhanVienRespon> getAllNhanVienPage(Pageable pageable);
 
+
+
+//    @Query("""
+//    select new org.example.backend.dto.response.NhanVien.NhanVienRespon(nd.id, nd.ma, nd.email, nd.sdt, nd.matKhau, nd.ten, nd.diaChi, nd.ngaySinh, nd.gioiTinh, nd.hinhAnh, nd.cccd, nd.chucVu, nd.trangThai, nd.deleted)
+//    from NguoiDung nd
+//    where (nd.ma like :name or nd.ten like :name or nd.sdt like :name)
+//      and nd.chucVu = 'nhanvien'
+//      and nd.deleted = false
+//""")
+//    List<NhanVienRespon> searchUserNhanVien(String name);
     @Query("""
-    select new org.example.backend.dto.response.NhanVien.NhanVienRespon(nd.id, nd.ma, nd.email, nd.sdt, nd.matKhau, nd.ten, nd.diaChi, nd.ngaySinh, nd.gioiTinh, nd.hinhAnh, nd.cccd, nd.chucVu, nd.trangThai, nd.deleted)
-    from NguoiDung nd
-    where (nd.ma like :name or nd.ten like :name or nd.sdt like :name) 
-      and nd.chucVu = 'nhanvien' 
-      and nd.deleted = false
-""")
-    List<NhanVienRespon> searchUserNhanVien(String name);
+        select new org.example.backend.dto.response.NhanVien.NhanVienRespon(
+            nd.id, nd.ma, nd.email, nd.sdt, nd.matKhau, nd.ten, nd.diaChi, nd.ngaySinh, nd.gioiTinh, nd.hinhAnh, nd.cccd, nd.chucVu, nd.trangThai, nd.deleted)
+        from NguoiDung nd
+        where nd.chucVu = 'nhanvien' 
+        and nd.deleted = false
+        and (
+            (:keyword is null or :keyword = '' or 
+            lower(nd.ten) like lower(concat('%', :keyword, '%')) or
+            lower(nd.ma) like lower(concat('%', :keyword, '%')) or
+            lower(nd.sdt) like lower(concat('%', :keyword, '%')))
+        )
+        and (:gioiTinh is null or :gioiTinh = '' or nd.gioiTinh = :gioiTinh)
+        and (:trangThai is null or :trangThai = '' or nd.trangThai = :trangThai)
+    """)
+    List<NhanVienRespon> searchUserNhanVien(String keyword, String gioiTinh, String trangThai);
+
+
 
     @Query("""
     select new org.example.backend.dto.response.NhanVien.NhanVienRespon(nd.id, nd.ma, nd.email, nd.sdt, nd.matKhau, nd.ten, nd.diaChi, nd.ngaySinh, nd.gioiTinh, nd.hinhAnh, nd.cccd, nd.chucVu, nd.trangThai, nd.deleted)
@@ -62,6 +82,27 @@ public interface NguoiDungRepository extends JpaRepository<NguoiDung, UUID> {
     order by nd.ten DESC 
 """)
     List<NhanVienRespon>  sortNhanVien();
+
+//    @Transactional
+//    @Modifying
+//    @Query("""
+//    update NguoiDung nd
+//    set nd.trangThai = 'Hoat dong'
+//    where nd.id = :id
+//""")
+//    void resetNhanVienStatusHoatDong(@Param("id") UUID id);
+//
+//    @Transactional
+//    @Modifying
+//    @Query("""
+//    update NguoiDung nd
+//    set nd.trangThai = 'Ngung hoat dong'
+//    where nd.id = :id
+//""")
+//    void resetNhanVienStatusNgungHoatDong(@Param("id") UUID id);
+
+
+
 
 
 
