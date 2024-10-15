@@ -16,8 +16,12 @@ public class SanPhamResponse {
     private String ma;
     private String ten;
     private Instant ngayTao;
+    private UUID idChatLieu;
     private String tenChatLieu;
+    private UUID idLopLot;
     private String tenLopLot;
+
+
     private String trangThai;
 
 
