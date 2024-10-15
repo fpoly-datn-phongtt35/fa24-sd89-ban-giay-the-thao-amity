@@ -27,13 +27,13 @@ public class NguoiDungService extends GenericServiceImpl<NguoiDung , UUID> {
     private final NhanVienMapper nhanVienMapper;
     private final NguoiDungRepository nguoiDungRepository;
 
-    public NguoiDungService(JpaRepository<NguoiDung, UUID> repository , NguoiDungRepository nhanVienRespository, NhanVienMapper nhanVienMapper, NguoiDungRepository nguoiDungRepository) {
+    public NguoiDungService(JpaRepository<NguoiDung, UUID> repository , NhanVienMapper nhanVienMapper, NguoiDungRepository nguoiDungRepository) {
         super(repository);
-        this.nhanVienRespository = nhanVienRespository;
+
         this.nhanVienMapper = nhanVienMapper;
         this.nguoiDungRepository = nguoiDungRepository;
     }
-    private final NguoiDungRepository nhanVienRespository;
+
 
     public PageResponse<List<NhanVienRespon>> getAllNhanVien(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
@@ -48,19 +48,24 @@ public class NguoiDungService extends GenericServiceImpl<NguoiDung , UUID> {
     }
 
     public Page<NhanVienRespon> getAllNhanVienPage(Pageable pageable){
-        return nhanVienRespository.getAllNhanVienPage(pageable);
+        return nguoiDungRepository.getAllNhanVienPage(pageable);
     }
 
 
     public void setDeletedNhanVien(UUID id){
-        nhanVienRespository.deleteNhanVienStatus(id);
+        nguoiDungRepository.deleteNhanVienStatus(id);
     }
                                             
     public List<NhanVienRespon> searchNhanVien(String keyword, String gioiTinh, String trangThai){
+
+        return nguoiDungRepository.searchUserNhanVien(keyword, gioiTinh, trangThai);
+
+
         return nhanVienRespository.searchUserNhanVien(keyword, gioiTinh, trangThai);
+
     }
 
     public List<NhanVienRespon> sortNhanVien(){
-        return nhanVienRespository.sortNhanVien();
+        return nguoiDungRepository.sortNhanVien();
     }
 }
