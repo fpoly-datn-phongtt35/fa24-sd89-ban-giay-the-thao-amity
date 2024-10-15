@@ -66,6 +66,9 @@ public class Admin {
     public static final String BILL_CREATE = BILL + "/create";
     public static final String BILL_UPDATE = BILL + "/update/{id}";
     public static final String BILL_DELETE = BILL + "/delete/{id}";
+    public static final String PAGE_BILL = BILL + "/page";
+    public static final String USER_GET_BY_BILL = BILL + "/search";
+
 
     // Endpoint BILL_DETAIL
     public static final String BILL_DETAIL = BASE + "/bill_detail";
