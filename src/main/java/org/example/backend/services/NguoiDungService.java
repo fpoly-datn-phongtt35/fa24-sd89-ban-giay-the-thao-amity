@@ -55,10 +55,9 @@ public class NguoiDungService extends GenericServiceImpl<NguoiDung , UUID> {
     public void setDeletedNhanVien(UUID id){
         nhanVienRespository.deleteNhanVienStatus(id);
     }
-
+                                            
     public List<NhanVienRespon> searchNhanVien(String keyword, String gioiTinh, String trangThai){
         return nhanVienRespository.searchUserNhanVien(keyword, gioiTinh, trangThai);
-
     }
 
     public List<NhanVienRespon> sortNhanVien(){

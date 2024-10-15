@@ -161,12 +161,20 @@ public interface NguoiDungRepository extends JpaRepository<NguoiDung, UUID> {
     void deletedKhachHangStatus(UUID id);
 
     @Query("""
-    select new org.example.backend.dto.response.khachHang.KhachHangResponse(nd.id,nd.ma,nd.email,nd.sdt,nd.ten,nd.diaChi,nd.ngaySinh,nd.gioiTinh,nd.diem,nd.trangThai, nd.deleted, nd.chucVu)    from NguoiDung nd
-    where (nd.ma like :name or nd.ten like :name or nd.sdt like :name) 
-      and nd.chucVu = 'khachhang' 
-      and nd.deleted = false
-""")
-    List<KhachHangResponse> searchUserKhachHang(String name);
+    select new org.example.backend.dto.response.khachHang.KhachHangResponse(nd.id,nd.ma,nd.email,nd.sdt,nd.ten,nd.diaChi,nd.ngaySinh,nd.gioiTinh,nd.diem,nd.trangThai, nd.deleted, nd.chucVu)    
+      from NguoiDung nd
+        where nd.chucVu = 'khachhang' 
+        and nd.deleted = false
+        and (
+            (:keyword is null or :keyword = '' or 
+            lower(nd.ten) like lower(concat('%', :keyword, '%')) or
+            lower(nd.ma) like lower(concat('%', :keyword, '%')) or
+            lower(nd.sdt) like lower(concat('%', :keyword, '%')))
+        )
+        and (:gioiTinh is null or :gioiTinh = '' or nd.gioiTinh = :gioiTinh)
+        and (:trangThai is null or :trangThai = '' or nd.trangThai = :trangThai)
+    """)
+    List<KhachHangResponse> searchUserKhachHang(String keyword, String gioiTinh, String trangThai);
 
     @Query("""
         select new org.example.backend.dto.response.khachHang.KhachHangResponse(nd.id,nd.ma,nd.email,nd.sdt,nd.ten,nd.diaChi,nd.ngaySinh,nd.gioiTinh,nd.diem,nd.trangThai, nd.deleted, nd.chucVu) 
