@@ -13,7 +13,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SanPhamDetailRespon {
-    private UUID uuidSP;
+       private UUID id;
     private String ten;
     private String hang;
     private String danhMuc;
