@@ -17,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
@@ -102,10 +103,22 @@ public class SanPhamChiTietController {
     }
 
 
+//    @GetMapping(Admin.PRODUCT_DETAIL_SEARCH)
+//    public ResponseEntity<?>  search(@RequestParam(value="ten" ,defaultValue = "") String ten) {
+//        return ResponseEntity.ok(sanPhamChiTietRepository.search("%"+ten+"%"));
+//    }
+
     @GetMapping(Admin.PRODUCT_DETAIL_SEARCH)
-    public ResponseEntity<?>  search(@RequestParam(value="ten" ,defaultValue = "") String ten) {
-        return ResponseEntity.ok(sanPhamChiTietRepository.search("%"+ten+"%"));
+    public ResponseEntity<?> search(
+            @RequestParam(value = "ten", defaultValue = "") String ten,
+            @RequestParam(value = "giaLonHon", required = false) Double giaLonHon,
+            @RequestParam(value = "giaNhoHon", required = false) Double giaNhoHon,
+            @RequestParam(value = "trangThai", required = false) String trangThai
+    ) {
+        return ResponseEntity.ok(sanPhamChiTietRepository.search("%" + ten + "%", giaLonHon, giaNhoHon, trangThai));
     }
+
+
 
     @GetMapping(Admin.PRODUCT_DETAIL_PAGE)
     public ResponseEntity<ResponseData<PageResponse<List<SanPhamChiTietRespon>>>> phanTrang(
