@@ -42,8 +42,8 @@ public Page<KhachHangResponse> getAllKhachHangPage(Pageable pageable){
     public void setDeletedKhachHang(UUID id){
 khachHangRespository.deletedKhachHangStatus(id);
     }
-    public List<KhachHangResponse> searchKhachHang(String name){
-        return khachHangRespository.searchUserKhachHang(name);
+    public List<KhachHangResponse> searchKhachHang(String keyword, String gioiTinh, String trangThai){
+        return khachHangRespository.searchUserKhachHang(keyword, gioiTinh, trangThai);
 
     }
 }

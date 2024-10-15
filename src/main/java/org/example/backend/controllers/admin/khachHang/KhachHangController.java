@@ -92,9 +92,11 @@ public KhachHangController(KhachHangService khachHangService, NguoiDungRepositor
 
     @GetMapping(CUSTOMER_GET_BY_KH)
     public ResponseEntity<List<KhachHangResponse>> searchUserKhachHang(
-            @RequestParam(value = "name") String name
+            @RequestParam(value = "keyword" , defaultValue = "") String keyword,
+            @RequestParam(value = "gioiTinh", defaultValue = "") String gioiTinh,
+            @RequestParam(value = "trangThai", defaultValue = "") String trangThai
     ) {
-        List<KhachHangResponse> result = khachHangService.searchKhachHang("%"+name+"%");
+        List<KhachHangResponse> result = khachHangService.searchKhachHang(keyword, gioiTinh, trangThai);
         if (result.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
