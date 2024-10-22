@@ -52,7 +52,7 @@ public interface DotGiamGiaRepository extends JpaRepository<DotGiamGia, UUID> {
     AND (COALESCE(:#{#dotGiamGiaSearch.value}, '') = '' OR d.ma LIKE %:#{#dotGiamGiaSearch.value}% OR d.ten LIKE %:#{#dotGiamGiaSearch.value}%)
     AND (COALESCE(:#{#dotGiamGiaSearch.minNgay}, null) IS NULL OR d.ngayBatDau >= :#{#dotGiamGiaSearch.minNgay})
     AND (COALESCE(:#{#dotGiamGiaSearch.maxNgay}, null) IS NULL OR d.ngayKetThuc <= :#{#dotGiamGiaSearch.maxNgay})
-    AND (COALESCE(:#{#dotGiamGiaSearch.trangThai}, null) IS NULL OR d.trangThai = :#{#dotGiamGiaSearch.trangThai})
+    AND (COALESCE(:#{#dotGiamGiaSearch.trangThai}, '')  = '' OR d.trangThai = :#{#dotGiamGiaSearch.trangThai})
     AND (COALESCE(:#{#dotGiamGiaSearch.minGia}, null) IS NULL OR d.giaTri >= :#{#dotGiamGiaSearch.minGia})
     AND (COALESCE(:#{#dotGiamGiaSearch.maxGia}, null) IS NULL OR d.giaTri <= :#{#dotGiamGiaSearch.maxGia})
     """)
