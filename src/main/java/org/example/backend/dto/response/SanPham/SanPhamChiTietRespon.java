@@ -13,16 +13,19 @@ import java.util.UUID;
 @Getter
 @Setter
 public class SanPhamChiTietRespon {
-    private UUID uuid;
+    private UUID id;
+    private UUID idSanPham;
     private String ten;
+    private UUID idHang;
     private String hang;
+    private UUID idDanhMuc;
     private String danhMuc;
+    private UUID idDeGiay;
     private String deGiay;
-    private String chatLieu;
+    private UUID idMauSac;
     private String mauSac;
+    private UUID idKichThuoc;
     private String kichThuoc;
-    public String lopLot;
-
     public int soLuong;
     public BigDecimal giaBan;
     public BigDecimal giaNhap;

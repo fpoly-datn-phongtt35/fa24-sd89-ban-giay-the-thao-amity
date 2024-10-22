@@ -1,15 +1,24 @@
 package org.example.backend.controllers.admin.khachHang;
 
+import org.example.backend.common.PageResponse;
+import org.example.backend.common.ResponseData;
 import org.example.backend.dto.request.khachHang.KhachHangCreate;
 import org.example.backend.dto.request.khachHang.KhachHangUpdate;
+import org.example.backend.dto.response.NhanVien.NhanVienRespon;
+import org.example.backend.dto.response.khachHang.KhachHangResponse;
 import org.example.backend.mapper.khachHang.KhachHangMapper;
 import org.example.backend.models.NguoiDung;
 import org.example.backend.repositories.NguoiDungRepository;
 import org.example.backend.services.KhachHangService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -29,26 +38,44 @@ public KhachHangController(KhachHangService khachHangService, NguoiDungRepositor
     this.khachHangMapper = khachHangMapper;
 }
 @GetMapping(CUSTOMER_GET_ALL)
-    public ResponseEntity<?> getAllCustomer(){
-    return ResponseEntity.ok().body(khachHangService.getAllKhachHang());
+    public ResponseEntity<ResponseData<PageResponse<List<KhachHangResponse>>>> getAllCustomer(
+        @RequestParam(value = "page", defaultValue = "0") int page,
+        @RequestParam(value = "size", defaultValue = "5") int size)
+{
+    PageResponse<List<KhachHangResponse>> khachHangPage = khachHangService.getAllKhachHang(page, size);
+    ResponseData<PageResponse<List<KhachHangResponse>>> responseData = ResponseData.<PageResponse<List<KhachHangResponse>>>builder()
+            .message("Get all users done")
+            .status(HttpStatus.OK.value())
+            .data(khachHangPage)
+            .build();
+    return ResponseEntity.ok(responseData);
 }
 @PostMapping(CUSTOMER_CREATE)
-    public ResponseEntity<?> createCustomer(@RequestBody KhachHangCreate khachHangCreate){
+    public ResponseData<KhachHangResponse> createCustomer(@RequestBody KhachHangCreate khachHangCreate){
+
     NguoiDung nguoiDung = new NguoiDung();
     khachHangMapper.createNguoiDungFromDto(khachHangCreate,nguoiDung);
-    return ResponseEntity.ok().body(khachHangService.save(nguoiDung));
+    khachHangService.save(nguoiDung);
+    return ResponseData.<KhachHangResponse>builder()
+            .status(HttpStatus.CREATED.value())
+            .message("Customer role created successfully")
+            .build();
 }
 @PutMapping(CUSTOMER_UPDATE)
-    public ResponseEntity<?> updateCustomer(
+    public ResponseData<KhachHangResponse> updateCustomer(
         @PathVariable UUID id,
         @RequestBody KhachHangUpdate khachHangUpdate){
     Optional<NguoiDung> exitNguoiDung = khachHangService.findById(id);
     if(exitNguoiDung.isEmpty()){
-        return ResponseEntity.notFound().build();
+        return null;
     }
     NguoiDung nd = exitNguoiDung.get();
     khachHangMapper.updateNguoiDungFromDto(khachHangUpdate,nd);
-    return ResponseEntity.ok().body(khachHangService.save(nd));
+    khachHangService.save(nd);
+    return ResponseData.<KhachHangResponse>builder()
+            .status(HttpStatus.CREATED.value())
+            .message("Customer role update successfully")
+            .build();
 
 }
 @DeleteMapping(CUSTOMER_DELETE)
@@ -62,5 +89,42 @@ public KhachHangController(KhachHangService khachHangService, NguoiDungRepositor
     return ResponseEntity.notFound().build();
 
 }
+
+    @GetMapping(CUSTOMER_GET_BY_KH)
+    public ResponseEntity<List<KhachHangResponse>> searchUserKhachHang(
+            @RequestParam(value = "keyword" , defaultValue = "") String keyword,
+            @RequestParam(value = "gioiTinh", defaultValue = "") String gioiTinh,
+            @RequestParam(value = "trangThai", defaultValue = "") String trangThai
+    ) {
+        List<KhachHangResponse> result = khachHangService.searchKhachHang(keyword, gioiTinh, trangThai);
+        if (result.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(result);
+    }
+
+    @GetMapping(PAGE_CUSTOMER)
+    public ResponseEntity<ResponseData<PageResponse<List<KhachHangResponse>>>> getAllCustomerPage(
+            @RequestParam(value = "itemsPerPage", defaultValue = "5") int itemsPerPage,
+            @RequestParam(value = "page", defaultValue = "0") int page
+    ) {
+        Pageable phanTrang = PageRequest.of(page, itemsPerPage);
+        Page<KhachHangResponse> khachHangPage = khachHangService.getAllKhachHangPage(phanTrang);
+
+        PageResponse<List<KhachHangResponse>> pageResponse = PageResponse.<List<KhachHangResponse>>builder()
+                .page(khachHangPage.getNumber())
+                .size(khachHangPage.getSize())
+                .totalPage(khachHangPage.getTotalPages())
+                .items(khachHangPage.getContent())
+                .build();
+
+        ResponseData<PageResponse<List<KhachHangResponse>>> responseData = ResponseData.<PageResponse<List<KhachHangResponse>>>builder()
+                .message("Get paginated users done")
+                .status(HttpStatus.OK.value())
+                .data(pageResponse)
+                .build();
+
+        return ResponseEntity.ok(responseData);
+    }
 
 }

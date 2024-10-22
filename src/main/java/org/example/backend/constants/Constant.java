@@ -16,6 +16,6 @@ public class Constant {
 
     public static final String NHAN_VIEN = "nhanvien";
 
-    public static final String TRANG_THAI_NHAN_VIEN = "HOẠT ĐỘNG";
+    public static final String TRANG_THAI_NHAN_VIEN = "Hoạt động";
 
 }
