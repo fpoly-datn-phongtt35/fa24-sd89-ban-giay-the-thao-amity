@@ -61,7 +61,6 @@ public class NguoiDungService extends GenericServiceImpl<NguoiDung , UUID> {
         return nguoiDungRepository.searchUserNhanVien(keyword, gioiTinh, trangThai);
 
 
-        return nhanVienRespository.searchUserNhanVien(keyword, gioiTinh, trangThai);
 
     }
 
