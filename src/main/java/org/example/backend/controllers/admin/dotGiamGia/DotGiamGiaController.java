@@ -23,6 +23,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -53,8 +55,8 @@ public class DotGiamGiaController {
 
     @GetMapping(SALE_GET_ALL)
     public ResponseEntity<?> getAllSalePaginate(@RequestParam(value = "page", defaultValue = "0") int page,
-                                                @RequestParam(value = "size", defaultValue = "1") int size,
-                                                @RequestParam(defaultValue = "ma") String sortBy,
+                                                @RequestParam(value = "size", defaultValue = "5") int size,
+                                                @RequestParam(defaultValue = "ngayTao") String sortBy,
                                                 @RequestParam(defaultValue = "desc") String sortDir) {
         PageResponse<List<DotGiamGiaResponse>> dotGiamGiaPage = dotGiamGiaService.dotGiamGiaGetAllPaginate(page, size, sortBy, sortDir);
         ResponseData<PageResponse<List<DotGiamGiaResponse>>> responseData = ResponseData.<PageResponse<List<DotGiamGiaResponse>>>builder()
@@ -66,9 +68,23 @@ public class DotGiamGiaController {
 
     @GetMapping(SALE_SEARCH_VALUE)
     public ResponseEntity<?> searchSalePaginate(@RequestParam(value = "page", defaultValue = "0") int page,
-                                                @RequestParam(value = "size", defaultValue = "1") int size,
-                                                @RequestParam(defaultValue = "ma") String sortBy,
-                                                @RequestParam(defaultValue = "desc") String sortDir, @RequestBody DotGiamGiaSearch dotGiamGiaSearch){
+                                                @RequestParam(value = "size", defaultValue = "5") int size,
+                                                @RequestParam(defaultValue = "ngayTao") String sortBy,
+                                                @RequestParam(defaultValue = "desc") String sortDir,
+                                                @RequestParam(defaultValue = "") String value,
+                                                @RequestParam(defaultValue = "") Instant minNgay,
+                                                @RequestParam(defaultValue = "") Instant maxNgay,
+                                                @RequestParam(defaultValue = "") String trangThai,
+                                                @RequestParam(defaultValue = "") BigDecimal minGia,
+                                                @RequestParam(defaultValue = "") BigDecimal maxGia
+                                                ){
+        DotGiamGiaSearch dotGiamGiaSearch = new DotGiamGiaSearch();
+        dotGiamGiaSearch.setMaxGia(maxGia);
+        dotGiamGiaSearch.setMinGia(minGia);
+        dotGiamGiaSearch.setTrangThai(trangThai);
+        dotGiamGiaSearch.setMinNgay(minNgay);
+        dotGiamGiaSearch.setMaxNgay(maxNgay);
+        dotGiamGiaSearch.setValue(value);
         PageResponse<List<DotGiamGiaResponse>> searchDggPage = dotGiamGiaService.searchDotGiamGia(page, size, sortBy, sortDir, dotGiamGiaSearch);
         ResponseData<PageResponse<List<DotGiamGiaResponse>>> responseData = ResponseData.<PageResponse<List<DotGiamGiaResponse>>>builder()
                 .message("Search Sale")
@@ -127,7 +143,6 @@ public class DotGiamGiaController {
             dotGiamGiaService.setDeletedDotGiamGia(!d.getDeleted(), id);
             return ResponseEntity.ok().body("Set deleted id: " + id);
         }
-        System.out.println("hehe");
         return ResponseEntity.notFound().build();
     }
 

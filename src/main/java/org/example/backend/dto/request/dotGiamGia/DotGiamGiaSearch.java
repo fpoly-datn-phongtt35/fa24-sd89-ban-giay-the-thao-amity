@@ -1,11 +1,12 @@
 package org.example.backend.dto.request.dotGiamGia;
 
 import lombok.Builder;
+import lombok.ToString;
 
 import java.math.BigDecimal;
 import java.time.Instant;
 @Builder
-
+@ToString
 public class DotGiamGiaSearch {
     private String value;
     private Instant minNgay;
