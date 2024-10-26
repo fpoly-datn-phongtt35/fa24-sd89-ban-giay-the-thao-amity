@@ -15,14 +15,15 @@ import java.util.UUID;
 public interface HoaDonChiTietRepository extends JpaRepository<HoaDonChiTiet, UUID> {
     @Query("""
         select new org.example.backend.dto.response.quanLyDonHang.QuanLyDonHangRespose(
-            qldh.id,qldh.idHoaDon.ma,qldh.soLuong,qldh.idHoaDon.tongTien,qldh.idHoaDon.idNguoiDung.ten,qldh.ngayTao,qldh.idHoaDon.loaiHoaDon,qldh.trangThai,qldh.deleted
+            qldh.id, qldh.ma, count(hdct.idHoaDon), qldh.tongTien, qldh.idNguoiDung.ten, 
+            qldh.ngayTao, qldh.loaiHoaDon, qldh.trangThai, qldh.deleted
         )
-        from HoaDonChiTiet qldh
+        from HoaDonChiTiet hdct
+        join hdct.idHoaDon qldh
         where qldh.deleted = false 
-        and qldh.idHoaDon.idNguoiDung.chucVu ='khachhang'
-        order by qldh.ngayTao desc 
+        group by qldh.id, qldh.ma, qldh.tongTien, qldh.idNguoiDung.ten, 
+                 qldh.ngayTao, qldh.loaiHoaDon, qldh.trangThai, qldh.deleted
 """)
     Page<QuanLyDonHangRespose> getByPageHoaDon(Pageable pageable);
-
 
 }
