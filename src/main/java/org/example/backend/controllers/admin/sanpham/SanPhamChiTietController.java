@@ -223,5 +223,13 @@ public class SanPhamChiTietController {
         return null;
     }
 
+//    qr
+    @Autowired
+    private QRCodeService qrCodeService;
+    @GetMapping(Admin.PRODUCT_DETAIL_QR)
+    public ResponseEntity<String> getQRCode(@PathVariable String id) throws Exception {
+        String qrCode = qrCodeService.generateQRCode(id);
+        return ResponseEntity.ok(qrCode);
+    }
 
 }
