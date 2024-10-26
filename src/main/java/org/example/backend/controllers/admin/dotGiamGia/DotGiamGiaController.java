@@ -9,7 +9,9 @@ import org.example.backend.dto.request.dotGiamGia.DotGiamGiaUpdate;
 import org.example.backend.dto.response.dotGiamGia.DotGiamGiaResponse;
 import org.example.backend.mapper.dotGiamGia.DotGiamGiaMapper;
 import org.example.backend.models.DotGiamGia;
+import org.example.backend.repositories.DotGiamGiaRepository;
 import org.example.backend.services.DotGiamGiaService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
@@ -47,7 +49,8 @@ public class DotGiamGiaController {
     }
 
     final DotGiamGiaMapper dotGiamGiaMapper;
-
+    @Autowired
+    private DotGiamGiaRepository dotGiamGiaRepository;
 //    @GetMapping(SALE_GET_ALL)
 //    public ResponseEntity<?> getAllSale() {
 //        return ResponseEntity.ok().body(dotGiamGiaService.getDotGiamGiaGetAll());
@@ -124,6 +127,8 @@ public class DotGiamGiaController {
         }
         return ResponseEntity.notFound().build();
     }
+
+
 
     @GetMapping(SALE_GET_BY_ID)
     public ResponseEntity<?> getSaleById(@PathVariable UUID id) {

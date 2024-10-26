@@ -32,16 +32,7 @@ public interface SanPhamChiTietRepository extends JpaRepository<SanPhamChiTiet, 
 """)
     void setDeleted(Boolean deleted,UUID id);
 
-//    @Query("""
-//        select new org.example.backend.dto.response.SanPham.SanPhamChiTietRespon(s.id,s.idSanPham.id,
-//        s.idSanPham.ten,s.idHang.id,s.idHang.ten,s.idDanhMuc.id,s.idDanhMuc.ten,s.idDeGiay.id,s.idDeGiay.ten,s.idMauSac.id,
-//        s.idMauSac.ten,s.idKichThuoc.id,s.idKichThuoc.ten,
-//        s.soLuong,s.giaBan,s.giaNhap,s.trangThai,s.hinhAnh
-//        )
-//        from SanPhamChiTiet  s
-//        where s.deleted=false  and s.idSanPham.ten like :ten
-//""")
-//    List<SanPhamChiTietRespon> search(String ten);
+
 
     @Query("""
     select new org.example.backend.dto.response.SanPham.SanPhamChiTietRespon(
@@ -71,4 +62,17 @@ public interface SanPhamChiTietRepository extends JpaRepository<SanPhamChiTiet, 
         order by s.ngayTao DESC 
 """)
     Page<SanPhamChiTietRespon> phanTrang(Pageable pageable);
+
+    @Query("""
+         select new org.example.backend.dto.response.SanPham.SanPhamChiTietRespon(s.id,s.idSanPham.id,
+        s.idSanPham.ten,s.idHang.id,s.idHang.ten,s.idDanhMuc.id,s.idDanhMuc.ten,s.idDeGiay.id,s.idDeGiay.ten,s.idMauSac.id,
+        s.idMauSac.ten,s.idKichThuoc.id,s.idKichThuoc.ten,
+        s.soLuong,s.giaBan,s.giaNhap,s.trangThai,s.hinhAnh
+        )
+        from SanPhamChiTiet  s
+        where s.deleted=false  and s.idSanPham.id =:idSanPham
+        
+""")
+
+    List<SanPhamChiTietRespon> findByIdSpct(UUID idSanPham);
 }
