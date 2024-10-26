@@ -128,7 +128,32 @@
             <version>0.2.0</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/com.cloudinary/cloudinary-core -->
 <!--        <dependency>-->
+<!--            <groupId>com.cloudinary</groupId>-->
+<!--            <artifactId>cloudinary-core</artifactId>-->
+<!--            <version>1.39.0</version>-->
+<!--        </dependency>-->
+        <!-- https://mvnrepository.com/artifact/com.cloudinary/cloudinary-core -->
+        <dependency>
+            <groupId>com.cloudinary</groupId>
+            <artifactId>cloudinary-core</artifactId>
+            <version>1.32.0</version> <!-- Phiên bản mà bạn đã thử -->
+        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.cloudinary</groupId>-->
+<!--            <artifactId>cloudinary-httpclient</artifactId>-->
+<!--            <version>1.32.0</version>-->
+<!--        </dependency>-->
+        <dependency>
+            <groupId>com.cloudinary</groupId>
+            <artifactId>cloudinary-http44</artifactId>
+            <version>1.32.0</version>
+        </dependency>
+
+
+
+        <!--        <dependency>-->
 <!--            <groupId>org.apache.tomcat.embed</groupId>-->
 <!--            <artifactId>tomcat-embed-jasper</artifactId>-->
 <!--            <version>10.1.23</version>-->
