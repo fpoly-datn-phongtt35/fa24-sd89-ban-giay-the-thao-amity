@@ -25,7 +25,7 @@ public class QuanLyDonHangRespose {
 
     private String maHD;
 
-    private Integer soLuong;
+    private Long soLuong;
 
     private BigDecimal tongTien;
 
