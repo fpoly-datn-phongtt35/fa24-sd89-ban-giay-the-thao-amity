@@ -53,6 +53,7 @@ public class Admin {
     public static final String PRODUCT_DETAIL_DETAIL = PRODUCT_DETAIL + "/detail/{id}";
     public static final String PRODUCT_DETAIL_SEARCH = PRODUCT_DETAIL + "/search";
     public static final String PRODUCT_DETAIL_PAGE = PRODUCT_DETAIL + "/page";
+    public static final String PRODUCT_DETAIL_QR = PRODUCT_DETAIL + "/qrcode/{id}";
 
 
 
