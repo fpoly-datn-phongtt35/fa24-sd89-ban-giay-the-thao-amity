@@ -247,4 +247,12 @@ public class Admin {
     public static final String PRODUCT_RETURN_UPDATE = PRODUCT_RETURN + "/update/{id}";
     public static final String PRODUCT_RETURN_DELETE = PRODUCT_RETURN + "/delete/{id}";
 
+
+    public static final String SELL = BASE + "/sell";
+    public static final String SELL_GET_ALL = SELL + "/all";
+    public static final String SELL_GET_BY_ID = SELL + "/{id}";
+    public static final String SELL_CREATE = SELL + "/create";
+    public static final String SELL_UPDATE = SELL + "/update/{id}";
+    public static final String SELL_SET_DELETE = SELL + "/update/{id}";
+
 }
