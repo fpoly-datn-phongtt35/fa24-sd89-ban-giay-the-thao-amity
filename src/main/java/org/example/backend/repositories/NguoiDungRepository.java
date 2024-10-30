@@ -187,7 +187,7 @@ public interface NguoiDungRepository extends JpaRepository<NguoiDung, UUID> {
         and (:gioiTinh is null or :gioiTinh = '' or nd.gioiTinh = :gioiTinh)
         and (:trangThai is null or :trangThai = '' or nd.trangThai = :trangThai)
     """)
-    List<KhachHangResponse> searchUserKhachHang(String keyword, String gioiTinh, String trangThai);
+    Page<KhachHangResponse> searchUserKhachHang(Pageable pageable, String keyword, String gioiTinh, String trangThai);
 
     @Query("""
         select new org.example.backend.dto.response.khachHang.KhachHangResponse(nd.id,nd.ma,nd.email,nd.sdt,nd.ten,nd.diaChi,nd.ngaySinh,nd.gioiTinh,nd.diem,nd.trangThai, nd.deleted, nd.chucVu) 
