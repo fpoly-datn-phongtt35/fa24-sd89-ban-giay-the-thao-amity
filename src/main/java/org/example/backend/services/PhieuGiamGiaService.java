@@ -1,9 +1,13 @@
 package org.example.backend.services;
 
+import org.example.backend.common.PageResponse;
 import org.example.backend.dto.response.dotGiamGia.DotGiamGiaResponse;
 import org.example.backend.dto.response.phieuGiamGia.phieuGiamGiaReponse;
 import org.example.backend.models.PhieuGiamGia;
 import org.example.backend.repositories.PhieuGiamGiaRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
@@ -16,19 +20,28 @@ public class PhieuGiamGiaService extends GenericServiceImpl<PhieuGiamGia , UUID>
         this. PGGrepository= PGGRepository;
     }
 
+    public PageResponse<List<phieuGiamGiaReponse>> getAllPGG(int page, int itemsPerPage) {
+        Pageable pageable = PageRequest.of(page, itemsPerPage);
+        Page<phieuGiamGiaReponse> PGGPage = PGGrepository.getAllPhieuGiamGia(pageable);
+
+        return PageResponse.<List<phieuGiamGiaReponse>>builder()
+                .page(PGGPage.getNumber())
+                .size(PGGPage.getSize())
+                .totalPage(PGGPage.getTotalPages())
+                .items(PGGPage.getContent())
+                .build();
+    }
+
     private final PhieuGiamGiaRepository PGGrepository;
 
-    public List<phieuGiamGiaReponse> getPGGGetAll() {
-        return PGGrepository.getAllPhieuGiamGia();
+    public Page<phieuGiamGiaReponse> getPGGGetAll(Pageable pageable) {
+        return PGGrepository.getAllPhieuGiamGia(pageable);
     }
 
     public void setDeletedPhieuGiamGia(Boolean deleted, UUID id){
         PGGrepository.updateDetailPhieuGiamGia(deleted, id);
     }
 
-//    public List<phieuGiamGiaReponse> searchPGG(String find , String filter){
-//        return PGGrepository.searchPGG(find , filter);
-//    }
 public List<phieuGiamGiaReponse> searchPGG(String find, String filterType) {
     switch (filterType) {
         case "tienMat":

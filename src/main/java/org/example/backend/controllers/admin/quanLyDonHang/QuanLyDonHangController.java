@@ -6,6 +6,7 @@ import org.example.backend.common.ResponseData;
 import org.example.backend.dto.response.NhanVien.NhanVienRespon;
 import org.example.backend.dto.response.quanLyDonHang.QuanLyDonHangRespose;
 import org.example.backend.repositories.HoaDonChiTietRepository;
+import org.example.backend.repositories.HoaDonRepository;
 import org.example.backend.services.HoaDonChiTietService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -27,17 +28,19 @@ public class QuanLyDonHangController {
 
     final HoaDonChiTietRepository hoaDonChiTietRepository;
     private final HoaDonChiTietService hoaDonChiTietService;
+    private final HoaDonRepository hoaDonRepository;
 
-    public QuanLyDonHangController(HoaDonChiTietRepository hoaDonChiTietRepository, HoaDonChiTietService hoaDonChiTietService){
+    public QuanLyDonHangController(HoaDonChiTietRepository hoaDonChiTietRepository, HoaDonChiTietService hoaDonChiTietService,HoaDonRepository hoaDonRepository){
         this.hoaDonChiTietRepository = hoaDonChiTietRepository;
         this.hoaDonChiTietService= hoaDonChiTietService;
+        this.hoaDonRepository = hoaDonRepository;
     }
     @GetMapping(BILL_GET_ALL)
     public ResponseEntity<ResponseData<PageResponse<List<QuanLyDonHangRespose>>>> getAllHoaDon(
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "size", defaultValue = "5") int size
     ){
-             PageResponse<List<QuanLyDonHangRespose>> qlhdPage = hoaDonChiTietService.getAllNhanVien(page,size);
+             PageResponse<List<QuanLyDonHangRespose>> qlhdPage = hoaDonChiTietService.getHoaDon(page,size);
              ResponseData<PageResponse<List<QuanLyDonHangRespose>>> responseData = ResponseData.<PageResponse<List<QuanLyDonHangRespose>>>builder()
                .message("Get all done")
                .status(HttpStatus.OK.value())

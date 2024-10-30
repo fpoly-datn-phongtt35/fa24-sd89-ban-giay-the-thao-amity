@@ -21,7 +21,7 @@ public class HoaDonChiTietService extends GenericServiceImpl<HoaDonChiTiet, UUID
         super(repository);
         this.hoaDonChiTietRepository = hoaDonChiTietRepository;
     }
-    public PageResponse<List<QuanLyDonHangRespose>> getAllNhanVien(int page, int size) {
+    public PageResponse<List<QuanLyDonHangRespose>> getHoaDon(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<QuanLyDonHangRespose> qlhdPage = hoaDonChiTietRepository.getByPageHoaDon(pageable);
 

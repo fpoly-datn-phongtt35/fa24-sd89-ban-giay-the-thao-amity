@@ -1,5 +1,6 @@
 package org.example.backend.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,6 +24,7 @@ import static org.example.backend.constants.Constant.CURRENT_TIME;
 @Setter
 @Entity
 @Table(name = "san_pham_chi_tiet")
+//@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class SanPhamChiTiet {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

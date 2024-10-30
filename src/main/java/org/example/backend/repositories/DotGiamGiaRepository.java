@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Repository
@@ -21,6 +22,12 @@ public interface DotGiamGiaRepository extends JpaRepository<DotGiamGia, UUID> {
                 from DotGiamGia d where d.deleted=false 
             """)
     List<DotGiamGiaResponse> getAllDotGiamGia();
+
+    @Query("""
+                select new org.example.backend.dto.response.dotGiamGia.DotGiamGiaResponse(d.id, d.ma, d.ten, d.giaTri, d.ngayBatDau, d.ngayKetThuc, d.loai, d.trangThai, d.hinhThuc, d.dieuKien)
+                from DotGiamGia d where d.deleted=false and d.id=:id
+            """)
+    Optional<DotGiamGiaResponse> getAllDotGiamGiaById(UUID id);
 
     @Query("""
                 update DotGiamGia d 

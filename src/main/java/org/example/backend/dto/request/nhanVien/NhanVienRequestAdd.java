@@ -27,7 +27,7 @@ public class NhanVienRequestAdd {
 
     private String sdt;
 
-    private String matKhau;
+    private String matKhau="a1234b5c";
 
     private String ten;
 
