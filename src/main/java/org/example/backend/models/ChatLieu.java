@@ -1,5 +1,7 @@
 package org.example.backend.models;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -63,7 +65,11 @@ public class ChatLieu {
     private Boolean deleted;
 
 
-    
+//    @JsonCreator
+//    public ChatLieu(@JsonProperty("id") UUID id) {
+//        this.id = id;
+//    }
+
     @PrePersist
     public void prePersist() {
         // Set default creation and modification dates

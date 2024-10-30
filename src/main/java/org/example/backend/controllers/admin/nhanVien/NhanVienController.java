@@ -9,6 +9,7 @@ import org.example.backend.common.ResponseData;
 import org.example.backend.dto.request.nhanVien.NhanVienRequestAdd;
 import org.example.backend.dto.request.nhanVien.NhanVienRequestUpdate;
 import org.example.backend.dto.response.NhanVien.NhanVienRespon;
+import org.example.backend.dto.response.dotGiamGia.DotGiamGiaResponse;
 import org.example.backend.mapper.NhanVienMapper;
 import org.example.backend.models.NguoiDung;
 import org.example.backend.repositories.NguoiDungRepository;
@@ -58,6 +59,14 @@ public class NhanVienController {
                 .build();
 
         return ResponseEntity.ok(responseData);
+    }
+
+    @GetMapping(USER_GET_BY_ID)
+    public ResponseEntity<?> getNhanVienById(
+            @PathVariable UUID id
+    ){
+        List<NhanVienRespon> nhanVienById = nhanVienService.getNhanVienById(id);
+        return ResponseEntity.ok(nhanVienById);
     }
 
 
@@ -132,16 +141,19 @@ public class NhanVienController {
 
 
     @GetMapping(USER_GET_BY_NV)
-    public ResponseEntity<List<NhanVienRespon>> searchUserNhanVien(
+    public ResponseEntity<?> searchUserNhanVien(
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "5") int size,
             @RequestParam(value = "keyword",defaultValue = "") String keyword,
             @RequestParam(value = "gioiTinh",defaultValue = "") String gioiTinh,
             @RequestParam(value = "trangThai",defaultValue = "") String trangThai
          ) {
-        List<NhanVienRespon> result = nhanVienService.searchNhanVien(keyword, gioiTinh, trangThai);
-        if (result.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.ok(result);
+        PageResponse<List<NhanVienRespon>> searchNhanVienValue = nhanVienService.searchNhanVien(page,size,keyword, gioiTinh, trangThai);
+        ResponseData<PageResponse<List<NhanVienRespon>>> responseData = ResponseData.<PageResponse<List<NhanVienRespon>>>builder()
+                .message("Search Sale")
+                .status(HttpStatus.OK.value())
+                .data(searchNhanVienValue).build();
+        return ResponseEntity.ok().body(responseData);
     }
 
     @GetMapping(USER_SORT)

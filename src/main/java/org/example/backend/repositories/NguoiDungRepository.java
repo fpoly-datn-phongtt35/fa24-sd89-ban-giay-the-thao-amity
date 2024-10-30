@@ -71,14 +71,26 @@ public interface NguoiDungRepository extends JpaRepository<NguoiDung, UUID> {
         and (:gioiTinh is null or :gioiTinh = '' or nd.gioiTinh = :gioiTinh)
         and (:trangThai is null or :trangThai = '' or nd.trangThai = :trangThai)
     """)
-    List<NhanVienRespon> searchUserNhanVien(String keyword, String gioiTinh, String trangThai);
+    Page<NhanVienRespon> searchUserNhanVien(Pageable pageable, String keyword, String gioiTinh, String trangThai);
 
+    @Query("""
+    select new org.example.backend.dto.response.NhanVien.NhanVienRespon(
+        nd.id, nd.ma, nd.email, nd.sdt, nd.matKhau, nd.ten, nd.diaChi, nd.ngaySinh, 
+        nd.gioiTinh, nd.hinhAnh, nd.cccd, nd.chucVu, nd.trangThai, nd.deleted
+    )
+    from NguoiDung nd
+    where nd.chucVu = 'nhanvien' and nd.deleted = false
+    and nd.id =:id
+    order by nd.ngayTao DESC
+""")
+    List<NhanVienRespon> getNhanVienById(UUID id);
 
 
     @Query("""
     select new org.example.backend.dto.response.NhanVien.NhanVienRespon(nd.id, nd.ma, nd.email, nd.sdt, nd.matKhau, nd.ten, nd.diaChi, nd.ngaySinh, nd.gioiTinh, nd.hinhAnh, nd.cccd, nd.chucVu, nd.trangThai, nd.deleted)
     from NguoiDung nd
     where  nd.chucVu = 'nhanvien'  and nd.deleted = false
+
     order by nd.ten DESC 
 """)
     List<NhanVienRespon>  sortNhanVien();
@@ -145,6 +157,7 @@ public interface NguoiDungRepository extends JpaRepository<NguoiDung, UUID> {
 
 
 
+
     //    KhachHang
     @Query("""
     select new org.example.backend.dto.response.khachHang.KhachHangResponse(nd.id,nd.ma,nd.email,nd.sdt,nd.ten,nd.diaChi,nd.ngaySinh,nd.gioiTinh,nd.diem,nd.trangThai, nd.deleted, nd.chucVu)
@@ -161,12 +174,20 @@ public interface NguoiDungRepository extends JpaRepository<NguoiDung, UUID> {
     void deletedKhachHangStatus(UUID id);
 
     @Query("""
-    select new org.example.backend.dto.response.khachHang.KhachHangResponse(nd.id,nd.ma,nd.email,nd.sdt,nd.ten,nd.diaChi,nd.ngaySinh,nd.gioiTinh,nd.diem,nd.trangThai, nd.deleted, nd.chucVu)    from NguoiDung nd
-    where (nd.ma like :name or nd.ten like :name or nd.sdt like :name) 
-      and nd.chucVu = 'khachhang' 
-      and nd.deleted = false
-""")
-    List<KhachHangResponse> searchUserKhachHang(String name);
+    select new org.example.backend.dto.response.khachHang.KhachHangResponse(nd.id,nd.ma,nd.email,nd.sdt,nd.ten,nd.diaChi,nd.ngaySinh,nd.gioiTinh,nd.diem,nd.trangThai, nd.deleted, nd.chucVu)    
+      from NguoiDung nd
+        where nd.chucVu = 'khachhang' 
+        and nd.deleted = false
+        and (
+            (:keyword is null or :keyword = '' or 
+            lower(nd.ten) like lower(concat('%', :keyword, '%')) or
+            lower(nd.ma) like lower(concat('%', :keyword, '%')) or
+            lower(nd.sdt) like lower(concat('%', :keyword, '%')))
+        )
+        and (:gioiTinh is null or :gioiTinh = '' or nd.gioiTinh = :gioiTinh)
+        and (:trangThai is null or :trangThai = '' or nd.trangThai = :trangThai)
+    """)
+    List<KhachHangResponse> searchUserKhachHang(String keyword, String gioiTinh, String trangThai);
 
     @Query("""
         select new org.example.backend.dto.response.khachHang.KhachHangResponse(nd.id,nd.ma,nd.email,nd.sdt,nd.ten,nd.diaChi,nd.ngaySinh,nd.gioiTinh,nd.diem,nd.trangThai, nd.deleted, nd.chucVu) 

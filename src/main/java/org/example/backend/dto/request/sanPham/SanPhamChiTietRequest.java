@@ -20,55 +20,49 @@ import java.util.UUID;
 public class SanPhamChiTietRequest {
     private UUID id;
     private SanPham idSanPham;
-
     private MauSac idMauSac;
-
-
     private KichThuoc idKichThuoc;
-
     private DeGiay idDeGiay;
-
     private DanhMuc idDanhMuc;
-
     private Hang idHang;
-
-
     private String ten;
-
-
     private BigDecimal giaBan;
-
-
     private BigDecimal giaNhap;
-
-
     private String qrCode;
-
-
     private String moTa;
-
     private Integer soLuong;
-
-
     private Integer soLuongTra;
-
     private String hinhAnh;
-
-
     private String nguoiTao;
-
-
     private String nguoiSua;
-
-
     private Instant ngayTao;
-
-
     private Instant ngaySua;
-
-
     private String ghiChu;
-
     private String trangThai;
+
+
+
+//    private UUID id;
+//    private String idSanPham;
+//    private String idMauSac;
+//    private String idKichThuoc;
+//    private String idDeGiay;
+//    private String idDanhMuc;
+//    private String idHang;
+//    private String ten;
+//    private BigDecimal giaBan;
+//    private BigDecimal giaNhap;
+//    private String qrCode;
+//    private String moTa;
+//    private Integer soLuong;
+//    private Integer soLuongTra;
+//    private String hinhAnh;
+//    private String nguoiTao;
+//    private String nguoiSua;
+//    private Instant ngayTao;
+//    private Instant ngaySua;
+//    private String ghiChu;
+//    private String trangThai;
+
 
 }

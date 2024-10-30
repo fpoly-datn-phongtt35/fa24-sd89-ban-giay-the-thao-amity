@@ -15,7 +15,7 @@ import java.util.UUID;
 
 public interface SanPhamRepository extends JpaRepository<SanPham, UUID> {
     @Query("""
-    select new org.example.backend.dto.response.SanPham.SanPhamResponse(s.id,s.ma,s.ten,s.ngayTao,s.idChatLieu.ten,s.idLopLot.ten,s.trangThai)
+    select new org.example.backend.dto.response.SanPham.SanPhamResponse(s.id,s.ma,s.ten,s.ngayTao,s.idChatLieu.id,s.idChatLieu.ten,s.idLopLot.id,s.idLopLot.ten,s.trangThai)
     from SanPham s where s.deleted= false 
 """)
     List<SanPhamResponse> getAll();
@@ -43,7 +43,7 @@ public interface SanPhamRepository extends JpaRepository<SanPham, UUID> {
 
 
     @Query("""
-    select new org.example.backend.dto.response.SanPham.SanPhamResponse(s.id,s.ma,s.ten,s.ngayTao,s.idChatLieu.ten,s.idLopLot.ten,s.trangThai)
+    select new org.example.backend.dto.response.SanPham.SanPhamResponse(s.id,s.ma,s.ten,s.ngayTao,s.idChatLieu.id,s.idChatLieu.ten,s.idLopLot.id,s.idLopLot.ten,s.trangThai)
     from SanPham s
      where s.deleted= false  and  s.ten Like :ten
     
@@ -52,7 +52,7 @@ public interface SanPhamRepository extends JpaRepository<SanPham, UUID> {
 
 
     @Query("""
-        select new org.example.backend.dto.response.SanPham.SanPhamResponse(s.id,s.ma,s.ten,s.ngayTao,s.idChatLieu.ten,s.idLopLot.ten,s.trangThai)
+        select new org.example.backend.dto.response.SanPham.SanPhamResponse(s.id,s.ma,s.ten,s.ngayTao,s.idChatLieu.id,s.idChatLieu.ten,s.idLopLot.id,s.idLopLot.ten,s.trangThai)
         from SanPham s
          where s.deleted= false  
          order by s.ngayTao DESC 
