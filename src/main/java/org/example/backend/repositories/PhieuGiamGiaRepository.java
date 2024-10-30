@@ -57,21 +57,21 @@ public interface PhieuGiamGiaRepository extends JpaRepository<PhieuGiamGia, UUID
             "WHERE p.deleted = false AND p.trangThai LIKE :trangThai AND (p.ma LIKE :find OR p.ten LIKE :find OR p.dieuKien LIKE :find)")
     List<phieuGiamGiaReponse> searchByTrangThaiAndFind(String trangThai, String find);
 
-    @Query("""
-            select new org.example.backend.dto.response.phieuGiamGia.phieuGiamGiaReponse(
-                            p.id, p.ma, p.ten,p.loai, p.giaTri,p.giamToiDa,p.mucDo,
-                             p.ngayBatDau, p.ngayKetThuc,p.soLuong, p.dieuKien, p.trangThai)
-                            from PhieuGiamGia p where p.deleted=false 
-                AND (COALESCE(:#{#keyFind}, '') = '' OR p.ma LIKE %:#{#keyFind}% OR p.ten LIKE %:#{#keyFind}%)
-                AND (COALESCE(:#{#minNgay}, null) IS NULL OR p.ngayBatDau >= :#{#minNgay})
-                AND (COALESCE(:#{#maxNgay}, null) IS NULL OR p.ngayKetThuc <= :#{#maxNgay})
-                AND (COALESCE(:#{#trangThai}, 'Tất Cả') IS NULL OR p.trangThai = :#{#trangThai})
-                AND (COALESCE(:#{#Loai}, 0) IS NULL OR p.loai = :#{#Loai})
-                AND (COALESCE(:#{#minGia}, null) IS NULL OR p.giaTri >= :#{#minGia})
-                AND (COALESCE(:#{#maxGia}, null) IS NULL OR p.giaTri <= :#{#maxGia})
-                AND (COALESCE(:#{#minGia}, null) IS NULL OR p.giamToiDa >= :#{#minGia})
-                AND (COALESCE(:#{#maxGia}, null) IS NULL OR p.giamToiDa <= :#{#maxGia})
-                """)
-    Page<phieuGiamGiaReponse> searchPhieuGiamGia(Pageable pageable, String keyFind, Integer Loai, String trangThai, Integer SapXep,
-                                                 Instant minNgay, Instant maxNgay, BigDecimal minGia, BigDecimal maxGia);
+//    @Query("""
+//            select new org.example.backend.dto.response.phieuGiamGia.phieuGiamGiaReponse(
+//                            p.id, p.ma, p.ten,p.loai, p.giaTri,p.giamToiDa,p.mucDo,
+//                             p.ngayBatDau, p.ngayKetThuc,p.soLuong, p.dieuKien, p.trangThai)
+//                            from PhieuGiamGia p where p.deleted=false
+//                AND (COALESCE(:#{#keyFind}, '') = '' OR p.ma LIKE %:#{#keyFind}% OR p.ten LIKE %:#{#keyFind}%)
+//                AND (COALESCE(:#{#minNgay}, null) IS NULL OR p.ngayBatDau >= :#{#minNgay})
+//                AND (COALESCE(:#{#maxNgay}, null) IS NULL OR p.ngayKetThuc <= :#{#maxNgay})
+//                AND (COALESCE(:#{#trangThai}, 'Tất Cả') IS NULL OR p.trangThai = :#{#trangThai})
+//                AND (COALESCE(:#{#Loai}, 0) IS NULL OR p.loai = :#{#Loai})
+//                AND (COALESCE(:#{#minGia}, null) IS NULL OR p.giaTri >= :#{#minGia})
+//                AND (COALESCE(:#{#maxGia}, null) IS NULL OR p.giaTri <= :#{#maxGia})
+//                AND (COALESCE(:#{#minGia}, null) IS NULL OR p.giamToiDa >= :#{#minGia})
+//                AND (COALESCE(:#{#maxGia}, null) IS NULL OR p.giamToiDa <= :#{#maxGia})
+//                """)
+//    Page<phieuGiamGiaReponse> searchPhieuGiamGia(Pageable pageable, String keyFind, Integer Loai, String trangThai, Integer SapXep,
+//                                                 Instant minNgay, Instant maxNgay, BigDecimal minGia, BigDecimal maxGia);
 }
