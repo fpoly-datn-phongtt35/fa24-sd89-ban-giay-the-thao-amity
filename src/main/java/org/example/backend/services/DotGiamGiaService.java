@@ -57,5 +57,10 @@ public class DotGiamGiaService extends GenericServiceImpl<DotGiamGia, UUID> {
 
     }
 
+//    public DotGiamGiaResponse getDotGiamGia(UUID id) {
+//         return dotGiamGiaRepository.getAllDotGiamGiaById(id);
+//
+//    }
+
 
 }

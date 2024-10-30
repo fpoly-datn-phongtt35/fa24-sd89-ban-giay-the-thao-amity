@@ -40,6 +40,7 @@ public class DotGiamGiaSpctController {
         if (dotGiamGia != null) {
             dotGiamGiaMapper.updateDotGiamGiaFromDto(dotGiamGiaSpctCreate.getDotGiamGiaUpdate(), dotGiamGia);
             dotGiamGiaSpctService.createDotGiamGiaWithSpct(dotGiamGia, dotGiamGiaSpctCreate.getIdSpcts());
+            return ResponseEntity.ok().build();
         }
         // chua co
         DotGiamGia newDotGiamGia = new DotGiamGia();

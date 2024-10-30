@@ -7,8 +7,10 @@ import org.example.backend.dto.request.sanPham.SanPhamRequest;
 import org.example.backend.dto.response.SanPham.DeGiayRepon;
 import org.example.backend.dto.response.SanPham.SanPhamDetailRespon;
 import org.example.backend.dto.response.SanPham.SanPhamResponse;
+import org.example.backend.models.ChatLieu;
 import org.example.backend.models.MauSac;
 import org.example.backend.models.SanPham;
+import org.example.backend.repositories.ChatLieuRepository;
 import org.example.backend.repositories.SanPhamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -25,6 +27,8 @@ import java.util.UUID;
 public class SanPhamController {
     @Autowired
     SanPhamRepository sanPhamRepository;
+    @Autowired
+    ChatLieuRepository chatLieuRepository;
     @GetMapping(Admin.PRODUCT_GET_ALL)
     public ResponseEntity<?> getAll() {
         return ResponseEntity.ok(sanPhamRepository.getAll());
@@ -46,6 +50,7 @@ public class SanPhamController {
     @PutMapping(Admin.PRODUCT_UPDATE)
     public ResponseEntity<?> update(@PathVariable UUID id, @RequestBody SanPhamRequest sanPhamRequest) {
         SanPham sp = sanPhamRepository.findById(id).orElse(null);
+
         if (sp!= null){
             sp.setMa(sanPhamRequest.getMa());
             sp.setTen(sanPhamRequest.getTen());
