@@ -1,5 +1,9 @@
 package org.example.backend.services;
 
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.example.backend.common.PageResponse;
 import org.example.backend.dto.response.dotGiamGia.DotGiamGiaResponse;
 import org.example.backend.dto.response.phieuGiamGia.phieuGiamGiaReponse;
@@ -12,6 +16,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.List;
@@ -23,22 +29,22 @@ public class PhieuGiamGiaService extends GenericServiceImpl<PhieuGiamGia , UUID>
         this. PGGrepository= PGGRepository;
     }
 
-    public PageResponse<List<phieuGiamGiaReponse>> getAllPGG(int page, int itemsPerPage) {
-        Pageable pageable = PageRequest.of(page, itemsPerPage);
-        Page<phieuGiamGiaReponse> PGGPage = PGGrepository.getAllPhieuGiamGia(pageable);
-
-        return PageResponse.<List<phieuGiamGiaReponse>>builder()
-                .page(PGGPage.getNumber())
-                .size(PGGPage.getSize())
-                .totalPage(PGGPage.getTotalPages())
-                .items(PGGPage.getContent())
-                .build();
-    }
+//    public PageResponse<List<phieuGiamGiaReponse>> getAllPGG(int page, int itemsPerPage) {
+//        Pageable pageable = PageRequest.of(page, itemsPerPage);
+//        Page<phieuGiamGiaReponse> PGGPage = PGGrepository.getAllPhieuGiamGia(pageable);
+//
+//        return PageResponse.<List<phieuGiamGiaReponse>>builder()
+//                .page(PGGPage.getNumber())
+//                .size(PGGPage.getSize())
+//                .totalPage(PGGPage.getTotalPages())
+//                .items(PGGPage.getContent())
+//                .build();
+//    }
 
     private final PhieuGiamGiaRepository PGGrepository;
 
-    public Page<phieuGiamGiaReponse> getPGGGetAll(Pageable pageable) {
-        return PGGrepository.getAllPhieuGiamGia(pageable);
+    public List<phieuGiamGiaReponse> getPGGGetAll() {
+        return PGGrepository.getAllPhieuGiamGia();
     }
 
     public void setDeletedPhieuGiamGia(Boolean deleted, UUID id){
@@ -67,6 +73,7 @@ public class PhieuGiamGiaService extends GenericServiceImpl<PhieuGiamGia , UUID>
         // Tạo Pageable với phân trang và sắp xếp
         Pageable pageable = PageRequest.of(page, itemsPerPage, sort);
 
+
 //        Pageable pageable = PageRequest.of(page, itemsPerPage);
         Page<phieuGiamGiaReponse> PGGPage = PGGrepository.searchPhieuGiamGia(pageable,keyFind,trangThai,minNgay,maxNgay,minGia,maxGia);
         return PageResponse.<List<phieuGiamGiaReponse>>builder()
@@ -75,5 +82,50 @@ public class PhieuGiamGiaService extends GenericServiceImpl<PhieuGiamGia , UUID>
                 .totalPage(PGGPage.getTotalPages())
                 .items(PGGPage.getContent())
                 .build();
+    }
+
+    public byte[] exportToExcel(List<phieuGiamGiaReponse> voucherList) throws IOException {
+        Workbook workbook = new XSSFWorkbook();
+        Sheet sheet = workbook.createSheet("Phiếu Giảm Giá");
+
+        // Tạo header
+        Row headerRow = sheet.createRow(0);
+        headerRow.createCell(0).setCellValue("ID");
+        headerRow.createCell(1).setCellValue("Mã");
+        headerRow.createCell(2).setCellValue("Tên");
+        headerRow.createCell(3).setCellValue("Loại");
+        headerRow.createCell(4).setCellValue("Giá Trị");
+        headerRow.createCell(5).setCellValue("Giảm Tối Đa");
+        headerRow.createCell(6).setCellValue("Mức Độ");
+        headerRow.createCell(7).setCellValue("Ngày Bắt Đầu");
+        headerRow.createCell(8).setCellValue("Ngày Kết Thúc");
+        headerRow.createCell(9).setCellValue("Số Lượng");
+        headerRow.createCell(10).setCellValue("Điều Kiện");
+        headerRow.createCell(11).setCellValue("Trạng Thái");
+
+        // Thêm dữ liệu
+        int rowNum = 1;
+        for (phieuGiamGiaReponse voucher : voucherList) {
+            Row row = sheet.createRow(rowNum++);
+            row.createCell(0).setCellValue(voucher.getId().toString());
+            row.createCell(1).setCellValue(voucher.getMa());
+            row.createCell(2).setCellValue(voucher.getTen());
+            row.createCell(3).setCellValue(voucher.getLoai() ? "Phần trăm" : "Giá cố định");
+            row.createCell(4).setCellValue(voucher.getGiaTri().doubleValue());
+            row.createCell(5).setCellValue(voucher.getGiamToiDa().doubleValue());
+            row.createCell(6).setCellValue(voucher.getMucDo());
+            row.createCell(7).setCellValue(voucher.getNgayBatDau().toString());
+            row.createCell(8).setCellValue(voucher.getNgayKetThuc().toString());
+            row.createCell(9).setCellValue(voucher.getSoLuong());
+            row.createCell(10).setCellValue(voucher.getDieuKien());
+            row.createCell(11).setCellValue(voucher.getTrangThai());
+        }
+
+        // Ghi dữ liệu ra byte array
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        workbook.write(outputStream);
+        workbook.close();
+
+        return outputStream.toByteArray();
     }
 }
