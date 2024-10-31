@@ -1,5 +1,7 @@
 package org.example.backend.controllers.admin.phieuGiamGia;
 
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.example.backend.common.PageResponse;
 import org.example.backend.common.ResponseData;
 import org.example.backend.constants.api.Admin;
@@ -12,7 +14,9 @@ import org.example.backend.services.PhieuGiamGiaService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.ByteArrayOutputStream;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.List;
@@ -30,6 +35,7 @@ import java.util.UUID;
 
 import static org.example.backend.constants.api.Admin.VOUCHER_CREATE;
 import static org.example.backend.constants.api.Admin.VOUCHER_DELETE;
+import static org.example.backend.constants.api.Admin.VOUCHER_EXCEL;
 import static org.example.backend.constants.api.Admin.VOUCHER_GET_BY_ID;
 import static org.example.backend.constants.api.Admin.VOUCHER_SEARCH;
 import static org.example.backend.constants.api.Admin.VOUCHER_UPDATE;
@@ -59,7 +65,7 @@ public class PhieuGiamGiaController {
 //                                           @RequestParam(value = "loai",required = false, defaultValue = "0") Integer loai,
                                            @RequestParam(required = false, defaultValue = "1") Integer sapXep
     ){
-        PageResponse<List<phieuGiamGiaReponse>> PGGPage = PGGService.searchPGG(page, itemsPerPage,"%"+keyFind+"%",trangThai,sapXep,minNgay,maxNgay,minGia,maxGia);
+        PageResponse<List<phieuGiamGiaReponse>> PGGPage = PGGService.searchPGG(page, itemsPerPage,keyFind,trangThai,sapXep,minNgay,maxNgay,minGia,maxGia);
         ResponseData<PageResponse<List<phieuGiamGiaReponse>>> responseData = ResponseData.<PageResponse<List<phieuGiamGiaReponse>>>builder()
                 .message("Get all voucher done")
                 .status(HttpStatus.OK.value())
@@ -135,4 +141,20 @@ public class PhieuGiamGiaController {
 //        }
 //        return ResponseEntity.ok(result);
 //    }
+
+    @GetMapping(VOUCHER_EXCEL)
+    public ResponseEntity<byte[]> exportExcel() {
+        try {
+            List<phieuGiamGiaReponse> voucherList = PGGService.getPGGGetAll(); // Lấy dữ liệu phiếu giảm giá
+            byte[] excelData = PGGService.exportToExcel(voucherList);
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=phieuGiamGia.xlsx")
+                    .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                    .body(excelData);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).build();
+        }
+    }
 }
+

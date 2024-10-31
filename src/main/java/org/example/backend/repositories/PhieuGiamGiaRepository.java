@@ -29,7 +29,7 @@ public interface PhieuGiamGiaRepository extends JpaRepository<PhieuGiamGia, UUID
                  p.ngayBatDau, p.ngayKetThuc,p.soLuong, p.dieuKien, p.trangThai)
                 from PhieuGiamGia p where p.deleted=false 
             """)
-    Page<phieuGiamGiaReponse> getAllPhieuGiamGia(Pageable pageable);
+    List<phieuGiamGiaReponse> getAllPhieuGiamGia();
 
     @Query("""
                 update PhieuGiamGia p 
@@ -62,14 +62,14 @@ public interface PhieuGiamGiaRepository extends JpaRepository<PhieuGiamGia, UUID
                             p.id, p.ma, p.ten,p.loai, p.giaTri,p.giamToiDa,p.mucDo,
                              p.ngayBatDau, p.ngayKetThuc,p.soLuong, p.dieuKien, p.trangThai)
                             from PhieuGiamGia p where p.deleted=false
-                AND (COALESCE(:#{#keyFind}, '') = '' OR p.ma LIKE :keyFind OR p.ten LIKE :keyFind)
+                AND (COALESCE(:#{#keyFind}, '') = '' OR p.ma like %:#{#keyFind}% OR p.ten like %:#{#keyFind}%)
                 AND (COALESCE(:#{#minNgay}, null) IS NULL OR p.ngayBatDau >= :#{#minNgay})
                 AND (COALESCE(:#{#maxNgay}, null) IS NULL OR p.ngayKetThuc <= :#{#maxNgay})
                 AND (COALESCE(:#{#trangThai}, '') = '' OR p.trangThai = :#{#trangThai})
-                AND (COALESCE(:#{#minGia}, null) IS NULL OR p.giaTri >= :#{#minGia})
+                AND ((COALESCE(:#{#minGia}, null) IS NULL OR p.giaTri >= :#{#minGia})
                 AND (COALESCE(:#{#maxGia}, null) IS NULL OR p.giaTri <= :#{#maxGia})
                 AND (COALESCE(:#{#minGia}, null) IS NULL OR p.giamToiDa >= :#{#minGia})
-                AND (COALESCE(:#{#maxGia}, null) IS NULL OR p.giamToiDa <= :#{#maxGia})
+                AND (COALESCE(:#{#maxGia}, null) IS NULL OR p.giamToiDa <= :#{#maxGia}))
                 """)
     Page<phieuGiamGiaReponse> searchPhieuGiamGia(Pageable pageable, String keyFind, String trangThai,
                                                  Instant minNgay, Instant maxNgay, BigDecimal minGia, BigDecimal maxGia);
