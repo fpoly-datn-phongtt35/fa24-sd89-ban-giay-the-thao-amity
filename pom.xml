@@ -123,7 +123,7 @@
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
-            <version>2.11.0</version> <!-- Kiểm tra phiên bản mới nhất tại https://mvnrepository.com/artifact/commons-io/commons-io -->
+            <version>2.11.0</version>
         </dependency>
 
 
