@@ -103,22 +103,29 @@ public class PhieuGiamGiaService extends GenericServiceImpl<PhieuGiamGia , UUID>
         headerRow.createCell(10).setCellValue("Điều Kiện");
         headerRow.createCell(11).setCellValue("Trạng Thái");
 
-        // Thêm dữ liệu
         int rowNum = 1;
         for (phieuGiamGiaReponse voucher : voucherList) {
             Row row = sheet.createRow(rowNum++);
             row.createCell(0).setCellValue(voucher.getId().toString());
             row.createCell(1).setCellValue(voucher.getMa());
             row.createCell(2).setCellValue(voucher.getTen());
-            row.createCell(3).setCellValue(voucher.getLoai() ? "Phần trăm" : "Giá cố định");
-            row.createCell(4).setCellValue(voucher.getGiaTri().doubleValue());
-            row.createCell(5).setCellValue(voucher.getGiamToiDa().doubleValue());
-            row.createCell(6).setCellValue(voucher.getMucDo());
-            row.createCell(7).setCellValue(voucher.getNgayBatDau().toString());
-            row.createCell(8).setCellValue(voucher.getNgayKetThuc().toString());
-            row.createCell(9).setCellValue(voucher.getSoLuong());
-            row.createCell(10).setCellValue(voucher.getDieuKien());
-            row.createCell(11).setCellValue(voucher.getTrangThai());
+
+            // Kiểm tra giá trị loai trước khi sử dụng
+            Boolean loai = voucher.getLoai();
+            if (loai != null) {
+                row.createCell(3).setCellValue(loai ? "Phần trăm" : "Giá");
+            } else {
+                row.createCell(3).setCellValue("Chưa xác định"); // Hoặc giá trị mặc định nào đó
+            }
+
+            row.createCell(4).setCellValue(voucher.getGiaTri() != null ? voucher.getGiaTri().doubleValue() : 0.0);
+            row.createCell(5).setCellValue(voucher.getGiamToiDa() != null ? voucher.getGiamToiDa().doubleValue() : 0.0);
+            row.createCell(6).setCellValue(voucher.getMucDo() != null ? voucher.getMucDo() : "Không xác định");
+            row.createCell(7).setCellValue(voucher.getNgayBatDau() != null ? voucher.getNgayBatDau().toString() : "Không xác định");
+            row.createCell(8).setCellValue(voucher.getNgayKetThuc() != null ? voucher.getNgayKetThuc().toString() : "Không xác định");
+            row.createCell(9).setCellValue(voucher.getSoLuong() != null ? voucher.getSoLuong() : 0);
+            row.createCell(10).setCellValue(voucher.getDieuKien() != null ? voucher.getDieuKien() : "Không xác định");
+            row.createCell(11).setCellValue(voucher.getTrangThai() != null ? voucher.getTrangThai() : "Không xác định");
         }
 
         // Ghi dữ liệu ra byte array
