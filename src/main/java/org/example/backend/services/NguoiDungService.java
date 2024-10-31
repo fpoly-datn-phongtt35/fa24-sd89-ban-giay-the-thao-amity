@@ -10,6 +10,7 @@ import org.example.backend.repositories.NguoiDungRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -47,6 +48,10 @@ public class NguoiDungService extends GenericServiceImpl<NguoiDung , UUID> {
                 .build();
     }
 
+    public List<NhanVienRespon> getNhanVienById(UUID id) {
+        return nguoiDungRepository.getNhanVienById(id);
+    }
+
     public Page<NhanVienRespon> getAllNhanVienPage(Pageable pageable){
         return nguoiDungRepository.getAllNhanVienPage(pageable);
     }
@@ -56,13 +61,14 @@ public class NguoiDungService extends GenericServiceImpl<NguoiDung , UUID> {
         nguoiDungRepository.deleteNhanVienStatus(id);
     }
                                             
-    public List<NhanVienRespon> searchNhanVien(String keyword, String gioiTinh, String trangThai){
-
-        return nguoiDungRepository.searchUserNhanVien(keyword, gioiTinh, trangThai);
-
-
-
-
+    public PageResponse<List<NhanVienRespon>> searchNhanVien(int page, int size,String keyword, String gioiTinh, String trangThai){
+        Pageable pageable = PageRequest.of(page, size);
+        Page<NhanVienRespon> seacrchNhanVienPaginate = nguoiDungRepository.searchUserNhanVien(pageable,keyword,gioiTinh,trangThai);
+        return PageResponse.<List<NhanVienRespon>>builder()
+                .page(seacrchNhanVienPaginate.getNumber())
+                .size(seacrchNhanVienPaginate.getSize())
+                .totalPage(seacrchNhanVienPaginate.getTotalPages())
+                .items(seacrchNhanVienPaginate.getContent()).build();
     }
 
     public List<NhanVienRespon> sortNhanVien(){

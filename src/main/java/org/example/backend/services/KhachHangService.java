@@ -42,8 +42,13 @@ public Page<KhachHangResponse> getAllKhachHangPage(Pageable pageable){
     public void setDeletedKhachHang(UUID id){
 khachHangRespository.deletedKhachHangStatus(id);
     }
-    public List<KhachHangResponse> searchKhachHang(String keyword, String gioiTinh, String trangThai){
-        return khachHangRespository.searchUserKhachHang(keyword, gioiTinh, trangThai);
-
+    public PageResponse<List<KhachHangResponse>> searchKhachHang(int page, int size,String keyword, String gioiTinh, String trangThai){
+        Pageable pageable = PageRequest.of(page, size);
+        Page<KhachHangResponse> seacrchKhachHangPaginate = nguoiDungRepository.searchUserKhachHang(pageable, keyword,gioiTinh, trangThai);
+        return PageResponse.<List<KhachHangResponse>>builder()
+                .page(seacrchKhachHangPaginate.getNumber())
+                .size(seacrchKhachHangPaginate.getSize())
+                .totalPage(seacrchKhachHangPaginate.getTotalPages())
+                .items(seacrchKhachHangPaginate.getContent()).build();
     }
 }

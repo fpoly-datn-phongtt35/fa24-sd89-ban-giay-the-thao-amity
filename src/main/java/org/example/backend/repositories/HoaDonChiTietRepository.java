@@ -26,4 +26,6 @@ public interface HoaDonChiTietRepository extends JpaRepository<HoaDonChiTiet, UU
 """)
     Page<QuanLyDonHangRespose> getByPageHoaDon(Pageable pageable);
 
+
+
 }

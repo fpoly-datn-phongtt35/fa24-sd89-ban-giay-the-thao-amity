@@ -91,16 +91,19 @@ public KhachHangController(KhachHangService khachHangService, NguoiDungRepositor
 }
 
     @GetMapping(CUSTOMER_GET_BY_KH)
-    public ResponseEntity<List<KhachHangResponse>> searchUserKhachHang(
+    public ResponseEntity<?> searchUserKhachHang(
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "5") int size,
             @RequestParam(value = "keyword" , defaultValue = "") String keyword,
             @RequestParam(value = "gioiTinh", defaultValue = "") String gioiTinh,
             @RequestParam(value = "trangThai", defaultValue = "") String trangThai
     ) {
-        List<KhachHangResponse> result = khachHangService.searchKhachHang(keyword, gioiTinh, trangThai);
-        if (result.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.ok(result);
+        PageResponse<List<KhachHangResponse>> result = khachHangService.searchKhachHang(page, size,keyword, gioiTinh, trangThai);
+        ResponseData<PageResponse<List<KhachHangResponse>>> responseData = ResponseData.<PageResponse<List<KhachHangResponse>>>builder()
+                .message("Search Sale")
+                .status(HttpStatus.OK.value())
+                .data(result).build();
+        return ResponseEntity.ok().body(responseData);
     }
 
     @GetMapping(PAGE_CUSTOMER)
