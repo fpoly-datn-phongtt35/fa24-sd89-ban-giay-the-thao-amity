@@ -36,17 +36,24 @@ public class DotGiamGiaSpctController {
 
     @PostMapping(Admin.SALE_DETAIL_CREATE)
     public ResponseEntity<?> createSaleDetail(@RequestBody DotGiamGiaSpctCreate dotGiamGiaSpctCreate){
-        DotGiamGia dotGiamGia = dotGiamGiaService.findById(dotGiamGiaSpctCreate.getDotGiamGiaUpdate().getId()).orElse(null);
-        if (dotGiamGia != null) {
-            dotGiamGiaMapper.updateDotGiamGiaFromDto(dotGiamGiaSpctCreate.getDotGiamGiaUpdate(), dotGiamGia);
-            dotGiamGiaSpctService.createDotGiamGiaWithSpct(dotGiamGia, dotGiamGiaSpctCreate.getIdSpcts());
+        try {
+            System.out.println("ac01 "+dotGiamGiaSpctCreate);
+            DotGiamGia dotGiamGia = dotGiamGiaService.findById(dotGiamGiaSpctCreate.getDotGiamGiaUpdate().getId()).orElse(null);
+            if (dotGiamGia != null) {
+                System.out.println("ac02 "+dotGiamGia);
+                dotGiamGiaMapper.updateDotGiamGiaFromDto(dotGiamGiaSpctCreate.getDotGiamGiaUpdate(), dotGiamGia);
+                dotGiamGiaSpctService.createDotGiamGiaWithSpct(dotGiamGia, dotGiamGiaSpctCreate.getIdSpcts());
+                return ResponseEntity.ok().build();
+            }
+            // chua co
+            DotGiamGia newDotGiamGia = new DotGiamGia();
+            dotGiamGiaMapper.updateDotGiamGiaFromDto(dotGiamGiaSpctCreate.getDotGiamGiaUpdate(), newDotGiamGia);
+            dotGiamGiaSpctService.createDotGiamGiaWithSpct(newDotGiamGia, dotGiamGiaSpctCreate.getIdSpcts());
             return ResponseEntity.ok().build();
+        } catch (Error e){
+            System.out.println(e);
         }
-        // chua co
-        DotGiamGia newDotGiamGia = new DotGiamGia();
-        dotGiamGiaMapper.updateDotGiamGiaFromDto(dotGiamGiaSpctCreate.getDotGiamGiaUpdate(), newDotGiamGia);
-        dotGiamGiaSpctService.createDotGiamGiaWithSpct(newDotGiamGia, dotGiamGiaSpctCreate.getIdSpcts());
-        return ResponseEntity.ok().build();
+        return ResponseEntity.notFound().build();
     }
 
     @PutMapping(Admin.SALE_DETAIL_SET_DELETE)
