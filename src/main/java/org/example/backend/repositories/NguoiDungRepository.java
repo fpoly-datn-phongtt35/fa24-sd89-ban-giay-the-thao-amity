@@ -160,7 +160,9 @@ public interface NguoiDungRepository extends JpaRepository<NguoiDung, UUID> {
 
     //    KhachHang
     @Query("""
-    select new org.example.backend.dto.response.khachHang.KhachHangResponse(nd.id,nd.ma,nd.email,nd.sdt,nd.ten,nd.diaChi,nd.ngaySinh,nd.gioiTinh,nd.diem,nd.trangThai, nd.deleted, nd.chucVu)
+    select new org.example.backend.dto.response.khachHang.KhachHangResponse(
+    nd.id,nd.ma,nd.email,nd.sdt,nd.ten,nd.diaChi,nd.ngaySinh,
+    nd.gioiTinh,nd.hinhAnh,nd.diem,nd.trangThai, nd.deleted, nd.chucVu)
     from NguoiDung nd where nd.chucVu = 'khachhang' and nd.deleted = false
 """)
     Page<KhachHangResponse> getAllKhachHang(Pageable pageable);
@@ -174,7 +176,9 @@ public interface NguoiDungRepository extends JpaRepository<NguoiDung, UUID> {
     void deletedKhachHangStatus(UUID id);
 
     @Query("""
-    select new org.example.backend.dto.response.khachHang.KhachHangResponse(nd.id,nd.ma,nd.email,nd.sdt,nd.ten,nd.diaChi,nd.ngaySinh,nd.gioiTinh,nd.diem,nd.trangThai, nd.deleted, nd.chucVu)    
+    select new org.example.backend.dto.response.khachHang.KhachHangResponse(
+    nd.id,nd.ma,nd.email,nd.sdt,nd.ten,nd.diaChi,nd.ngaySinh,
+    nd.gioiTinh,nd.hinhAnh,nd.diem,nd.trangThai, nd.deleted, nd.chucVu)    
       from NguoiDung nd
         where nd.chucVu = 'khachhang' 
         and nd.deleted = false
@@ -190,7 +194,9 @@ public interface NguoiDungRepository extends JpaRepository<NguoiDung, UUID> {
     Page<KhachHangResponse> searchUserKhachHang(Pageable pageable, String keyword, String gioiTinh, String trangThai);
 
     @Query("""
-        select new org.example.backend.dto.response.khachHang.KhachHangResponse(nd.id,nd.ma,nd.email,nd.sdt,nd.ten,nd.diaChi,nd.ngaySinh,nd.gioiTinh,nd.diem,nd.trangThai, nd.deleted, nd.chucVu) 
+        select new org.example.backend.dto.response.khachHang.KhachHangResponse(
+        nd.id,nd.ma,nd.email,nd.sdt,nd.ten,nd.diaChi,nd.ngaySinh,
+        nd.gioiTinh,nd.hinhAnh,nd.diem,nd.trangThai, nd.deleted, nd.chucVu) 
         from NguoiDung nd 
         where nd.chucVu = 'khachhang' and nd.deleted = false 
         order by nd.ngayTao DESC 
