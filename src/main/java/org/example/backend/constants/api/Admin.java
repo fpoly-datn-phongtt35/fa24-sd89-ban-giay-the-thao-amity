@@ -29,6 +29,7 @@ public class Admin {
     public static final String CUSTOMER_SORT = CUSTOMER + "/sort";
     public static final String PAGE_CUSTOMER = CUSTOMER + "/page";
     public static final String CUSTOMER_GET_BY_KH = CUSTOMER + "/search";
+    public static final String CUSTOMER_GET_BY_SDT = CUSTOMER + "/search/sdt";
 
 
     // Endpoint PRODUCT
@@ -94,6 +95,7 @@ public class Admin {
     public static final String VOUCHER_UPDATE = VOUCHER + "/update/{id}";
     public static final String VOUCHER_DELETE = VOUCHER + "/delete/{id}";
     public static final String VOUCHER_SEARCH = VOUCHER + "/search/{find}&{filterType}";
+    public static final String VOUCHER_EXCEL = VOUCHER + "/excel";
 
     // Endpoint SALE
     public static final String SALE = BASE + "/sale";

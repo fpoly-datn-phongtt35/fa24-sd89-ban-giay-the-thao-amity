@@ -19,6 +19,7 @@ public class KhachHangResponse {
     private String diaChi;
     private Instant ngaySinh;
     private String gioiTinh;
+    private String hinhAnh;
     private Integer diem;
     private String trangThai;
     private Boolean deleted;
