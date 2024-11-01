@@ -15,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,6 +30,7 @@ public class KhachHangController {
     final
     KhachHangMapper khachHangMapper;
 final KhachHangService khachHangService;
+
 
 private final NguoiDungRepository nguoiDungRepository;
 
@@ -50,17 +52,26 @@ public KhachHangController(KhachHangService khachHangService, NguoiDungRepositor
             .build();
     return ResponseEntity.ok(responseData);
 }
-@PostMapping(CUSTOMER_CREATE)
-    public ResponseData<KhachHangResponse> createCustomer(@RequestBody KhachHangCreate khachHangCreate){
+//@PostMapping(CUSTOMER_CREATE)
+//    public ResponseData<KhachHangResponse> createCustomer(@RequestBody KhachHangCreate khachHangCreate){
+//
+//    NguoiDung nguoiDung = new NguoiDung();
+//    khachHangMapper.createNguoiDungFromDto(khachHangCreate,nguoiDung);
+//    khachHangService.save(nguoiDung);
+//    return ResponseData.<KhachHangResponse>builder()
+//            .status(HttpStatus.CREATED.value())
+//            .message("Customer role created successfully")
+//            .build();
+//}
 
-    NguoiDung nguoiDung = new NguoiDung();
-    khachHangMapper.createNguoiDungFromDto(khachHangCreate,nguoiDung);
-    khachHangService.save(nguoiDung);
-    return ResponseData.<KhachHangResponse>builder()
-            .status(HttpStatus.CREATED.value())
-            .message("Customer role created successfully")
-            .build();
-}
+    @PostMapping(CUSTOMER_CREATE)
+    public ResponseEntity<?> createCustomer(@RequestBody KhachHangCreate khachHangCreate){
+
+        NguoiDung nguoiDung = new NguoiDung();
+        khachHangMapper.createNguoiDungFromDto(khachHangCreate,nguoiDung);
+        ;
+        return ResponseEntity.ok().body(khachHangService.save(nguoiDung));
+    }
 @PutMapping(CUSTOMER_UPDATE)
     public ResponseData<KhachHangResponse> updateCustomer(
         @PathVariable UUID id,
@@ -128,6 +139,12 @@ public KhachHangController(KhachHangService khachHangService, NguoiDungRepositor
                 .build();
 
         return ResponseEntity.ok(responseData);
+    }
+
+
+    @GetMapping(CUSTOMER_GET_BY_SDT)
+    public ResponseEntity<?> getAllCustomerBySDT( @RequestParam(value = "sdt" , defaultValue = "") String sdt){
+        return ResponseEntity.ok(nguoiDungRepository.timKiemSDT(sdt));
     }
 
 }

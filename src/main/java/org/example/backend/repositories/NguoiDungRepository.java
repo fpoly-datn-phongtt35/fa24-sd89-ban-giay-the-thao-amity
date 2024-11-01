@@ -12,7 +12,9 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import javax.swing.text.html.Option;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface NguoiDungRepository extends JpaRepository<NguoiDung, UUID> {
@@ -114,6 +116,16 @@ public interface NguoiDungRepository extends JpaRepository<NguoiDung, UUID> {
 //    void resetNhanVienStatusNgungHoatDong(@Param("id") UUID id);
 
 
+    @Query("""
+        select new org.example.backend.dto.response.NhanVien.NhanVienRespon(
+            nd.id, nd.ma, nd.email, nd.sdt, nd.matKhau, nd.ten, nd.diaChi, nd.ngaySinh, nd.gioiTinh, nd.hinhAnh, nd.cccd, nd.chucVu, nd.trangThai, nd.deleted)
+        from NguoiDung nd
+        where nd.chucVu = 'khachhang'  and nd.sdt =:sdt
+        and nd.deleted = false
+        
+       
+    """)
+    Optional<NhanVienRespon> timKiemSDT( String sdt);
 
 
 
@@ -160,7 +172,9 @@ public interface NguoiDungRepository extends JpaRepository<NguoiDung, UUID> {
 
     //    KhachHang
     @Query("""
-    select new org.example.backend.dto.response.khachHang.KhachHangResponse(nd.id,nd.ma,nd.email,nd.sdt,nd.ten,nd.diaChi,nd.ngaySinh,nd.gioiTinh,nd.diem,nd.trangThai, nd.deleted, nd.chucVu)
+    select new org.example.backend.dto.response.khachHang.KhachHangResponse(
+    nd.id,nd.ma,nd.email,nd.sdt,nd.ten,nd.diaChi,nd.ngaySinh,
+    nd.gioiTinh,nd.hinhAnh,nd.diem,nd.trangThai, nd.deleted, nd.chucVu)
     from NguoiDung nd where nd.chucVu = 'khachhang' and nd.deleted = false
 """)
     Page<KhachHangResponse> getAllKhachHang(Pageable pageable);
@@ -174,7 +188,9 @@ public interface NguoiDungRepository extends JpaRepository<NguoiDung, UUID> {
     void deletedKhachHangStatus(UUID id);
 
     @Query("""
-    select new org.example.backend.dto.response.khachHang.KhachHangResponse(nd.id,nd.ma,nd.email,nd.sdt,nd.ten,nd.diaChi,nd.ngaySinh,nd.gioiTinh,nd.diem,nd.trangThai, nd.deleted, nd.chucVu)    
+    select new org.example.backend.dto.response.khachHang.KhachHangResponse(
+    nd.id,nd.ma,nd.email,nd.sdt,nd.ten,nd.diaChi,nd.ngaySinh,
+    nd.gioiTinh,nd.hinhAnh,nd.diem,nd.trangThai, nd.deleted, nd.chucVu)    
       from NguoiDung nd
         where nd.chucVu = 'khachhang' 
         and nd.deleted = false
@@ -190,7 +206,9 @@ public interface NguoiDungRepository extends JpaRepository<NguoiDung, UUID> {
     Page<KhachHangResponse> searchUserKhachHang(Pageable pageable, String keyword, String gioiTinh, String trangThai);
 
     @Query("""
-        select new org.example.backend.dto.response.khachHang.KhachHangResponse(nd.id,nd.ma,nd.email,nd.sdt,nd.ten,nd.diaChi,nd.ngaySinh,nd.gioiTinh,nd.diem,nd.trangThai, nd.deleted, nd.chucVu) 
+        select new org.example.backend.dto.response.khachHang.KhachHangResponse(
+        nd.id,nd.ma,nd.email,nd.sdt,nd.ten,nd.diaChi,nd.ngaySinh,
+        nd.gioiTinh,nd.hinhAnh,nd.diem,nd.trangThai, nd.deleted, nd.chucVu) 
         from NguoiDung nd 
         where nd.chucVu = 'khachhang' and nd.deleted = false 
         order by nd.ngayTao DESC 
