@@ -29,6 +29,7 @@ public class Admin {
     public static final String CUSTOMER_SORT = CUSTOMER + "/sort";
     public static final String PAGE_CUSTOMER = CUSTOMER + "/page";
     public static final String CUSTOMER_GET_BY_KH = CUSTOMER + "/search";
+    public static final String CUSTOMER_GET_BY_SDT = CUSTOMER + "/search/sdt";
 
 
     // Endpoint PRODUCT
