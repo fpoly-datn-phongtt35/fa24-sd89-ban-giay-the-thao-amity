@@ -81,7 +81,7 @@ public class NhanVienController {
         nhanVienService.save(nd);
         return ResponseData.<NhanVienRespon>builder()
                 .status(HttpStatus.CREATED.value())
-                .message("Customer role created successfully")
+                .message("Staff role created successfully")
                 .build();
     }
 
