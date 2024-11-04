@@ -1,5 +1,7 @@
 package org.example.backend.controllers.admin.khachHang;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import org.example.backend.common.PageResponse;
 import org.example.backend.common.ResponseData;
 import org.example.backend.dto.request.khachHang.KhachHangCreate;
@@ -7,6 +9,7 @@ import org.example.backend.dto.request.khachHang.KhachHangUpdate;
 import org.example.backend.dto.response.NhanVien.NhanVienRespon;
 import org.example.backend.dto.response.khachHang.KhachHangResponse;
 import org.example.backend.mapper.khachHang.KhachHangMapper;
+import org.example.backend.models.Hang;
 import org.example.backend.models.NguoiDung;
 import org.example.backend.repositories.NguoiDungRepository;
 import org.example.backend.services.KhachHangService;
@@ -14,12 +17,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.time.Instant;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -34,10 +42,13 @@ final KhachHangService khachHangService;
 
 private final NguoiDungRepository nguoiDungRepository;
 
-public KhachHangController(KhachHangService khachHangService, NguoiDungRepository nguoiDungRepository, KhachHangMapper khachHangMapper){
+private Cloudinary cloudinary;
+
+public KhachHangController(KhachHangService khachHangService, NguoiDungRepository nguoiDungRepository, KhachHangMapper khachHangMapper, Cloudinary cloudinary){
     this.khachHangService = khachHangService;
     this.nguoiDungRepository = nguoiDungRepository;
     this.khachHangMapper = khachHangMapper;
+    this.cloudinary = cloudinary;
 }
 @GetMapping(CUSTOMER_GET_ALL)
     public ResponseEntity<ResponseData<PageResponse<List<KhachHangResponse>>>> getAllCustomer(
@@ -65,13 +76,47 @@ public KhachHangController(KhachHangService khachHangService, NguoiDungRepositor
 //}
 
     @PostMapping(CUSTOMER_CREATE)
-    public ResponseEntity<?> createCustomer(@RequestBody KhachHangCreate khachHangCreate){
+    public ResponseEntity<?> createCustomer(
+            @RequestParam("ma") String ma,
+            @RequestParam("ten") String ten,
+            @RequestParam("email") String email,
+            @RequestParam("sdt") String sdt,
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+            @RequestParam("ngaySinh") Instant ngaySinh,
+            @RequestParam("gioiTinh") String gioiTinh,
+            @RequestParam("diaChi") String diaChi,
+            @RequestParam("trangThai") String trangThai,
+            @RequestParam("hinhAnh") MultipartFile fileHinhAnh) throws IOException {
 
+    try {
         NguoiDung nguoiDung = new NguoiDung();
-        khachHangMapper.createNguoiDungFromDto(khachHangCreate,nguoiDung);
-        ;
-        return ResponseEntity.ok().body(khachHangService.save(nguoiDung));
+        nguoiDung.setMa(ma);
+        nguoiDung.setTen(ten);
+        nguoiDung.setEmail(email);
+        nguoiDung.setSdt(sdt);
+        nguoiDung.setNgaySinh(ngaySinh);
+        nguoiDung.setGioiTinh(gioiTinh);
+        nguoiDung.setDiaChi(diaChi);
+        nguoiDung.setTrangThai(trangThai);
+
+        Map<String, Object> uploadResult = cloudinary.uploader().upload(fileHinhAnh.getBytes(), ObjectUtils.emptyMap());
+        String imageUrl = (String) uploadResult.get("secure_url");
+        nguoiDung.setHinhAnh(imageUrl);
+
+        return ResponseEntity.ok(nguoiDungRepository.save(nguoiDung));
+
+    }catch (IOException e){
+        return ResponseEntity.status(500).body("Tải hình ảnh lên thất bại" + e.getMessage());
     }
+    }
+
+//    ){
+//
+//
+////        khachHangMapper.createNguoiDungFromDto(khachHangCreate,nguoiDung);
+////        ;
+//        return ResponseEntity.ok().body(khachHangService.save(nguoiDung));
+//    }
 @PutMapping(CUSTOMER_UPDATE)
     public ResponseData<KhachHangResponse> updateCustomer(
         @PathVariable UUID id,
