@@ -215,5 +215,15 @@ public interface NguoiDungRepository extends JpaRepository<NguoiDung, UUID> {
     """)
     Page<KhachHangResponse> getAllKhachHangPage(Pageable pageable);
 
-
+    @Query("""
+        select new org.example.backend.dto.response.khachHang.KhachHangResponse(
+        nd.id,nd.ma,nd.email,nd.sdt,nd.ten,nd.diaChi,nd.ngaySinh,
+        nd.gioiTinh,nd.hinhAnh,nd.diem,nd.trangThai, nd.deleted, nd.chucVu) 
+        from NguoiDung nd 
+        where nd.chucVu = 'khachhang' and nd.deleted = false 
+        and nd.id =:id
+        order by nd.ngayTao DESC 
+       
+    """)
+    List<KhachHangResponse> getKhachHangById(UUID id);
 }

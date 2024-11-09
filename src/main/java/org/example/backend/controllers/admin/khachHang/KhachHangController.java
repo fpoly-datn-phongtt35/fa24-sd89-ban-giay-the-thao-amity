@@ -35,14 +35,10 @@ import static org.example.backend.constants.api.Admin.*;
 
 @RestController
 public class KhachHangController {
-    final
-    KhachHangMapper khachHangMapper;
-final KhachHangService khachHangService;
-
-
-private final NguoiDungRepository nguoiDungRepository;
-
-private Cloudinary cloudinary;
+    final KhachHangMapper khachHangMapper;
+    final KhachHangService khachHangService;
+    private final NguoiDungRepository nguoiDungRepository;
+    private Cloudinary cloudinary;
 
 public KhachHangController(KhachHangService khachHangService, NguoiDungRepository nguoiDungRepository, KhachHangMapper khachHangMapper, Cloudinary cloudinary){
     this.khachHangService = khachHangService;
@@ -63,6 +59,13 @@ public KhachHangController(KhachHangService khachHangService, NguoiDungRepositor
             .build();
     return ResponseEntity.ok(responseData);
 }
+    @GetMapping(CUSTOMER_GET_BY_ID)
+    public ResponseEntity<?> getKhachHangById(
+            @PathVariable UUID id
+    ){
+        List<KhachHangResponse> khachHangById = khachHangService.getKhachHangById(id);
+        return ResponseEntity.ok(khachHangById);
+    }
 //@PostMapping(CUSTOMER_CREATE)
 //    public ResponseData<KhachHangResponse> createCustomer(@RequestBody KhachHangCreate khachHangCreate){
 //
@@ -81,14 +84,14 @@ public KhachHangController(KhachHangService khachHangService, NguoiDungRepositor
             @RequestParam("ten") String ten,
             @RequestParam("email") String email,
             @RequestParam("sdt") String sdt,
-            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
             @RequestParam("ngaySinh") Instant ngaySinh,
             @RequestParam("gioiTinh") String gioiTinh,
             @RequestParam("diaChi") String diaChi,
-            @RequestParam("trangThai") String trangThai,
-            @RequestParam("hinhAnh") MultipartFile fileHinhAnh) throws IOException {
+            @RequestParam("hinhAnh") MultipartFile fileHinhAnh,
+            @RequestParam("chucVu") String chucVu,
+             @RequestParam("trangThai") String trangThai
+    ) throws IOException {
 
-    try {
         NguoiDung nguoiDung = new NguoiDung();
         nguoiDung.setMa(ma);
         nguoiDung.setTen(ten);
@@ -97,17 +100,15 @@ public KhachHangController(KhachHangService khachHangService, NguoiDungRepositor
         nguoiDung.setNgaySinh(ngaySinh);
         nguoiDung.setGioiTinh(gioiTinh);
         nguoiDung.setDiaChi(diaChi);
-        nguoiDung.setTrangThai(trangThai);
 
         Map<String, Object> uploadResult = cloudinary.uploader().upload(fileHinhAnh.getBytes(), ObjectUtils.emptyMap());
         String imageUrl = (String) uploadResult.get("secure_url");
         nguoiDung.setHinhAnh(imageUrl);
-
+        nguoiDung.setChucVu(chucVu);
+        nguoiDung.setTrangThai(trangThai);
         return ResponseEntity.ok(nguoiDungRepository.save(nguoiDung));
 
-    }catch (IOException e){
-        return ResponseEntity.status(500).body("Tải hình ảnh lên thất bại" + e.getMessage());
-    }
+
     }
 
 //    ){
@@ -118,21 +119,40 @@ public KhachHangController(KhachHangService khachHangService, NguoiDungRepositor
 //        return ResponseEntity.ok().body(khachHangService.save(nguoiDung));
 //    }
 @PutMapping(CUSTOMER_UPDATE)
-    public ResponseData<KhachHangResponse> updateCustomer(
+    public ResponseEntity<?> updateCustomer(
         @PathVariable UUID id,
-        @RequestBody KhachHangUpdate khachHangUpdate){
+        @RequestParam(value = "ma",defaultValue = "") String ma,
+        @RequestParam(value = "email",defaultValue = "") String email,
+        @RequestParam(value = "sdt",defaultValue = "") String sdt,
+        @RequestParam(value = "ten",defaultValue = "") String ten,
+        @RequestParam(value = "diaChi",defaultValue = "") String diaChi,
+        @RequestParam(value = "ngaySinh",defaultValue = "") Instant ngaySinh,
+        @RequestParam(value = "gioiTinh",defaultValue = "") String gioiTinh,
+        @RequestParam(value = "hinhAnh" ,defaultValue = "") MultipartFile hinhAnh,
+        @RequestParam(value = "chucVu", defaultValue = "") String chucVu,
+        @RequestParam(value = "trangThai" ,defaultValue = "") String trangThai
+) throws IOException {
     Optional<NguoiDung> exitNguoiDung = khachHangService.findById(id);
-    if(exitNguoiDung.isEmpty()){
+    if (exitNguoiDung.isEmpty()) {
         return null;
     }
-    NguoiDung nd = exitNguoiDung.get();
-    khachHangMapper.updateNguoiDungFromDto(khachHangUpdate,nd);
-    khachHangService.save(nd);
-    return ResponseData.<KhachHangResponse>builder()
-            .status(HttpStatus.CREATED.value())
-            .message("Customer role update successfully")
-            .build();
+    NguoiDung nguoiDung = exitNguoiDung.get();
+    nguoiDung.setId(id);
+    nguoiDung.setMa(ma);
+    nguoiDung.setEmail(email);
+    nguoiDung.setSdt(sdt);
+    nguoiDung.setTen(ten);
+    nguoiDung.setDiaChi(diaChi);
+    nguoiDung.setNgaySinh(ngaySinh);
+    nguoiDung.setGioiTinh(gioiTinh);
+    Map<String, Object> uploadResult = cloudinary.uploader().upload(hinhAnh.getBytes(), ObjectUtils.emptyMap());
+    String imageUrl = (String) uploadResult.get("secure_url");
+    nguoiDung.setHinhAnh(imageUrl);
+    nguoiDung.setChucVu(chucVu);
+    nguoiDung.setTrangThai(trangThai);
 
+    khachHangService.save(nguoiDung);
+    return ResponseEntity.ok(khachHangService.save(nguoiDung));
 }
 @DeleteMapping(CUSTOMER_DELETE)
     public ResponseEntity<?> deleteCustomer(@PathVariable UUID id){
