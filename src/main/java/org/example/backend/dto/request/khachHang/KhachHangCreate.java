@@ -17,6 +17,8 @@ public class KhachHangCreate {
     private String diaChi;
     private Instant ngaySinh;
     private String gioiTinh;
+    private String hinhAnh;
+    private String trangThai;
     private Integer diem;
     private String chucVu="khachhang";
 
