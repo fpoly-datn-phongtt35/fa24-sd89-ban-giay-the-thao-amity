@@ -78,6 +78,8 @@ public class Admin {
     public static final String BILL_DELETE = BILL + "/delete/{id}";
     public static final String PAGE_BILL = BILL + "/page";
     public static final String USER_GET_BY_BILL = BILL + "/search";
+    public static final String COUT_BY_STATUS_BILL = BILL + "/status";
+    public static final String BILL_EXCEL = BILL + "/excel";
 
 
     // Endpoint BILL_DETAIL
