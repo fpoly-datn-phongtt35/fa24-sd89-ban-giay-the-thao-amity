@@ -37,10 +37,10 @@ public interface HoaDonRepository extends JpaRepository<HoaDon, UUID> {
 
     @Query("""
         select new   org.example.backend.dto.response.banHang.BanHangResponse(h.id,h.ma,h.trangThai)
-        from HoaDon h where h.deleted = false
+        from HoaDon h where h.deleted = false and h.trangThai = :trangThai
         order by h.ngayTao desc 
 """)
-    List<BanHangResponse> getAllBanHang();
+    List<BanHangResponse> getAllBanHang(String trangThai);
 
     @Query("""
         select new  org.example.backend.dto.response.banHang.TrangThaiRespon(h.trangThai,count(h.id))
