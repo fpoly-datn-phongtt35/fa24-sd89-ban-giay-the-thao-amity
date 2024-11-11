@@ -55,6 +55,7 @@ public class Admin {
     public static final String PRODUCT_DETAIL_SEARCH = PRODUCT_DETAIL + "/search";
     public static final String PRODUCT_DETAIL_PAGE = PRODUCT_DETAIL + "/page";
     public static final String PRODUCT_DETAIL_QR = PRODUCT_DETAIL + "/qrcode/{id}";
+    public static final String PRODUCT_DETAIL_QR_TO_CART = PRODUCT_DETAIL + "/qrcode/cart/{id}";
 
 
 
@@ -78,6 +79,8 @@ public class Admin {
     public static final String BILL_DELETE = BILL + "/delete/{id}";
     public static final String PAGE_BILL = BILL + "/page";
     public static final String USER_GET_BY_BILL = BILL + "/search";
+    public static final String COUT_BY_STATUS_BILL = BILL + "/status";
+    public static final String BILL_EXCEL = BILL + "/excel";
 
 
     // Endpoint BILL_DETAIL
@@ -254,7 +257,19 @@ public class Admin {
     public static final String SELL_GET_ALL = SELL + "/all";
     public static final String SELL_GET_BY_ID = SELL + "/{id}";
     public static final String SELL_CREATE = SELL + "/create";
-    public static final String SELL_UPDATE = SELL + "/update/{id}";
+    public static final String SELL_UPDATE = SELL + "/update/hd";
     public static final String SELL_SET_DELETE = SELL + "/update/{id}";
 
+
+
+    public static final String SELL_DETAIL = BASE + "/sell_detail";
+    public static final String SELL_DETAIL_GET_ALL = SELL_DETAIL + "/all";
+    public static final String SELL_DETAIL_GET_BY_ID = SELL_DETAIL + "/{id}";
+    public static final String SELL_DETAIL_CREATE = SELL_DETAIL + "/create";
+    public static final String SELL_DETAIL_UPDATE = SELL_DETAIL + "/update/{id}";
+    public static final String SELL_DETAIL_SET_DELETE = SELL_DETAIL + "/update/{id}";
+
+    public static final String SELL_ORDER = BASE + "/sell/order";
+    public static final String SELL_ORDER_PRODUCT_COMPLETE = SELL_ORDER + "/complete/{id}";
+    public static final String SELL_ORDER_VOUCHER_COMPLETE = SELL_ORDER + "/complete/voucher/{id}";
 }

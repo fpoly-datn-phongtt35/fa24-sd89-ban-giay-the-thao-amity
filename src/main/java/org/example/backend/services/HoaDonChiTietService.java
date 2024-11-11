@@ -21,18 +21,18 @@ public class HoaDonChiTietService extends GenericServiceImpl<HoaDonChiTiet, UUID
         super(repository);
         this.hoaDonChiTietRepository = hoaDonChiTietRepository;
     }
-    public PageResponse<List<QuanLyDonHangRespose>> getHoaDon(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        Page<QuanLyDonHangRespose> qlhdPage = hoaDonChiTietRepository.getByPageHoaDon(pageable);
-
-        return PageResponse.<List<QuanLyDonHangRespose>>builder()
-                .page(qlhdPage.getNumber())
-                .size(qlhdPage.getSize())
-                .totalPage(qlhdPage.getTotalPages())
-                .items(qlhdPage.getContent())
-                .build();
-    }
-    public Page<QuanLyDonHangRespose> getAllBillPage(Pageable pageable){
-        return hoaDonChiTietRepository.getByPageHoaDon(pageable);
-    }
+//    public PageResponse<List<QuanLyDonHangRespose>> getHoaDon(int page, int size) {
+//        Pageable pageable = PageRequest.of(page, size);
+//        Page<QuanLyDonHangRespose> qlhdPage = hoaDonChiTietRepository.getByPageHoaDon(pageable);
+//
+//        return PageResponse.<List<QuanLyDonHangRespose>>builder()
+//                .page(qlhdPage.getNumber())
+//                .size(qlhdPage.getSize())
+//                .totalPage(qlhdPage.getTotalPages())
+//                .items(qlhdPage.getContent())
+//                .build();
+//    }
+//    public Page<QuanLyDonHangRespose> getAllBillPage(Pageable pageable){
+//        return hoaDonChiTietRepository.getByPageHoaDon(pageable);
+//    }
 }

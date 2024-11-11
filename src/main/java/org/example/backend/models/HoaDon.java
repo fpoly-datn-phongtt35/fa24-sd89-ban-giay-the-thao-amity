@@ -38,6 +38,11 @@ public class HoaDon {
     @JoinColumn(name = "id_phieu_giam_gia")
     private PhieuGiamGia idPhieuGiamGia;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_dot_giam_gia")
+    private DotGiamGia idDotGiamGia;
+
+
     @Nationalized
     @Column(name = "ma", length = 50)
     private String ma;
