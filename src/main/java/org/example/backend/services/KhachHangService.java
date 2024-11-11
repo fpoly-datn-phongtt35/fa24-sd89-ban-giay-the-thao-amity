@@ -36,6 +36,7 @@ public PageResponse<List<KhachHangResponse>> getAllKhachHang(int page, int size)
             .items(khachHangPage.getContent())
             .build();
 }
+public List<KhachHangResponse> getKhachHangById(UUID id){return nguoiDungRepository.getKhachHangById(id);}
 public Page<KhachHangResponse> getAllKhachHangPage(Pageable pageable){
     return  khachHangRespository.getAllKhachHangPage(pageable);
 }

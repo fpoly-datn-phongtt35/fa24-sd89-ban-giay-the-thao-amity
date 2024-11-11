@@ -25,15 +25,17 @@ public class QuanLyDonHangRespose {
 
     private String maHD;
 
-    private Long soLuong;
+    private String tenKhachHang;
+
+    private String soDienThoai;
+
+    private String diaChi;
 
     private BigDecimal tongTien;
 
-    private String tenKhachHang;
+    private String loaiHoaDon;
 
     private Instant ngayTao;
-
-    private String loaiHoaDon;
 
     private String trangThai;
 
