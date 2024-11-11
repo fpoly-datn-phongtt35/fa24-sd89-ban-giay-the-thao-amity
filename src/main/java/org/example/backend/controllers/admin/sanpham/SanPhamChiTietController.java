@@ -29,6 +29,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -232,4 +233,12 @@ public class SanPhamChiTietController {
         return ResponseEntity.ok(qrCode);
     }
 
+    @GetMapping(Admin.PRODUCT_DETAIL_QR_TO_CART)
+    public ResponseEntity<?> spQRtoCart(@PathVariable UUID id) {
+        Optional<SanPhamChiTietRespon> sanPhamChiTietList = sanPhamChiTietRepository.timspctQuetQR(id);
+        if (!sanPhamChiTietList.isEmpty()) {
+            return ResponseEntity.ok(sanPhamChiTietList);
+        }
+        return null;
+    }
 }

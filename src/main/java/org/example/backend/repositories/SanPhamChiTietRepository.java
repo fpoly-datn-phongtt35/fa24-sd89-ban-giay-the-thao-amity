@@ -11,6 +11,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface SanPhamChiTietRepository extends JpaRepository<SanPhamChiTiet, UUID> {
@@ -75,4 +76,16 @@ public interface SanPhamChiTietRepository extends JpaRepository<SanPhamChiTiet, 
 """)
 
     List<SanPhamChiTietRespon> findByIdSpct(UUID idSanPham);
+
+    @Query("""
+         select new org.example.backend.dto.response.SanPham.SanPhamChiTietRespon(s.id,s.idSanPham.id,
+        s.idSanPham.ten,s.idHang.id,s.idHang.ten,s.idDanhMuc.id,s.idDanhMuc.ten,s.idDeGiay.id,s.idDeGiay.ten,s.idMauSac.id,
+        s.idMauSac.ten,s.idKichThuoc.id,s.idKichThuoc.ten,
+        s.soLuong,s.giaBan,s.giaNhap,s.trangThai,s.hinhAnh
+        )
+        from SanPhamChiTiet  s
+        where s.deleted=false  and s.id =:id
+        
+""")
+    Optional<SanPhamChiTietRespon> timspctQuetQR(UUID id);
 }

@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.example.backend.models.DotGiamGia;
 import org.example.backend.models.NguoiDung;
 import org.example.backend.models.PhieuGiamGia;
 import org.hibernate.annotations.ColumnDefault;
@@ -30,6 +31,8 @@ public class BanHangRequest {
 
 
     private PhieuGiamGia idPhieuGiamGia;
+
+    private DotGiamGia idDotGiamGia;
 
 
     private String ma;
