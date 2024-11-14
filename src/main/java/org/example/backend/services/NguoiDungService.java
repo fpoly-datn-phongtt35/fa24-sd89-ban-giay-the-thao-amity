@@ -91,7 +91,6 @@ public class NguoiDungService extends GenericServiceImpl<NguoiDung, UUID> {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                         .body("Email orr password not match");
             }
-
         } else {
             // Trả về lỗi nếu không tìm thấy tài khoản hoặc thông tin không chính xác
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
