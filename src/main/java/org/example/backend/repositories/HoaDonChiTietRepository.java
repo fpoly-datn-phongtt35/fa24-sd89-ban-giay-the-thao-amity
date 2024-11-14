@@ -13,18 +13,18 @@ import java.util.UUID;
 
 @Repository
 public interface HoaDonChiTietRepository extends JpaRepository<HoaDonChiTiet, UUID> {
-    @Query("""
-        select new org.example.backend.dto.response.quanLyDonHang.QuanLyDonHangRespose(
-            qldh.id, qldh.ma, count(hdct.idHoaDon), qldh.tongTien, qldh.idNguoiDung.ten, 
-            qldh.ngayTao, qldh.loaiHoaDon, qldh.trangThai, qldh.deleted
-        )
-        from HoaDonChiTiet hdct
-        join hdct.idHoaDon qldh
-        where qldh.deleted = false 
-        group by qldh.id, qldh.ma, qldh.tongTien, qldh.idNguoiDung.ten, 
-                 qldh.ngayTao, qldh.loaiHoaDon, qldh.trangThai, qldh.deleted
-""")
-    Page<QuanLyDonHangRespose> getByPageHoaDon(Pageable pageable);
+//    @Query("""
+//        select new org.example.backend.dto.response.quanLyDonHang.QuanLyDonHangRespose(
+//            qldh.id, qldh.ma, count(hdct.idHoaDon), qldh.tongTien, qldh.idNguoiDung.ten,
+//            qldh.ngayTao, qldh.loaiHoaDon, qldh.trangThai, qldh.deleted
+//        )
+//        from HoaDonChiTiet hdct
+//        join hdct.idHoaDon qldh
+//        where qldh.deleted = false
+//        group by qldh.id, qldh.ma, qldh.tongTien, qldh.idNguoiDung.ten,
+//                 qldh.ngayTao, qldh.loaiHoaDon, qldh.trangThai, qldh.deleted
+//""")
+//    Page<QuanLyDonHangRespose> getByPageHoaDon(Pageable pageable);
 
 
 
