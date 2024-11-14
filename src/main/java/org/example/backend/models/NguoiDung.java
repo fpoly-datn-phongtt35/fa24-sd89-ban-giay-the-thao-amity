@@ -44,7 +44,7 @@ public class NguoiDung {
     private String sdt;
 
     @Nationalized
-    @Column(name = "mat_khau", length = 50)
+    @Column(name = "mat_khau", length = 100)
     private String matKhau;
 
     @Nationalized

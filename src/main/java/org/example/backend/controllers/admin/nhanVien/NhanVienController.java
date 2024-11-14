@@ -24,6 +24,7 @@
     import org.springframework.http.HttpStatus;
     import org.springframework.http.MediaType;
     import org.springframework.http.ResponseEntity;
+    import org.springframework.security.crypto.password.PasswordEncoder;
     import org.springframework.web.bind.annotation.*;
     import org.springframework.web.multipart.MultipartFile;
 
@@ -44,12 +45,14 @@
         final NhanVienMapper nhanVienMapper;
         private final NguoiDungRepository nguoiDungRepository;
         private final Cloudinary cloudinary;
+        private final PasswordEncoder passwordEncoder;
 
-        public NhanVienController(NguoiDungService nhanVienService, NhanVienMapper nhanVienMapper, NguoiDungRepository nguoiDungRepository,Cloudinary cloudinary) {
+        public NhanVienController(NguoiDungService nhanVienService, NhanVienMapper nhanVienMapper, NguoiDungRepository nguoiDungRepository, Cloudinary cloudinary, PasswordEncoder passwordEncoder) {
             this.nhanVienService = nhanVienService;
             this.nhanVienMapper = nhanVienMapper;
             this.nguoiDungRepository = nguoiDungRepository;
             this.cloudinary = cloudinary;
+            this.passwordEncoder=passwordEncoder;
         }
 
         @GetMapping(USER_GET_ALL)
@@ -97,7 +100,7 @@
             nd.setMa(ma);
             nd.setEmail(email);
             nd.setSdt(sdt);
-            nd.setMatKhau(matKhau);
+            nd.setMatKhau(passwordEncoder.encode(matKhau));
             nd.setTen(ten);
             nd.setDiaChi(diaChi);
             nd.setNgaySinh(ngaySinh);
@@ -138,7 +141,7 @@
             nd.setMa(ma);
             nd.setEmail(email);
             nd.setSdt(sdt);
-            nd.setMatKhau(matKhau);
+            nd.setMatKhau(passwordEncoder.encode(matKhau));
             nd.setTen(ten);
             nd.setDiaChi(diaChi);
             nd.setNgaySinh(ngaySinh);
@@ -210,6 +213,18 @@
                 return ResponseEntity.noContent().build();
             }
             return ResponseEntity.ok(result);
+        }
+        @PostMapping(USER_LOGIN)
+        public ResponseEntity<?> login(
+                @RequestParam(value = "email",defaultValue = "") String email,
+                @RequestParam(value = "password" , defaultValue = "") String password
+
+        ) {
+//            ResponseData<PageResponse<List<NhanVienRespon>>> responseData = ResponseData.<PageResponse<List<NhanVienRespon>>>builder()
+//                    .message("Get paginated users done")
+//                    .status(HttpStatus.OK.value())
+//                    .build();
+            return ResponseEntity.ok(nhanVienService.login(email, password));
         }
 
 
