@@ -1,5 +1,10 @@
 package org.example.backend.controllers.admin.banHang;
 
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.EncodeHintType;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.QRCodeWriter;
 import org.example.backend.constants.api.Admin;
 import org.example.backend.dto.request.banHang.*;
 import org.example.backend.dto.response.banHang.TrangThaiRespon;
@@ -16,8 +21,13 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 //import net.glxn.qrgen.javase.QRCode;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.UUID;
 
@@ -66,6 +76,7 @@ public class BanHangController {
 
                     SanPhamChiTiet spct = sanPhamChiTietRepository.findById(hdct.getIdSpct()).orElse(null);
                     HoaDonChiTiet hoaDonChiTiet = new HoaDonChiTiet();
+
                     hoaDonChiTiet.setIdHoaDon(hd);
                     hoaDonChiTiet.setIdSpct(spct);
                     hoaDonChiTiet.setSoLuong(hdct.getSoLuong());
@@ -92,6 +103,7 @@ public class BanHangController {
             return ResponseEntity.notFound().build();
         }
         hoaDon.setIdPhieuGiamGia(request.getIdPhieuGiamGia());
+        hoaDon.setIdNguoiDung(request.getIdNguoiDung());
         hoaDon.setIdDotGiamGia(request.getIdDotGiamGia());
         hoaDon.setSoDienThoai(request.getSoDienThoai());
         hoaDon.setDiaChi(request.getDiaChi());
@@ -155,11 +167,10 @@ public class BanHangController {
 
 
 
-//    @GetMapping(value = "/generate-qr", produces = MediaType.IMAGE_PNG_VALUE)
-//    public ResponseEntity<byte[]> generateQRCode(@RequestParam String orderId, @RequestParam double amount) {
-//        String qrData = "QRPAY|123456789|Ngân hàng ABC|" + amount + "|Thanh toán đơn hàng " + orderId;
-//        ByteArrayOutputStream stream = QRCode.from(qrData).withSize(250, 250).stream();
-//        return ResponseEntity.ok().body(stream.toByteArray());
-//    }
+
+
+
+
+
 
 }
