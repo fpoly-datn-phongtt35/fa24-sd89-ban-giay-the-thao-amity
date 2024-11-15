@@ -7,13 +7,17 @@ import org.example.backend.common.PageResponse;
 import org.example.backend.common.ResponseData;
 import org.example.backend.constants.api.Admin;
 import org.example.backend.dto.request.sanPham.SanPhamChiTietRequest;
+import org.example.backend.dto.request.sanPham.SanPhamChiTietSearchRequest;
 import org.example.backend.dto.response.SanPham.SanPhamChiTietRespon;
+import org.example.backend.dto.response.dotGiamGia.DotGiamGiaResponse;
 import org.example.backend.models.*;
 import org.example.backend.repositories.SanPhamChiTietRepository;
+import org.example.backend.repositories.SanPhamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +31,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -39,6 +44,8 @@ public class SanPhamChiTietController {
 
     @Autowired
     private Cloudinary cloudinary;
+    @Autowired
+    private SanPhamRepository sanPhamRepository;
 
     @GetMapping(Admin.PRODUCT_DETAIL_GET_ALL)
     public ResponseEntity<?> getAll() {
@@ -72,13 +79,15 @@ public class SanPhamChiTietController {
             @RequestParam("idHang") Hang idHang,
             @RequestParam("idDanhMuc") DanhMuc idDanhMuc,
             @RequestParam("idDeGiay") DeGiay idDeGiay,
-            @RequestParam("idSanPham") SanPham idSanPham,
+            @PathVariable("id") UUID idSanPham,
             @RequestParam("idMauSac") MauSac idMauSac,
             @RequestParam("idKichThuoc") KichThuoc idKichThuoc,
             @RequestParam("soLuong") int soLuong,
             @RequestParam("giaBan") BigDecimal giaBan,
             @RequestParam("giaNhap") BigDecimal giaNhap,
             @RequestParam("trangThai") String trangThai,
+            @RequestParam("moTa") String moTa,
+
             @RequestParam("hinhAnh") MultipartFile hinhAnhFile) throws IOException {
 
         try {
@@ -87,13 +96,14 @@ public class SanPhamChiTietController {
             s.setIdHang(idHang);
             s.setIdDanhMuc(idDanhMuc);
             s.setIdDeGiay(idDeGiay);
-            s.setIdSanPham(idSanPham);
+            s.setIdSanPham(sanPhamRepository.findById(idSanPham).orElse(null));
             s.setIdMauSac(idMauSac);
             s.setIdKichThuoc(idKichThuoc);
             s.setSoLuong(soLuong);
             s.setGiaBan(giaBan);
             s.setGiaNhap(giaNhap);
             s.setTrangThai(trangThai);
+            s.setMoTa(moTa);
 
             Map<String, Object> uploadResult = cloudinary.uploader().upload(hinhAnhFile.getBytes(), ObjectUtils.emptyMap());
             String imageUrl = (String) uploadResult.get("secure_url");
@@ -109,17 +119,18 @@ public class SanPhamChiTietController {
 
     @PutMapping(value = Admin.PRODUCT_DETAIL_UPDATE, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> update(
-            @PathVariable UUID id,
+            @PathVariable("id") UUID id,
             @RequestParam("idHang") Hang idHang,
             @RequestParam("idDanhMuc") DanhMuc idDanhMuc,
             @RequestParam("idDeGiay") DeGiay idDeGiay,
-            @RequestParam("idSanPham") SanPham idSanPham,
+            @PathVariable("idSanPham") UUID idSanPham,
             @RequestParam("idMauSac") MauSac idMauSac,
             @RequestParam("idKichThuoc") KichThuoc idKichThuoc,
             @RequestParam("soLuong") int soLuong,
             @RequestParam("giaBan") BigDecimal giaBan,
             @RequestParam("giaNhap") BigDecimal giaNhap,
             @RequestParam("trangThai") String trangThai,
+            @RequestParam("moTa") String moTa,
             @RequestPart(value = "hinhAnh", required = false) MultipartFile hinhAnhFile) {
         try {
             SanPhamChiTiet s = sanPhamChiTietRepository.findById(id).orElse(null);
@@ -130,13 +141,14 @@ public class SanPhamChiTietController {
                 s.setIdHang(idHang);
                 s.setIdDanhMuc(idDanhMuc);
                 s.setIdDeGiay(idDeGiay);
-                s.setIdSanPham(idSanPham);
+                s.setIdSanPham(sanPhamRepository.findById(idSanPham).orElse(null));
                 s.setIdMauSac(idMauSac);
                 s.setIdKichThuoc(idKichThuoc);
                 s.setSoLuong(soLuong);
                 s.setGiaBan(giaBan);
                 s.setGiaNhap(giaNhap);
                 s.setTrangThai(trangThai);
+                s.setMoTa(moTa);
 
                 // Tải lên hình ảnh lên Cloudinary nếu có tệp hình ảnh
                 if (hinhAnhFile != null && !hinhAnhFile.isEmpty()) {
@@ -222,6 +234,35 @@ public class SanPhamChiTietController {
             return ResponseEntity.ok(sanPhamChiTietList);
         }
         return null;
+    }
+
+    @GetMapping(Admin.PRODUCT_DETAIL_GET_BY_ID1)
+    public ResponseEntity<?> getSpctById(@PathVariable UUID id,
+                                         @RequestParam(value = "page", defaultValue = "0") int page,
+                                         @RequestParam(value = "size", defaultValue = "5") int size,
+                                         @RequestParam(defaultValue = "ngayTao") String sortBy,
+                                         @RequestParam(defaultValue = "desc") String sortDir,
+                                         @RequestParam(defaultValue = "") String hang,
+                                         @RequestParam(defaultValue = "") String mauSac,
+                                         @RequestParam(defaultValue = "") String kichThuoc) {
+        SanPhamChiTietSearchRequest searchRequest = new SanPhamChiTietSearchRequest();
+        searchRequest.setHang(hang);
+        searchRequest.setMauSac(mauSac);
+        searchRequest.setKichThuoc(kichThuoc);
+        searchRequest.setIdSanPham(id);
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(sortDir), sortBy));
+        Page<SanPhamChiTietRespon> searchSPCTPaginate = sanPhamChiTietRepository.findByIdSpct1(pageable, searchRequest);
+        PageResponse<List<SanPhamChiTietRespon>> data = PageResponse.<List<SanPhamChiTietRespon>>builder()
+                .page(searchSPCTPaginate.getNumber())
+                .size(searchSPCTPaginate.getSize())
+                .totalPage(searchSPCTPaginate.getTotalPages())
+                .items(searchSPCTPaginate.getContent()).build();
+        ResponseData<PageResponse<List<SanPhamChiTietRespon>>> responseData = ResponseData.<PageResponse<List<SanPhamChiTietRespon>>>builder()
+                .message("Search Sale")
+                .status(HttpStatus.OK.value())
+                .data(data).build();
+        return ResponseEntity.ok(responseData);
     }
 
 //    qr

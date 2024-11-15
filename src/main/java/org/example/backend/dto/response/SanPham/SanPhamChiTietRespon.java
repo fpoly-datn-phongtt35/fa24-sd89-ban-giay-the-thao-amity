@@ -30,6 +30,8 @@ public class SanPhamChiTietRespon {
     public BigDecimal giaBan;
     public BigDecimal giaNhap;
     public String trangThai;
+
     public String hinhAnh;
+    public String moTa;
 
 }

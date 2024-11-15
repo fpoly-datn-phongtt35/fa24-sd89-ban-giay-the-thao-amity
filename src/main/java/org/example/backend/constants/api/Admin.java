@@ -49,10 +49,12 @@ public class Admin {
 
     // Endpoint PRODUCT_DETAIL
     public static final String PRODUCT_DETAIL = BASE + "/product_detail";
+    public static final String PRODUCT_DETAIL1 = BASE + "/product_detail1";
     public static final String PRODUCT_DETAIL_GET_ALL = PRODUCT_DETAIL + "/all";
     public static final String PRODUCT_DETAIL_GET_BY_ID = PRODUCT_DETAIL + "/{id}";
-    public static final String PRODUCT_DETAIL_CREATE = PRODUCT_DETAIL + "/create";
-    public static final String PRODUCT_DETAIL_UPDATE = PRODUCT_DETAIL + "/update/{id}";
+    public static final String PRODUCT_DETAIL_GET_BY_ID1 = PRODUCT_DETAIL1 + "/{id}";
+    public static final String PRODUCT_DETAIL_CREATE = PRODUCT_DETAIL + "/create/{id}";
+    public static final String PRODUCT_DETAIL_UPDATE = PRODUCT_DETAIL + "/update/{id}/{idSanPham}";
     public static final String PRODUCT_DETAIL_SET_DELETE = PRODUCT_DETAIL + "/delete/{id}";
     public static final String PRODUCT_DETAIL_DETAIL = PRODUCT_DETAIL + "/detail/{id}";
     public static final String PRODUCT_DETAIL_SEARCH = PRODUCT_DETAIL + "/search";
@@ -271,8 +273,11 @@ public class Admin {
     public static final String SELL_DETAIL_CREATE = SELL_DETAIL + "/create";
     public static final String SELL_DETAIL_UPDATE = SELL_DETAIL + "/update/{id}";
     public static final String SELL_DETAIL_SET_DELETE = SELL_DETAIL + "/update/{id}";
+    public static final String SELL_DETAIL_QR = SELL_DETAIL + "/generate-qr";
+    public static final String SELL_DETAIL_QR_COMPLETE = SELL_DETAIL + "/generate-qr/complete";
 
     public static final String SELL_ORDER = BASE + "/sell/order";
     public static final String SELL_ORDER_PRODUCT_COMPLETE = SELL_ORDER + "/complete/{id}";
     public static final String SELL_ORDER_VOUCHER_COMPLETE = SELL_ORDER + "/complete/voucher/{id}";
+
 }
