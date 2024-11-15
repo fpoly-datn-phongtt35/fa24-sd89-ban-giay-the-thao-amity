@@ -46,13 +46,15 @@
         private final NguoiDungRepository nguoiDungRepository;
         private final Cloudinary cloudinary;
         private final PasswordEncoder passwordEncoder;
+        private final NguoiDungService nguoiDungService;
 
-        public NhanVienController(NguoiDungService nhanVienService, NhanVienMapper nhanVienMapper, NguoiDungRepository nguoiDungRepository, Cloudinary cloudinary, PasswordEncoder passwordEncoder) {
+        public NhanVienController(NguoiDungService nhanVienService, NhanVienMapper nhanVienMapper, NguoiDungRepository nguoiDungRepository, Cloudinary cloudinary, PasswordEncoder passwordEncoder, NguoiDungService nguoiDungService) {
             this.nhanVienService = nhanVienService;
             this.nhanVienMapper = nhanVienMapper;
             this.nguoiDungRepository = nguoiDungRepository;
             this.cloudinary = cloudinary;
             this.passwordEncoder=passwordEncoder;
+            this.nguoiDungService = nguoiDungService;
         }
 
         @GetMapping(USER_GET_ALL)
@@ -226,7 +228,34 @@
 //                    .build();
             return ResponseEntity.ok(nhanVienService.login(email, password));
         }
-
+        @PostMapping(USER_REGISTER)
+        public ResponseEntity<?>   createRegister (
+//                @RequestParam(value = "ma",defaultValue = "") String ma,
+                @RequestParam(value = "ten",defaultValue = "") String ten,
+                @RequestParam(value = "email" ,defaultValue = "") String email,
+                @RequestParam(value = "matKhau",defaultValue = "") String matKhau,
+                @RequestParam(value = "matKhauNhapLai",defaultValue = "") String matKhauNhapLai,
+                @RequestParam(value = "chucVu" ,defaultValue = "") String chucVu,
+                @RequestParam(value = "trangThai",defaultValue = "") String trangThai
+        ){
+            String ma = "KH" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
+            NguoiDung nd = new NguoiDung();
+            nd.setMa(ma);
+            nd.setEmail(email);
+            nd.setMatKhau(passwordEncoder.encode(matKhau));
+            nd.setTen(ten);
+            nd.setChucVu(chucVu);
+            nd.setTrangThai(trangThai);
+            if (!matKhauNhapLai.equals(matKhau)){
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body("mật khẩu và mật khẩu nhập lại chưa trung khớp");
+            }
+            if (nguoiDungRepository.findByEmail(email).isPresent()){
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body("Email đã tồn tại vui lòng điền email khac");
+            }
+            return ResponseEntity.ok(nhanVienService.save(nd));
+        }
 
 
     }

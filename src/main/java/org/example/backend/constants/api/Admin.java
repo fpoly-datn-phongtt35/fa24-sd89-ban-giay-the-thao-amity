@@ -18,6 +18,8 @@ public class Admin {
     public static final String USER_SET_TRANG_THAI = USER + "/status/{id}";
     public static final String USER_SAVE_EXCEL = USER + "/excel";
     public static final String USER_LOGIN = USER + "/login";
+    public static final String USER_REGISTER = USER + "/createUser";
+
 
 
     // Endpoint CUSTOMER
