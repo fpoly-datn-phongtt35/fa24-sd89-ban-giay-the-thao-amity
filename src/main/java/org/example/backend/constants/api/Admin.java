@@ -47,6 +47,7 @@ public class Admin {
     public static final String PRODUCT_PAGE= PRODUCT + "/page";
 
 
+
     // Endpoint PRODUCT_DETAIL
     public static final String PRODUCT_DETAIL = BASE + "/product_detail";
     public static final String PRODUCT_DETAIL1 = BASE + "/product_detail1";
@@ -61,6 +62,7 @@ public class Admin {
     public static final String PRODUCT_DETAIL_PAGE = PRODUCT_DETAIL + "/page";
     public static final String PRODUCT_DETAIL_QR = PRODUCT_DETAIL + "/qrcode/{id}";
     public static final String PRODUCT_DETAIL_QR_TO_CART = PRODUCT_DETAIL + "/qrcode/cart/{id}";
+    public static final String PRODUCT_DETAIL_CLIENT= PRODUCT_DETAIL + "/client";
 
 
 
