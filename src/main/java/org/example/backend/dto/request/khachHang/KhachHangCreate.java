@@ -13,6 +13,7 @@ public class KhachHangCreate {
     private String ma;
     private String email;
     private String sdt;
+    private String matKhau="a123456";
     private String ten;
     private String diaChi;
     private Instant ngaySinh;

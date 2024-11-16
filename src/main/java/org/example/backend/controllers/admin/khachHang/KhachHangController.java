@@ -21,6 +21,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -38,13 +39,15 @@ public class KhachHangController {
     final KhachHangMapper khachHangMapper;
     final KhachHangService khachHangService;
     private final NguoiDungRepository nguoiDungRepository;
-    private Cloudinary cloudinary;
+    private final Cloudinary cloudinary;
+    private final PasswordEncoder passwordEncoder;
 
-public KhachHangController(KhachHangService khachHangService, NguoiDungRepository nguoiDungRepository, KhachHangMapper khachHangMapper, Cloudinary cloudinary){
+public KhachHangController(KhachHangService khachHangService, NguoiDungRepository nguoiDungRepository, KhachHangMapper khachHangMapper, Cloudinary cloudinary, PasswordEncoder passwordEncoder){
     this.khachHangService = khachHangService;
     this.nguoiDungRepository = nguoiDungRepository;
     this.khachHangMapper = khachHangMapper;
     this.cloudinary = cloudinary;
+    this.passwordEncoder = passwordEncoder;
 }
 @GetMapping(CUSTOMER_GET_ALL)
     public ResponseEntity<ResponseData<PageResponse<List<KhachHangResponse>>>> getAllCustomer(
@@ -81,9 +84,10 @@ public KhachHangController(KhachHangService khachHangService, NguoiDungRepositor
     @PostMapping(CUSTOMER_CREATE)
     public ResponseEntity<?> createCustomer(
             @RequestParam("ma") String ma,
-            @RequestParam("ten") String ten,
             @RequestParam("email") String email,
             @RequestParam("sdt") String sdt,
+            @RequestParam("matKhau") String matKhau,
+            @RequestParam("ten") String ten,
             @RequestParam("ngaySinh") Instant ngaySinh,
             @RequestParam("gioiTinh") String gioiTinh,
             @RequestParam("diaChi") String diaChi,
@@ -94,9 +98,10 @@ public KhachHangController(KhachHangService khachHangService, NguoiDungRepositor
 
         NguoiDung nguoiDung = new NguoiDung();
         nguoiDung.setMa(ma);
-        nguoiDung.setTen(ten);
         nguoiDung.setEmail(email);
         nguoiDung.setSdt(sdt);
+        nguoiDung.setMatKhau(passwordEncoder.encode(matKhau));
+        nguoiDung.setTen(ten);
         nguoiDung.setNgaySinh(ngaySinh);
         nguoiDung.setGioiTinh(gioiTinh);
         nguoiDung.setDiaChi(diaChi);
@@ -124,6 +129,7 @@ public KhachHangController(KhachHangService khachHangService, NguoiDungRepositor
         @RequestParam(value = "ma",defaultValue = "") String ma,
         @RequestParam(value = "email",defaultValue = "") String email,
         @RequestParam(value = "sdt",defaultValue = "") String sdt,
+        @RequestParam(value = "matKhau",defaultValue = "") String matKhau,
         @RequestParam(value = "ten",defaultValue = "") String ten,
         @RequestParam(value = "diaChi",defaultValue = "") String diaChi,
         @RequestParam(value = "ngaySinh",defaultValue = "") Instant ngaySinh,
@@ -141,6 +147,7 @@ public KhachHangController(KhachHangService khachHangService, NguoiDungRepositor
     nguoiDung.setMa(ma);
     nguoiDung.setEmail(email);
     nguoiDung.setSdt(sdt);
+    nguoiDung.setMatKhau(passwordEncoder.encode(matKhau));
     nguoiDung.setTen(ten);
     nguoiDung.setDiaChi(diaChi);
     nguoiDung.setNgaySinh(ngaySinh);
@@ -210,6 +217,21 @@ public KhachHangController(KhachHangService khachHangService, NguoiDungRepositor
     @GetMapping(CUSTOMER_GET_BY_SDT)
     public ResponseEntity<?> getAllCustomerBySDT( @RequestParam(value = "sdt" , defaultValue = "") String sdt){
         return ResponseEntity.ok(nguoiDungRepository.timKiemSDT(sdt));
+    }
+    @GetMapping(CUSTOMER_SORT)
+    public ResponseEntity<List<KhachHangResponse>> sortCustomerSort(){
+    List<KhachHangResponse> result = khachHangService.sortKhachHang();
+    if(result.isEmpty()){
+        return ResponseEntity.noContent().build();
+    }
+    return ResponseEntity.ok(result);
+    }
+    @PostMapping(CUSTOMER_LOGIN)
+    public ResponseEntity<?> login(
+            @RequestParam(value = "email",defaultValue = "") String email,
+            @RequestParam(value = "password" , defaultValue = "") String password
+    ){
+    return ResponseEntity.ok(khachHangService.login(email,password));
     }
 
 }

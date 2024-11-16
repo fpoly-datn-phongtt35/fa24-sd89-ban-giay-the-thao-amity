@@ -33,7 +33,7 @@ public class Admin {
     public static final String PAGE_CUSTOMER = CUSTOMER + "/page";
     public static final String CUSTOMER_GET_BY_KH = CUSTOMER + "/search";
     public static final String CUSTOMER_GET_BY_SDT = CUSTOMER + "/search/sdt";
-
+    public static final String CUSTOMER_LOGIN = CUSTOMER + "/login";
 
     // Endpoint PRODUCT
     public static final String PRODUCT = BASE + "/product";
