@@ -15,6 +15,7 @@ public class KhachHangResponse {
     private String ma;
     private String email;
     private String sdt;
+    private String matKhau;
     private String ten;
     private String diaChi;
     private Instant ngaySinh;
