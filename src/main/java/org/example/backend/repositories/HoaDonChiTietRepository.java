@@ -1,6 +1,6 @@
 package org.example.backend.repositories;
 
-import org.example.backend.dto.response.quanLyDonHang.QuanLyDonHangRespose;
+import org.example.backend.dto.response.quanLyDonHang.hoaDonChiTietReponse;
 import org.example.backend.models.HoaDonChiTiet;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,19 +13,15 @@ import java.util.UUID;
 
 @Repository
 public interface HoaDonChiTietRepository extends JpaRepository<HoaDonChiTiet, UUID> {
-//    @Query("""
-//        select new org.example.backend.dto.response.quanLyDonHang.QuanLyDonHangRespose(
-//            qldh.id, qldh.ma, count(hdct.idHoaDon), qldh.tongTien, qldh.idNguoiDung.ten,
-//            qldh.ngayTao, qldh.loaiHoaDon, qldh.trangThai, qldh.deleted
-//        )
-//        from HoaDonChiTiet hdct
-//        join hdct.idHoaDon qldh
-//        where qldh.deleted = false
-//        group by qldh.id, qldh.ma, qldh.tongTien, qldh.idNguoiDung.ten,
-//                 qldh.ngayTao, qldh.loaiHoaDon, qldh.trangThai, qldh.deleted
-//""")
-//    Page<QuanLyDonHangRespose> getByPageHoaDon(Pageable pageable);
-
-
+    @Query("""
+        select new org.example.backend.dto.response.quanLyDonHang.hoaDonChiTietReponse(
+        hdct.id,spct.id,hd.id,spct.idSanPham.ten,spct.idMauSac.ten,spct.idKichThuoc.ten,spct.idHang.ten,
+        hdct.soLuong,hdct.gia,spct.hinhAnh,hdct.ngayTao,hdct.deleted)
+        from HoaDonChiTiet hdct
+        join hdct.idHoaDon hd
+        join hdct.idSpct spct
+        where hdct.deleted = false and hd.id = :idHD
+""")
+    Page<hoaDonChiTietReponse> getByPageHoaDonChiTiet(Pageable pageable,UUID idHD);
 
 }
