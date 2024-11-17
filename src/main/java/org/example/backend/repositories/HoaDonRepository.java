@@ -22,14 +22,14 @@ import java.util.UUID;
 
 @Repository
 public interface HoaDonRepository extends JpaRepository<HoaDon, UUID> {
-//    @Query("""
-//      select new org.example.backend.dto.response.quanLyDonHang.QuanLyDonHangRespose(
-//            qldh.id,qldh.ma,count(hdct.idHoaDon),qldh.tongTien,qldh.idNguoiDung.ten,qldh.ngayTao,qldh.loaiHoaDon,qldh.trangThai,qldh.deleted
-//        )
-//        from HoaDon qldh, HoaDonChiTiet hdct
-//        where qldh.deleted = false
-//""")
-//    Page<QuanLyDonHangRespose> getByPageHoaDon(Pageable pageable);
+    @Query("""
+select new org.example.backend.dto.response.quanLyDonHang.QuanLyDonHangRespose(
+            hd.id, hd.ma, hd.idNguoiDung.ten, hd.soDienThoai, hd.diaChi, hd.tongTien, hd.loaiHoaDon, hd.ngayTao, hd.trangThai, hd.deleted
+        )
+        from HoaDon hd
+        where hd.deleted = false and hd.id =:id
+""")
+    QuanLyDonHangRespose getHoaDonbyID(UUID id);
 
 
     @Modifying

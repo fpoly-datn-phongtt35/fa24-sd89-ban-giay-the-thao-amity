@@ -36,6 +36,10 @@ public class HoaDonService extends GenericServiceImpl<HoaDon, UUID> {
         return hoaDonRepository.GetAllHoaDon();
     }
 
+    public QuanLyDonHangRespose getHoaDonByID(UUID id) {
+        return hoaDonRepository.getHoaDonbyID(id);
+    }
+
     public PageResponse<List<QuanLyDonHangRespose>> getHoaDonByStats(int page, int size,String status) {
         Pageable pageable = PageRequest.of(page, size);
         Page<QuanLyDonHangRespose> qlhdPage = hoaDonRepository.GetAllHoaDonByTrangThai(pageable,status);
