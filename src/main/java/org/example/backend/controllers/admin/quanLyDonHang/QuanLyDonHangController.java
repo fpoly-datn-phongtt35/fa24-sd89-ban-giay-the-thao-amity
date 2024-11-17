@@ -3,17 +3,11 @@ package org.example.backend.controllers.admin.quanLyDonHang;
 
 import org.example.backend.common.PageResponse;
 import org.example.backend.common.ResponseData;
-import org.example.backend.dto.response.NhanVien.NhanVienRespon;
-import org.example.backend.dto.response.phieuGiamGia.phieuGiamGiaReponse;
 import org.example.backend.dto.response.quanLyDonHang.QuanLyDonHangRespose;
 import org.example.backend.repositories.HoaDonChiTietRepository;
 import org.example.backend.repositories.HoaDonRepository;
 import org.example.backend.services.HoaDonChiTietService;
 import org.example.backend.services.HoaDonService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -29,7 +23,6 @@ import java.util.List;
 import static org.example.backend.constants.api.Admin.BILL_EXCEL;
 import static org.example.backend.constants.api.Admin.BILL_GET_ALL;
 import static org.example.backend.constants.api.Admin.COUT_BY_STATUS_BILL;
-import static org.example.backend.constants.api.Admin.PAGE_BILL;
 
 @RestController
 public class QuanLyDonHangController {
