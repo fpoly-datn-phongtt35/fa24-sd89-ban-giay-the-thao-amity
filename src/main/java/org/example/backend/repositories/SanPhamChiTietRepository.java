@@ -1,7 +1,10 @@
 package org.example.backend.repositories;
 
 import jakarta.transaction.Transactional;
+import org.example.backend.dto.request.dotGiamGia.DotGiamGiaSearch;
+import org.example.backend.dto.request.sanPham.SanPhamChiTietSearchRequest;
 import org.example.backend.dto.response.SanPham.SanPhamChiTietRespon;
+import org.example.backend.dto.response.dotGiamGia.DotGiamGiaResponse;
 import org.example.backend.models.SanPhamChiTiet;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,7 +22,7 @@ public interface SanPhamChiTietRepository extends JpaRepository<SanPhamChiTiet, 
         select new org.example.backend.dto.response.SanPham.SanPhamChiTietRespon(s.id,s.idSanPham.id,
         s.idSanPham.ten,s.idHang.id,s.idHang.ten,s.idDanhMuc.id,s.idDanhMuc.ten,s.idDeGiay.id,s.idDeGiay.ten,s.idMauSac.id,
         s.idMauSac.ten,s.idKichThuoc.id,s.idKichThuoc.ten,
-        s.soLuong,s.giaBan,s.giaNhap,s.trangThai,s.hinhAnh
+        s.soLuong,s.giaBan,s.giaNhap,s.trangThai,s.hinhAnh,s.moTa
         )
         from SanPhamChiTiet  s
         where s.deleted=false 
@@ -39,7 +42,7 @@ public interface SanPhamChiTietRepository extends JpaRepository<SanPhamChiTiet, 
     select new org.example.backend.dto.response.SanPham.SanPhamChiTietRespon(
         s.id, s.idSanPham.id, s.idSanPham.ten, s.idHang.id, s.idHang.ten, s.idDanhMuc.id, s.idDanhMuc.ten,
         s.idDeGiay.id, s.idDeGiay.ten, s.idMauSac.id, s.idMauSac.ten, s.idKichThuoc.id, s.idKichThuoc.ten,
-        s.soLuong, s.giaBan, s.giaNhap, s.trangThai, s.hinhAnh
+        s.soLuong, s.giaBan, s.giaNhap, s.trangThai, s.hinhAnh,s.moTa
     )
     from SanPhamChiTiet s
     where s.deleted = false
@@ -56,7 +59,7 @@ public interface SanPhamChiTietRepository extends JpaRepository<SanPhamChiTiet, 
         select new org.example.backend.dto.response.SanPham.SanPhamChiTietRespon(s.id,s.idSanPham.id,
         s.idSanPham.ten,s.idHang.id,s.idHang.ten,s.idDanhMuc.id,s.idDanhMuc.ten,s.idDeGiay.id,s.idDeGiay.ten,s.idMauSac.id,
         s.idMauSac.ten,s.idKichThuoc.id,s.idKichThuoc.ten,
-        s.soLuong,s.giaBan,s.giaNhap,s.trangThai,s.hinhAnh
+        s.soLuong,s.giaBan,s.giaNhap,s.trangThai,s.hinhAnh,s.moTa
         )
         from SanPhamChiTiet  s
         where s.deleted=false 
@@ -64,11 +67,23 @@ public interface SanPhamChiTietRepository extends JpaRepository<SanPhamChiTiet, 
 """)
     Page<SanPhamChiTietRespon> phanTrang(Pageable pageable);
 
+//    @Query("""
+//        select new org.example.backend.dto.response.SanPham.SanPhamClientResponse(s.id,s.idSanPham.id,
+//        s.idSanPham.ten,s.idHang.id,s.idHang.ten,s.idDanhMuc.id,s.idDanhMuc.ten,s.idDeGiay.id,s.idDeGiay.ten,s.idMauSac.id,
+//        s.idMauSac.ten,s.idKichThuoc.id,s.idKichThuoc.ten,
+//        s.soLuong,s.giaBan,s.giaNhap,s.giaGiam,s.trangThai,s.hinhAnh,s.moTa
+//        )
+//        from SanPhamChiTiet  s
+//        where s.deleted=false
+//        order by s.ngayTao DESC
+//""")
+//    Page<SanPhamChiTietRespon> getAllSpctClient(Pageable pageable);
+
     @Query("""
          select new org.example.backend.dto.response.SanPham.SanPhamChiTietRespon(s.id,s.idSanPham.id,
         s.idSanPham.ten,s.idHang.id,s.idHang.ten,s.idDanhMuc.id,s.idDanhMuc.ten,s.idDeGiay.id,s.idDeGiay.ten,s.idMauSac.id,
         s.idMauSac.ten,s.idKichThuoc.id,s.idKichThuoc.ten,
-        s.soLuong,s.giaBan,s.giaNhap,s.trangThai,s.hinhAnh
+        s.soLuong,s.giaBan,s.giaNhap,s.trangThai,s.hinhAnh,s.moTa
         )
         from SanPhamChiTiet  s
         where s.deleted=false  and s.idSanPham.id =:idSanPham
@@ -78,10 +93,43 @@ public interface SanPhamChiTietRepository extends JpaRepository<SanPhamChiTiet, 
     List<SanPhamChiTietRespon> findByIdSpct(UUID idSanPham);
 
     @Query("""
+        select new org.example.backend.dto.response.SanPham.SanPhamChiTietRespon(s.id,s.idSanPham.id,
+        s.idSanPham.ten,s.idHang.id,s.idHang.ten,s.idDanhMuc.id,s.idDanhMuc.ten,s.idDeGiay.id,s.idDeGiay.ten,s.idMauSac.id,
+        s.idMauSac.ten,s.idKichThuoc.id,s.idKichThuoc.ten,
+        s.soLuong,s.giaBan,s.giaNhap,s.trangThai,s.hinhAnh,s.moTa
+        )
+        from SanPhamChiTiet s
+        where s.deleted=false  
+        and s.idSanPham.id = :#{#SPCTSearch.idSanPham}
+        AND (COALESCE(:#{#SPCTSearch.hang}, '') = '' OR s.idHang.ten LIKE %:#{#SPCTSearch.hang}%)
+        AND (COALESCE(:#{#SPCTSearch.kichThuoc}, '') ='' OR s.idKichThuoc.ten LIKE %:#{#SPCTSearch.kichThuoc}%)
+        AND (COALESCE(:#{#SPCTSearch.mauSac}, '') ='' OR s.idMauSac.ten LIKE %:#{#SPCTSearch.mauSac}%)
+        
+""")
+    Page<SanPhamChiTietRespon> findByIdSpct1(Pageable pageable, SanPhamChiTietSearchRequest SPCTSearch);
+
+//    @Query("""
+//    select new org.example.backend.dto.response.SanPham.SanPhamChiTietRespon(
+//        s.id, s.idSanPham.id, s.idSanPham.ten, s.idHang.id, s.idHang.ten,
+//        s.idDanhMuc.id, s.idDanhMuc.ten, s.idDeGiay.id, s.idDeGiay.ten,
+//        s.idMauSac.id, s.idMauSac.ten, s.idKichThuoc.id, s.idKichThuoc.ten,
+//        s.soLuong, s.giaBan, s.giaNhap, s.trangThai, s.hinhAnh
+//    )
+//    from SanPhamChiTiet s
+//    where s.deleted = false
+//      and s.idSanPham.id = :#{#dotGiamGiaSearch.idSanPham}
+//      and (:#{#dotGiamGiaSearch.hang} IS NULL OR s.idHang.ten LIKE %:#{#dotGiamGiaSearch.hang}%)
+//      and (:#{#dotGiamGiaSearch.kichThuoc} IS NULL OR s.idKichThuoc.ten LIKE %:#{#dotGiamGiaSearch.kichThuoc}%)
+//      and (:#{#dotGiamGiaSearch.mauSac} IS NULL OR s.idMauSac.ten LIKE %:#{#dotGiamGiaSearch.mauSac}%)
+//""")
+//    Page<SanPhamChiTietRespon> findByIdSpct1(Pageable pageable, SanPhamChiTietSearchRequest dotGiamGiaSearch);
+//
+
+    @Query("""
          select new org.example.backend.dto.response.SanPham.SanPhamChiTietRespon(s.id,s.idSanPham.id,
         s.idSanPham.ten,s.idHang.id,s.idHang.ten,s.idDanhMuc.id,s.idDanhMuc.ten,s.idDeGiay.id,s.idDeGiay.ten,s.idMauSac.id,
         s.idMauSac.ten,s.idKichThuoc.id,s.idKichThuoc.ten,
-        s.soLuong,s.giaBan,s.giaNhap,s.trangThai,s.hinhAnh
+        s.soLuong,s.giaBan,s.giaNhap,s.trangThai,s.hinhAnh,s.moTa
         )
         from SanPhamChiTiet  s
         where s.deleted=false  and s.id =:id

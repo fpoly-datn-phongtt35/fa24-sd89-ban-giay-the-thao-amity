@@ -127,6 +127,15 @@ public interface NguoiDungRepository extends JpaRepository<NguoiDung, UUID> {
     """)
     Optional<NhanVienRespon> timKiemSDT( String sdt);
 
+    @Query("""
+    select nd
+    from NguoiDung nd
+    where nd.email = :email and nd.deleted = false
+""")
+    Optional<NguoiDung> findByEmail(@Param("email") String email);
+
+
+
 
 
 
@@ -173,7 +182,7 @@ public interface NguoiDungRepository extends JpaRepository<NguoiDung, UUID> {
     //    KhachHang
     @Query("""
     select new org.example.backend.dto.response.khachHang.KhachHangResponse(
-    nd.id,nd.ma,nd.email,nd.sdt,nd.ten,nd.diaChi,nd.ngaySinh,
+    nd.id,nd.ma,nd.email,nd.sdt,nd.matKhau,nd.ten,nd.diaChi,nd.ngaySinh,
     nd.gioiTinh,nd.hinhAnh,nd.diem,nd.trangThai, nd.deleted, nd.chucVu)
     from NguoiDung nd where nd.chucVu = 'khachhang' and nd.deleted = false
 """)
@@ -189,7 +198,7 @@ public interface NguoiDungRepository extends JpaRepository<NguoiDung, UUID> {
 
     @Query("""
     select new org.example.backend.dto.response.khachHang.KhachHangResponse(
-    nd.id,nd.ma,nd.email,nd.sdt,nd.ten,nd.diaChi,nd.ngaySinh,
+    nd.id,nd.ma,nd.email,nd.sdt,nd.matKhau,nd.ten,nd.diaChi,nd.ngaySinh,
     nd.gioiTinh,nd.hinhAnh,nd.diem,nd.trangThai, nd.deleted, nd.chucVu)    
       from NguoiDung nd
         where nd.chucVu = 'khachhang' 
@@ -207,7 +216,7 @@ public interface NguoiDungRepository extends JpaRepository<NguoiDung, UUID> {
 
     @Query("""
         select new org.example.backend.dto.response.khachHang.KhachHangResponse(
-        nd.id,nd.ma,nd.email,nd.sdt,nd.ten,nd.diaChi,nd.ngaySinh,
+        nd.id,nd.ma,nd.email,nd.sdt,nd.matKhau,nd.ten,nd.diaChi,nd.ngaySinh,
         nd.gioiTinh,nd.hinhAnh,nd.diem,nd.trangThai, nd.deleted, nd.chucVu) 
         from NguoiDung nd 
         where nd.chucVu = 'khachhang' and nd.deleted = false 
@@ -217,7 +226,7 @@ public interface NguoiDungRepository extends JpaRepository<NguoiDung, UUID> {
 
     @Query("""
         select new org.example.backend.dto.response.khachHang.KhachHangResponse(
-        nd.id,nd.ma,nd.email,nd.sdt,nd.ten,nd.diaChi,nd.ngaySinh,
+        nd.id,nd.ma,nd.email,nd.sdt,nd.matKhau,nd.ten,nd.diaChi,nd.ngaySinh,
         nd.gioiTinh,nd.hinhAnh,nd.diem,nd.trangThai, nd.deleted, nd.chucVu) 
         from NguoiDung nd 
         where nd.chucVu = 'khachhang' and nd.deleted = false 
@@ -226,4 +235,14 @@ public interface NguoiDungRepository extends JpaRepository<NguoiDung, UUID> {
        
     """)
     List<KhachHangResponse> getKhachHangById(UUID id);
+    @Query("""
+        select new org.example.backend.dto.response.khachHang.KhachHangResponse(
+        nd.id,nd.ma,nd.email,nd.sdt,nd.matKhau,nd.ten,nd.diaChi,nd.ngaySinh,
+        nd.gioiTinh,nd.hinhAnh,nd.diem,nd.trangThai, nd.deleted, nd.chucVu) 
+        from NguoiDung nd 
+        where nd.chucVu = 'khachhang' and nd.deleted = false 
+        order by nd.ten DESC 
+       
+    """)
+    List<KhachHangResponse> sortKhachHang();
 }

@@ -17,6 +17,9 @@ public class Admin {
     public static final String USER_GET_BY_NV = USER + "/search";
     public static final String USER_SET_TRANG_THAI = USER + "/status/{id}";
     public static final String USER_SAVE_EXCEL = USER + "/excel";
+    public static final String USER_LOGIN = USER + "/login";
+    public static final String USER_REGISTER = USER + "/createUser";
+
 
 
     // Endpoint CUSTOMER
@@ -30,7 +33,7 @@ public class Admin {
     public static final String PAGE_CUSTOMER = CUSTOMER + "/page";
     public static final String CUSTOMER_GET_BY_KH = CUSTOMER + "/search";
     public static final String CUSTOMER_GET_BY_SDT = CUSTOMER + "/search/sdt";
-
+    public static final String CUSTOMER_LOGIN = CUSTOMER + "/login";
 
     // Endpoint PRODUCT
     public static final String PRODUCT = BASE + "/product";
@@ -44,18 +47,22 @@ public class Admin {
     public static final String PRODUCT_PAGE= PRODUCT + "/page";
 
 
+
     // Endpoint PRODUCT_DETAIL
     public static final String PRODUCT_DETAIL = BASE + "/product_detail";
+    public static final String PRODUCT_DETAIL1 = BASE + "/product_detail1";
     public static final String PRODUCT_DETAIL_GET_ALL = PRODUCT_DETAIL + "/all";
     public static final String PRODUCT_DETAIL_GET_BY_ID = PRODUCT_DETAIL + "/{id}";
-    public static final String PRODUCT_DETAIL_CREATE = PRODUCT_DETAIL + "/create";
-    public static final String PRODUCT_DETAIL_UPDATE = PRODUCT_DETAIL + "/update/{id}";
+    public static final String PRODUCT_DETAIL_GET_BY_ID1 = PRODUCT_DETAIL1 + "/{id}";
+    public static final String PRODUCT_DETAIL_CREATE = PRODUCT_DETAIL + "/create/{id}";
+    public static final String PRODUCT_DETAIL_UPDATE = PRODUCT_DETAIL + "/update/{id}/{idSanPham}";
     public static final String PRODUCT_DETAIL_SET_DELETE = PRODUCT_DETAIL + "/delete/{id}";
     public static final String PRODUCT_DETAIL_DETAIL = PRODUCT_DETAIL + "/detail/{id}";
     public static final String PRODUCT_DETAIL_SEARCH = PRODUCT_DETAIL + "/search";
     public static final String PRODUCT_DETAIL_PAGE = PRODUCT_DETAIL + "/page";
     public static final String PRODUCT_DETAIL_QR = PRODUCT_DETAIL + "/qrcode/{id}";
     public static final String PRODUCT_DETAIL_QR_TO_CART = PRODUCT_DETAIL + "/qrcode/cart/{id}";
+    public static final String PRODUCT_DETAIL_CLIENT= PRODUCT_DETAIL + "/client";
 
 
 
@@ -268,8 +275,11 @@ public class Admin {
     public static final String SELL_DETAIL_CREATE = SELL_DETAIL + "/create";
     public static final String SELL_DETAIL_UPDATE = SELL_DETAIL + "/update/{id}";
     public static final String SELL_DETAIL_SET_DELETE = SELL_DETAIL + "/update/{id}";
+    public static final String SELL_DETAIL_QR = SELL_DETAIL + "/generate-qr";
+    public static final String SELL_DETAIL_QR_COMPLETE = SELL_DETAIL + "/generate-qr/complete";
 
     public static final String SELL_ORDER = BASE + "/sell/order";
     public static final String SELL_ORDER_PRODUCT_COMPLETE = SELL_ORDER + "/complete/{id}";
     public static final String SELL_ORDER_VOUCHER_COMPLETE = SELL_ORDER + "/complete/voucher/{id}";
+
 }

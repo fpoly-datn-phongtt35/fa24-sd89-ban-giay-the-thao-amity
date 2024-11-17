@@ -10,7 +10,7 @@ import java.time.Instant;
 import java.util.UUID;
 
 import static org.example.backend.constants.Constant.NHAN_VIEN;
-import static org.example.backend.constants.Constant.TRANG_THAI_NHAN_VIEN;
+import static org.example.backend.constants.Constant.TRANG_THAI_USER;
 
 @Builder
 @AllArgsConstructor
@@ -54,7 +54,7 @@ public class NhanVienRequestAdd {
 
     private String chucVu=NHAN_VIEN;
 
-    private String trangThai;
+    private String trangThai=TRANG_THAI_USER;
 
     private Boolean deleted;
 }

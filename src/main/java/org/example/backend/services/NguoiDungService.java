@@ -12,27 +12,32 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.example.backend.constants.api.Admin.USER_CREATE;
 
 @Service
-public class NguoiDungService extends GenericServiceImpl<NguoiDung , UUID> {
+public class NguoiDungService extends GenericServiceImpl<NguoiDung, UUID> {
     private final NhanVienMapper nhanVienMapper;
     private final NguoiDungRepository nguoiDungRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public NguoiDungService(JpaRepository<NguoiDung, UUID> repository , NhanVienMapper nhanVienMapper, NguoiDungRepository nguoiDungRepository) {
+    public NguoiDungService(JpaRepository<NguoiDung, UUID> repository, NhanVienMapper nhanVienMapper, NguoiDungRepository nguoiDungRepository, PasswordEncoder passwordEncoder) {
         super(repository);
 
         this.nhanVienMapper = nhanVienMapper;
         this.nguoiDungRepository = nguoiDungRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
 
@@ -52,18 +57,18 @@ public class NguoiDungService extends GenericServiceImpl<NguoiDung , UUID> {
         return nguoiDungRepository.getNhanVienById(id);
     }
 
-    public Page<NhanVienRespon> getAllNhanVienPage(Pageable pageable){
+    public Page<NhanVienRespon> getAllNhanVienPage(Pageable pageable) {
         return nguoiDungRepository.getAllNhanVienPage(pageable);
     }
 
 
-    public void setDeletedNhanVien(UUID id){
+    public void setDeletedNhanVien(UUID id) {
         nguoiDungRepository.deleteNhanVienStatus(id);
     }
-                                            
-    public PageResponse<List<NhanVienRespon>> searchNhanVien(int page, int size,String keyword, String gioiTinh, String trangThai){
+
+    public PageResponse<List<NhanVienRespon>> searchNhanVien(int page, int size, String keyword, String gioiTinh, String trangThai) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<NhanVienRespon> seacrchNhanVienPaginate = nguoiDungRepository.searchUserNhanVien(pageable,keyword,gioiTinh,trangThai);
+        Page<NhanVienRespon> seacrchNhanVienPaginate = nguoiDungRepository.searchUserNhanVien(pageable, keyword, gioiTinh, trangThai);
         return PageResponse.<List<NhanVienRespon>>builder()
                 .page(seacrchNhanVienPaginate.getNumber())
                 .size(seacrchNhanVienPaginate.getSize())
@@ -71,7 +76,33 @@ public class NguoiDungService extends GenericServiceImpl<NguoiDung , UUID> {
                 .items(seacrchNhanVienPaginate.getContent()).build();
     }
 
-    public List<NhanVienRespon> sortNhanVien(){
+    public List<NhanVienRespon> sortNhanVien() {
         return nguoiDungRepository.sortNhanVien();
     }
+
+    public ResponseEntity<?> login(String email, String password) {
+        Optional<NguoiDung> user = nguoiDungRepository.findByEmail(email);
+
+        if (user.isPresent()) {
+            NguoiDung nguoiDung = user.get();
+            if (passwordEncoder.matches(password, nguoiDung.getMatKhau())) {
+                  if (nguoiDung.getChucVu().contains("nhanvien")){
+                      return ResponseEntity.ok(nguoiDung);
+                  }else if (nguoiDung.getChucVu().contains("khachhang")){
+                      return ResponseEntity.ok(nguoiDung);
+                  }else {
+                      return ResponseEntity.ok(nguoiDung);
+                  }
+
+            } else {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body("Email orr password not match");
+            }
+        } else {
+            // Trả về lỗi nếu không tìm thấy tài khoản hoặc thông tin không chính xác
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body("Email hoặc mật khẩu không đúng");
+        }
+    }
 }
+
