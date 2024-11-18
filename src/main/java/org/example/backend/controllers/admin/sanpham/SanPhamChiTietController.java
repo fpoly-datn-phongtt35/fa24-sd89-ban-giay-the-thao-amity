@@ -9,6 +9,7 @@ import org.example.backend.constants.api.Admin;
 import org.example.backend.dto.request.sanPham.SanPhamChiTietRequest;
 import org.example.backend.dto.request.sanPham.SanPhamChiTietSearchRequest;
 import org.example.backend.dto.response.SanPham.SanPhamChiTietRespon;
+import org.example.backend.dto.response.SanPham.SanPhamClientResponse;
 import org.example.backend.dto.response.SanPham.SanPhamResponse;
 import org.example.backend.dto.response.dotGiamGia.DotGiamGiaResponse;
 import org.example.backend.models.*;
@@ -293,7 +294,8 @@ public class SanPhamChiTietController {
             Pageable pageable = PageRequest.of(page, itemsPerPage);
 
             // Lấy danh sách sản phẩm từ repository
-            Page<SanPhamChiTietRespon> productPage = sanPhamChiTietRepository.phanTrang(pageable);
+//            Page<SanPhamChiTietRespon> productPage = sanPhamChiTietRepository.phanTrang(pageable);
+            Page<SanPhamClientResponse> productPage = sanPhamChiTietRepository.getAllSpctAndDgg(pageable);
 
             // Chuẩn bị phản hồi dưới dạng map
             Map<String, Object> response = new HashMap<>();

@@ -266,6 +266,7 @@ public class Admin {
     public static final String SELL_CREATE = SELL + "/create";
     public static final String SELL_UPDATE = SELL + "/update/hd";
     public static final String SELL_SET_DELETE = SELL + "/update/{id}";
+    public static final String SELL_QR = SELL + "/generate";
 
 
 

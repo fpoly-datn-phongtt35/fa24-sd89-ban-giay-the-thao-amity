@@ -4,6 +4,7 @@ import jakarta.transaction.Transactional;
 import org.example.backend.dto.request.dotGiamGia.DotGiamGiaSearch;
 import org.example.backend.dto.request.sanPham.SanPhamChiTietSearchRequest;
 import org.example.backend.dto.response.SanPham.SanPhamChiTietRespon;
+import org.example.backend.dto.response.SanPham.SanPhamClientResponse;
 import org.example.backend.dto.response.dotGiamGia.DotGiamGiaResponse;
 import org.example.backend.models.SanPhamChiTiet;
 import org.springframework.data.domain.Page;
@@ -67,18 +68,15 @@ public interface SanPhamChiTietRepository extends JpaRepository<SanPhamChiTiet, 
 """)
     Page<SanPhamChiTietRespon> phanTrang(Pageable pageable);
 
-//    @Query("""
-//        select new org.example.backend.dto.response.SanPham.SanPhamClientResponse(s.id,s.idSanPham.id,
-//        s.idSanPham.ten,s.idHang.id,s.idHang.ten,s.idDanhMuc.id,s.idDanhMuc.ten,s.idDeGiay.id,s.idDeGiay.ten,s.idMauSac.id,
-//        s.idMauSac.ten,s.idKichThuoc.id,s.idKichThuoc.ten,
-//        s.soLuong,s.giaBan,s.giaNhap,s.giaGiam,s.trangThai,s.hinhAnh,s.moTa
-//        )
-//        from SanPhamChiTiet  s
-//        where s.deleted=false
-//        order by s.ngayTao DESC
-//""")
-//    Page<SanPhamChiTietRespon> getAllSpctClient(Pageable pageable);
+    @Query("""
+                select new org.example.backend.dto.response.SanPham.SanPhamClientResponse(
+                                           dggspct.idSpct.id, dggspct.idDotGiamGia.id, dggspct.idSpct.giaBan, dggspct.idDotGiamGia.loai, dggspct.idDotGiamGia.giaTri,dggspct.idSpct.hinhAnh
+                                       )
+                                       from
+                                        DotGiamGiaSpct dggspct
 
+            """)
+    Page<SanPhamClientResponse> getAllSpctAndDgg(Pageable pageable);
     @Query("""
          select new org.example.backend.dto.response.SanPham.SanPhamChiTietRespon(s.id,s.idSanPham.id,
         s.idSanPham.ten,s.idHang.id,s.idHang.ten,s.idDanhMuc.id,s.idDanhMuc.ten,s.idDeGiay.id,s.idDeGiay.ten,s.idMauSac.id,
