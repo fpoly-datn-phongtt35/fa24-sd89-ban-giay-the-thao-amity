@@ -17,6 +17,7 @@ import org.example.backend.repositories.HoaDonRepository;
 import org.example.backend.repositories.PhieuGiamGiaRepository;
 import org.example.backend.repositories.SanPhamChiTietRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -43,6 +44,9 @@ public class BanHangController {
     SanPhamChiTietRepository sanPhamChiTietRepository;
     @Autowired
     PhieuGiamGiaRepository phieuGiamGiaRepository;
+    @Autowired
+    VietQrService vietQrService;
+
     @GetMapping(Admin.SELL_GET_ALL)
     public ResponseEntity<?> getAll() {
         return ResponseEntity.ok(hoaDonRepository.getAllBanHang(CHO_XAC_NHAN_HOA_DON));
@@ -79,6 +83,7 @@ public class BanHangController {
 
                     hoaDonChiTiet.setIdHoaDon(hd);
                     hoaDonChiTiet.setIdSpct(spct);
+//                    hoaDonChiTiet.setNguoiTao(hdct.getIdNguoiDung());
                     hoaDonChiTiet.setSoLuong(hdct.getSoLuong());
                     hoaDonChiTiet.setGia(hdct.getGia());
                     hoaDonChiTiet.setTrangThai(hdct.getTrangThai());
@@ -166,8 +171,18 @@ public class BanHangController {
     }
 
 
-
-
+    @PostMapping(Admin.SELL_QR)
+    public ResponseEntity<String> generateQrCode(@RequestBody QrRequest qrRequest) {
+        // Gọi service để tạo QR code
+        String qrResponse = vietQrService.generateQrCode(
+                qrRequest.getAccountNo(),
+                qrRequest.getAccountName(),
+                qrRequest.getAcqId(),
+                qrRequest.getAddInfo(),
+                qrRequest.getAmount()
+        );
+        return ResponseEntity.ok(qrResponse);
+    }
 
 
 
