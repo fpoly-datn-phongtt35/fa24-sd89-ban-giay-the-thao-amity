@@ -4,6 +4,8 @@ import jakarta.transaction.Transactional;
 import org.example.backend.dto.request.dotGiamGia.DotGiamGiaSearch;
 import org.example.backend.dto.request.sanPham.SanPhamChiTietSearchRequest;
 import org.example.backend.dto.response.SanPham.SanPhamChiTietRespon;
+import org.example.backend.dto.response.SanPham.SanPhamClientResponse;
+import org.example.backend.dto.response.banHang.banHangClientResponse;
 import org.example.backend.dto.response.dotGiamGia.DotGiamGiaResponse;
 import org.example.backend.models.SanPhamChiTiet;
 import org.springframework.data.domain.Page;
@@ -67,18 +69,15 @@ public interface SanPhamChiTietRepository extends JpaRepository<SanPhamChiTiet, 
 """)
     Page<SanPhamChiTietRespon> phanTrang(Pageable pageable);
 
-//    @Query("""
-//        select new org.example.backend.dto.response.SanPham.SanPhamClientResponse(s.id,s.idSanPham.id,
-//        s.idSanPham.ten,s.idHang.id,s.idHang.ten,s.idDanhMuc.id,s.idDanhMuc.ten,s.idDeGiay.id,s.idDeGiay.ten,s.idMauSac.id,
-//        s.idMauSac.ten,s.idKichThuoc.id,s.idKichThuoc.ten,
-//        s.soLuong,s.giaBan,s.giaNhap,s.giaGiam,s.trangThai,s.hinhAnh,s.moTa
-//        )
-//        from SanPhamChiTiet  s
-//        where s.deleted=false
-//        order by s.ngayTao DESC
-//""")
-//    Page<SanPhamChiTietRespon> getAllSpctClient(Pageable pageable);
+    @Query("""
+                select new org.example.backend.dto.response.SanPham.SanPhamClientResponse(
+                                           dggspct.idSpct.id, dggspct.idDotGiamGia.id, dggspct.idSpct.giaBan, dggspct.idDotGiamGia.loai, dggspct.idDotGiamGia.giaTri,dggspct.idSpct.hinhAnh
+                                       )
+                                       from
+                                        DotGiamGiaSpct dggspct
 
+            """)
+    Page<SanPhamClientResponse> getAllSpctAndDgg(Pageable pageable);
     @Query("""
          select new org.example.backend.dto.response.SanPham.SanPhamChiTietRespon(s.id,s.idSanPham.id,
         s.idSanPham.ten,s.idHang.id,s.idHang.ten,s.idDanhMuc.id,s.idDanhMuc.ten,s.idDeGiay.id,s.idDeGiay.ten,s.idMauSac.id,
@@ -136,4 +135,40 @@ public interface SanPhamChiTietRepository extends JpaRepository<SanPhamChiTiet, 
         
 """)
     Optional<SanPhamChiTietRespon> timspctQuetQR(UUID id);
+
+    @Query("""
+    select new org.example.backend.dto.response.banHang.banHangClientResponse(
+        s.id, 
+        s.idSanPham.ten as tenSp, 
+        s.ten as tenSpct, 
+        s.idMauSac.ten as tenMauSac, 
+        s.idKichThuoc.ten as tenKichThuoc, 
+        s.idDeGiay.ten as tenDeGiay, 
+        s.idDanhMuc.ten as tenDanhMuc, 
+        s.idHang.ten as tenHang, 
+        COALESCE(d.id, '00000000-0000-0000-0000-000000000000') as dotGiamGia, 
+        COALESCE(d.loai, false ) as loaiGiamGia, 
+        COALESCE(d.giaTri, 0) as giaTriGiam, 
+        s.giaBan as giaBan, 
+        CASE 
+            WHEN COALESCE(d.loai, false ) = false THEN s.giaBan * COALESCE(d.giaTri, 0) / 100
+            ELSE COALESCE(d.giaTri, 0) 
+        END as giaGiam, 
+        s.giaBan - 
+        CASE 
+            WHEN COALESCE(d.loai, false ) = false THEN s.giaBan * COALESCE(d.giaTri, 0) / 100
+            ELSE COALESCE(d.giaTri, 0) 
+        END as giaSauGiam, 
+        s.hinhAnh, 
+        COALESCE(s.moTa, 'Sản Phẩm Chất Lượng') as moTa,
+        COALESCE(d.trangThai, 'Không Có') as trangThai
+    )
+    from SanPhamChiTiet s
+    left join DotGiamGiaSpct ds on s.id = ds.idSpct.id
+    left join DotGiamGia d on d.id = ds.idDotGiamGia.id
+""")
+    Page<banHangClientResponse> getBanHangClient(Pageable pageable);
+
+
+
 }

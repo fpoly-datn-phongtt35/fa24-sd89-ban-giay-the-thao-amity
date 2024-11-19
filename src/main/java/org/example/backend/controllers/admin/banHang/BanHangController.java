@@ -5,9 +5,13 @@ import com.google.zxing.EncodeHintType;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
+import org.example.backend.common.PageResponse;
+import org.example.backend.common.ResponseData;
 import org.example.backend.constants.api.Admin;
 import org.example.backend.dto.request.banHang.*;
 import org.example.backend.dto.response.banHang.TrangThaiRespon;
+import org.example.backend.dto.response.banHang.banHangClientResponse;
+import org.example.backend.dto.response.phieuGiamGia.phieuGiamGiaReponse;
 import org.example.backend.models.HoaDon;
 import org.example.backend.models.HoaDonChiTiet;
 import org.example.backend.models.PhieuGiamGia;
@@ -16,7 +20,9 @@ import org.example.backend.repositories.HoaDonChiTietRepository;
 import org.example.backend.repositories.HoaDonRepository;
 import org.example.backend.repositories.PhieuGiamGiaRepository;
 import org.example.backend.repositories.SanPhamChiTietRepository;
+import org.example.backend.services.SanPhamChiTietService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,7 +32,9 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 //import net.glxn.qrgen.javase.QRCode;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
+import java.time.Instant;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.UUID;
@@ -43,6 +51,11 @@ public class BanHangController {
     SanPhamChiTietRepository sanPhamChiTietRepository;
     @Autowired
     PhieuGiamGiaRepository phieuGiamGiaRepository;
+    @Autowired
+    SanPhamChiTietService sanPhamChiTietService;
+    @Autowired
+    VietQrService vietQrService;
+
     @GetMapping(Admin.SELL_GET_ALL)
     public ResponseEntity<?> getAll() {
         return ResponseEntity.ok(hoaDonRepository.getAllBanHang(CHO_XAC_NHAN_HOA_DON));
@@ -79,6 +92,7 @@ public class BanHangController {
 
                     hoaDonChiTiet.setIdHoaDon(hd);
                     hoaDonChiTiet.setIdSpct(spct);
+//                    hoaDonChiTiet.setNguoiTao(hdct.getIdNguoiDung());
                     hoaDonChiTiet.setSoLuong(hdct.getSoLuong());
                     hoaDonChiTiet.setGia(hdct.getGia());
                     hoaDonChiTiet.setTrangThai(hdct.getTrangThai());
@@ -166,10 +180,32 @@ public class BanHangController {
     }
 
 
+    @PostMapping(Admin.SELL_QR)
+    public ResponseEntity<String> generateQrCode(@RequestBody QrRequest qrRequest) {
+        // Gọi service để tạo QR code
+        String qrResponse = vietQrService.generateQrCode(
+                qrRequest.getAccountNo(),
+                qrRequest.getAccountName(),
+                qrRequest.getAcqId(),
+                qrRequest.getAddInfo(),
+                qrRequest.getAmount()
+        );
+        return ResponseEntity.ok(qrResponse);
+    }
 
+    @GetMapping(Admin.SELL_CLIENT_GET_ALL)
+    public ResponseEntity<?> getbanHangClient(@RequestParam(value = "itemsPerPage", defaultValue = "25") int itemsPerPage,
+                                           @RequestParam(value = "page", defaultValue = "0") int page
+    ){
+        PageResponse<List<banHangClientResponse>> bhPage = sanPhamChiTietService.getbanHangClient(page, itemsPerPage);
+        ResponseData<PageResponse<List<banHangClientResponse>>> responseData = ResponseData.<PageResponse<List<banHangClientResponse>>>builder()
+                .message("Get all banHangCient done")
+                .status(HttpStatus.OK.value())
+                .data(bhPage)
+                .build();
 
-
-
+        return ResponseEntity.ok(responseData);
+    }
 
 
 

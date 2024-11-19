@@ -3,33 +3,31 @@ package org.example.backend.controllers.admin.quanLyDonHang;
 
 import org.example.backend.common.PageResponse;
 import org.example.backend.common.ResponseData;
-import org.example.backend.dto.response.NhanVien.NhanVienRespon;
-import org.example.backend.dto.response.phieuGiamGia.phieuGiamGiaReponse;
+import org.example.backend.dto.response.dotGiamGia.DotGiamGiaResponse;
 import org.example.backend.dto.response.quanLyDonHang.QuanLyDonHangRespose;
+import org.example.backend.models.DotGiamGia;
 import org.example.backend.repositories.HoaDonChiTietRepository;
 import org.example.backend.repositories.HoaDonRepository;
 import org.example.backend.services.HoaDonChiTietService;
 import org.example.backend.services.HoaDonService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.List;
+import java.util.UUID;
 
 import static org.example.backend.constants.api.Admin.BILL_EXCEL;
 import static org.example.backend.constants.api.Admin.BILL_GET_ALL;
+import static org.example.backend.constants.api.Admin.BILL_GET_BY_ID;
 import static org.example.backend.constants.api.Admin.COUT_BY_STATUS_BILL;
-import static org.example.backend.constants.api.Admin.PAGE_BILL;
 
 @RestController
 public class QuanLyDonHangController {
@@ -46,19 +44,14 @@ public class QuanLyDonHangController {
         this.hoaDonRepository = hoaDonRepository;
         this.hoaDonService = hoaDonService;
     }
-//    @GetMapping(BILL_GET_ALL)
-//    public ResponseEntity<ResponseData<PageResponse<List<QuanLyDonHangRespose>>>> getAllHoaDon(
-//            @RequestParam(value = "page", defaultValue = "0") int page,
-//            @RequestParam(value = "size", defaultValue = "5") int size
-//    ){
-//             PageResponse<List<QuanLyDonHangRespose>> qlhdPage = hoaDonChiTietService.getHoaDon(page,size);
-//             ResponseData<PageResponse<List<QuanLyDonHangRespose>>> responseData = ResponseData.<PageResponse<List<QuanLyDonHangRespose>>>builder()
-//               .message("Get all done")
-//               .status(HttpStatus.OK.value())
-//               .data(qlhdPage)
-//                     .build();
-//             return ResponseEntity.ok(responseData);
-//    }
+    @GetMapping(BILL_GET_BY_ID)
+    public ResponseEntity<?> getHoaDonById(@PathVariable UUID id) {
+        QuanLyDonHangRespose HoaDon = hoaDonService.getHoaDonByID(id);
+        if (HoaDon != null) {
+            return ResponseEntity.ok().body(HoaDon);
+        }
+        return ResponseEntity.notFound().build();
+    }
 
 //    @GetMapping(BILL_GET_ALL)
 //    public ResponseEntity<ResponseData<PageResponse<List<QuanLyDonHangRespose>>>> getAllBillPage(

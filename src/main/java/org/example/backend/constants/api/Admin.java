@@ -266,6 +266,7 @@ public class Admin {
     public static final String SELL_CREATE = SELL + "/create";
     public static final String SELL_UPDATE = SELL + "/update/hd";
     public static final String SELL_SET_DELETE = SELL + "/update/{id}";
+    public static final String SELL_QR = SELL + "/generate";
 
 
 
@@ -281,5 +282,8 @@ public class Admin {
     public static final String SELL_ORDER = BASE + "/sell/order";
     public static final String SELL_ORDER_PRODUCT_COMPLETE = SELL_ORDER + "/complete/{id}";
     public static final String SELL_ORDER_VOUCHER_COMPLETE = SELL_ORDER + "/complete/voucher/{id}";
+
+    public static final String SELL_CLIENT = BASE + "/sellClient";
+    public static final String SELL_CLIENT_GET_ALL = SELL_CLIENT + "/all";
 
 }
