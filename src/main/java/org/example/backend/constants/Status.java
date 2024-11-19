@@ -19,6 +19,7 @@ public class Status {
 
 
     public static final String CHO_XAC_NHAN_HOA_DON = "Chờ xác nhận hóa đơn";
+    public static final String CHO_THANH_TOAN= "Chờ thanh toán";
     public static final String DA_XAC_NHAN_HOA_DON = "Đã xác nhận hóa đơn";
     public static final String DANG_CHUAN_BI_HANG = "Đang chuẩn bị hàng";
     public static final String DANG_CHO_GIAO_HANG = "Đang chờ giao hàng";

@@ -1,9 +1,13 @@
 package org.example.backend.services;
 
 import org.example.backend.common.PageResponse;
+
 import org.example.backend.dto.response.NhanVien.NhanVienRespon;
 import org.example.backend.dto.response.quanLyDonHang.QuanLyDonHangRespose;
 import org.example.backend.dto.response.thongKe.ThongKeResponse;
+
+import org.example.backend.dto.response.quanLyDonHang.hoaDonChiTietReponse;
+
 import org.example.backend.models.HoaDonChiTiet;
 import org.example.backend.repositories.HoaDonChiTietRepository;
 import org.springframework.data.domain.Page;
@@ -25,6 +29,20 @@ public class HoaDonChiTietService extends GenericServiceImpl<HoaDonChiTiet, UUID
 
 //    public List<ThongKeResponse> getThongKeData() {
 //        return hoaDonChiTietRepository.getAllThongKe();
+=======
+    public PageResponse<List<hoaDonChiTietReponse>> getHoaDonChiTiet(int page, int size,UUID idHD) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<hoaDonChiTietReponse> hdctPage = hoaDonChiTietRepository.getByPageHoaDonChiTiet(pageable,idHD);
+        return PageResponse.<List<hoaDonChiTietReponse>>builder()
+                .page(hdctPage.getNumber())
+                .size(hdctPage.getSize())
+                .totalPage(hdctPage.getTotalPages())
+                .items(hdctPage.getContent())
+                .build();
+    }
+//    public Page<hoaDonChiTietReponse> getAllBillPage(Pageable pageable){
+//        return hoaDonChiTietRepository.getByPageHoaDon(pageable);
+
 //    }
 
 }

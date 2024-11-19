@@ -1,4 +1,4 @@
-package org.example.backend.controllers.admin.banHang;
+package org.example.backend.utils;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -63,8 +63,9 @@ public class VNPayUtil {
                         (encodeKey ? URLEncoder.encode(entry.getKey(),
                                 StandardCharsets.US_ASCII)
                                 : entry.getKey()) + "=" +
-                                URLEncoder.encode(entry.getValue()
-                                        , StandardCharsets.US_ASCII))
+                        URLEncoder.encode(entry.getValue()
+                                , StandardCharsets.US_ASCII))
                 .collect(Collectors.joining("&"));
     }
 }
+

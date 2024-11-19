@@ -16,6 +16,7 @@ public class HoaDonChiTietRequest {
 
     private UUID idHoaDon;
     private UUID idSpct;
+//    private String idNguoiDung;
     private Integer soLuong;
     private BigDecimal gia;
     private BigDecimal giaGiam;

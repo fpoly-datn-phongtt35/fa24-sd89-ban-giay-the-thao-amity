@@ -47,6 +47,7 @@ public class Admin {
     public static final String PRODUCT_PAGE= PRODUCT + "/page";
 
 
+
     // Endpoint PRODUCT_DETAIL
     public static final String PRODUCT_DETAIL = BASE + "/product_detail";
     public static final String PRODUCT_DETAIL1 = BASE + "/product_detail1";
@@ -61,6 +62,7 @@ public class Admin {
     public static final String PRODUCT_DETAIL_PAGE = PRODUCT_DETAIL + "/page";
     public static final String PRODUCT_DETAIL_QR = PRODUCT_DETAIL + "/qrcode/{id}";
     public static final String PRODUCT_DETAIL_QR_TO_CART = PRODUCT_DETAIL + "/qrcode/cart/{id}";
+    public static final String PRODUCT_DETAIL_CLIENT= PRODUCT_DETAIL + "/client";
 
 
 
@@ -265,6 +267,7 @@ public class Admin {
     public static final String SELL_CREATE = SELL + "/create";
     public static final String SELL_UPDATE = SELL + "/update/hd";
     public static final String SELL_SET_DELETE = SELL + "/update/{id}";
+    public static final String SELL_QR = SELL + "/generate";
 
 
 
@@ -280,5 +283,8 @@ public class Admin {
     public static final String SELL_ORDER = BASE + "/sell/order";
     public static final String SELL_ORDER_PRODUCT_COMPLETE = SELL_ORDER + "/complete/{id}";
     public static final String SELL_ORDER_VOUCHER_COMPLETE = SELL_ORDER + "/complete/voucher/{id}";
+
+    public static final String SELL_CLIENT = BASE + "/sellClient";
+    public static final String SELL_CLIENT_GET_ALL = SELL_CLIENT + "/all";
 
 }

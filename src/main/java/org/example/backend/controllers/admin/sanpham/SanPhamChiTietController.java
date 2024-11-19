@@ -9,6 +9,8 @@ import org.example.backend.constants.api.Admin;
 import org.example.backend.dto.request.sanPham.SanPhamChiTietRequest;
 import org.example.backend.dto.request.sanPham.SanPhamChiTietSearchRequest;
 import org.example.backend.dto.response.SanPham.SanPhamChiTietRespon;
+import org.example.backend.dto.response.SanPham.SanPhamClientResponse;
+import org.example.backend.dto.response.SanPham.SanPhamResponse;
 import org.example.backend.dto.response.dotGiamGia.DotGiamGiaResponse;
 import org.example.backend.models.*;
 import org.example.backend.repositories.SanPhamChiTietRepository;
@@ -32,10 +34,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.Instant;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @RestController
 public class SanPhamChiTietController {
@@ -190,17 +189,54 @@ public class SanPhamChiTietController {
 
 
 
+//    @GetMapping(Admin.PRODUCT_DETAIL_SEARCH)
+//    public ResponseEntity<?> search(
+//            @RequestParam(value = "ten", defaultValue = "") String ten,
+//            @RequestParam(value = "giaLonHon", required = false) Double giaLonHon,
+//            @RequestParam(value = "giaNhoHon", required = false) Double giaNhoHon,
+//            @RequestParam(value = "trangThai", required = false) String trangThai
+//    ) {
+//        return ResponseEntity.ok(sanPhamChiTietRepository.search("%" + ten + "%", giaLonHon, giaNhoHon, trangThai));
+//    }
+
+
+//    @GetMapping(Admin.PRODUCT_DETAIL_SEARCH)
+//    public ResponseEntity<?> search(
+//            @RequestParam(value = "idHang", required = false) Long idHang,
+//            @RequestParam(value = "idMauSac", required = false) Long idMauSac,
+//            @RequestParam(value = "idKichThuoc", required = false) Long idKichThuoc
+//    ) {
+//        return ResponseEntity.ok(sanPhamChiTietRepository.search(idHang, idMauSac, idKichThuoc));
+//    }
+
     @GetMapping(Admin.PRODUCT_DETAIL_SEARCH)
     public ResponseEntity<?> search(
-            @RequestParam(value = "ten", defaultValue = "") String ten,
-            @RequestParam(value = "giaLonHon", required = false) Double giaLonHon,
-            @RequestParam(value = "giaNhoHon", required = false) Double giaNhoHon,
-            @RequestParam(value = "trangThai", required = false) String trangThai
-    ) {
-        return ResponseEntity.ok(sanPhamChiTietRepository.search("%" + ten + "%", giaLonHon, giaNhoHon, trangThai));
+                                         @RequestParam(value = "page", defaultValue = "0") int page,
+                                         @RequestParam(value = "size", defaultValue = "5") int size,
+                                         @RequestParam(defaultValue = "ngayTao") String sortBy,
+                                         @RequestParam(defaultValue = "desc") String sortDir,
+                                         @RequestParam(defaultValue = "") String hang,
+                                         @RequestParam(defaultValue = "") String mauSac,
+                                         @RequestParam(defaultValue = "") String kichThuoc) {
+        SanPhamChiTietSearchRequest searchRequest = new SanPhamChiTietSearchRequest();
+        searchRequest.setHang(hang);
+        searchRequest.setMauSac(mauSac);
+        searchRequest.setKichThuoc(kichThuoc);
+
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(sortDir), sortBy));
+        Page<SanPhamChiTietRespon> searchSPCTPaginate = sanPhamChiTietRepository.search(pageable, searchRequest);
+        PageResponse<List<SanPhamChiTietRespon>> data = PageResponse.<List<SanPhamChiTietRespon>>builder()
+                .page(searchSPCTPaginate.getNumber())
+                .size(searchSPCTPaginate.getSize())
+                .totalPage(searchSPCTPaginate.getTotalPages())
+                .items(searchSPCTPaginate.getContent()).build();
+        ResponseData<PageResponse<List<SanPhamChiTietRespon>>> responseData = ResponseData.<PageResponse<List<SanPhamChiTietRespon>>>builder()
+                .message("Search Sale")
+                .status(HttpStatus.OK.value())
+                .data(data).build();
+        return ResponseEntity.ok(responseData);
     }
-
-
 
     @GetMapping(Admin.PRODUCT_DETAIL_PAGE)
     public ResponseEntity<ResponseData<PageResponse<List<SanPhamChiTietRespon>>>> phanTrang(
@@ -281,5 +317,36 @@ public class SanPhamChiTietController {
             return ResponseEntity.ok(sanPhamChiTietList);
         }
         return null;
+    }
+
+
+
+    @GetMapping(Admin.PRODUCT_DETAIL_CLIENT)
+    public ResponseEntity<Map<String, Object>> getPaginatedProducts(
+            @RequestParam(value = "itemsPerPage", defaultValue = "5") int itemsPerPage,
+            @RequestParam(value = "page", defaultValue = "0") int page
+    ) {
+        try {
+            // Tạo đối tượng Pageable
+            Pageable pageable = PageRequest.of(page, itemsPerPage);
+
+            // Lấy danh sách sản phẩm từ repository
+//            Page<SanPhamChiTietRespon> productPage = sanPhamChiTietRepository.phanTrang(pageable);
+            Page<SanPhamClientResponse> productPage = sanPhamChiTietRepository.getAllSpctAndDgg(pageable);
+
+            // Chuẩn bị phản hồi dưới dạng map
+            Map<String, Object> response = new HashMap<>();
+            response.put("products", productPage.getContent());
+            response.put("totalPages", productPage.getTotalPages());
+
+            // Trả về phản hồi
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            // Trả về lỗi dưới dạng JSON
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("message", "Failed to fetch paginated products");
+            errorResponse.put("error", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+        }
     }
 }
