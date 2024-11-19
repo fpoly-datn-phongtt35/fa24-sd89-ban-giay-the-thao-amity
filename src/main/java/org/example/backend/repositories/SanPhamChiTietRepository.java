@@ -38,8 +38,6 @@ public interface SanPhamChiTietRepository extends JpaRepository<SanPhamChiTiet, 
 """)
     void setDeleted(Boolean deleted,UUID id);
 
-
-
     @Query("""
     select new org.example.backend.dto.response.SanPham.SanPhamChiTietRespon(
         s.id, s.idSanPham.id, s.idSanPham.ten, s.idHang.id, s.idHang.ten, s.idDanhMuc.id, s.idDanhMuc.ten,
@@ -146,6 +144,7 @@ public interface SanPhamChiTietRepository extends JpaRepository<SanPhamChiTiet, 
         s.idDeGiay.ten as tenDeGiay, 
         s.idDanhMuc.ten as tenDanhMuc, 
         s.idHang.ten as tenHang, 
+        s.soLuong as soLuong,
         COALESCE(d.id, '00000000-0000-0000-0000-000000000000') as dotGiamGia, 
         COALESCE(d.loai, false ) as loaiGiamGia, 
         COALESCE(d.giaTri, 0) as giaTriGiam, 
