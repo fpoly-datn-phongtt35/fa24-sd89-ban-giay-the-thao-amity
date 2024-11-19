@@ -13,8 +13,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.http.HttpStatus;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
@@ -61,6 +63,23 @@ public class DotGiamGiaService extends GenericServiceImpl<DotGiamGia, UUID> {
 //         return dotGiamGiaRepository.getAllDotGiamGiaById(id);
 //
 //    }
+    @Scheduled(fixedRate = 60000)
+    public void updateDotGiamGia(){
+    List<DotGiamGia> dotGiamGias = dotGiamGiaRepository.findAll();
+    Instant now = Instant.now();
+    for (DotGiamGia dotGiamGia: dotGiamGias){
+        if (dotGiamGia.getDeleted()){
+            dotGiamGia.setTrangThai("Bị huỷ");
+        }else if (now.isBefore(dotGiamGia.getNgayBatDau())){
+            dotGiamGia.setTrangThai("Sắp diễn ra");
+        }else if (now.isAfter(dotGiamGia.getNgayKetThuc())){
+            dotGiamGia.setTrangThai("Hết hạn");
+        }else {
+            dotGiamGia.setTrangThai("Hoạt động");
+        }
+    }
+    dotGiamGiaRepository.saveAll(dotGiamGias);
+}
 
 
 }
