@@ -4,6 +4,7 @@ import static org.example.backend.constants.api.ApiUrl.API_BASE;
 
 public class Admin {
     public static final String BASE = API_BASE + "/admin";
+    public static final String BASE_CLIENT = API_BASE + "/client";
 
     // Endpoint USER
     public static final String USER = BASE + "/user";
@@ -182,7 +183,7 @@ public class Admin {
     public static final String CART_GET_BY_ID = CART + "/{id}";
     public static final String CART_CREATE = CART + "/create";
     public static final String CART_UPDATE = CART + "/update/{id}";
-    public static final String CART_DELETE = CART + "/delete/{id}";
+    public static final String CART_DELETE = CART + "/delete";
 
     // Endpoint CART_DETAIL
     public static final String CART_DETAIL = BASE + "/cart-detail";
@@ -265,6 +266,7 @@ public class Admin {
     public static final String SELL_GET_ALL = SELL + "/all";
     public static final String SELL_GET_BY_ID = SELL + "/{id}";
     public static final String SELL_CREATE = SELL + "/create";
+    public static final String SELL_CLIENT_CREATE = BASE_CLIENT + "/sell/create";
     public static final String SELL_UPDATE = SELL + "/update/hd";
     public static final String SELL_SET_DELETE = SELL + "/update/{id}";
     public static final String SELL_QR = SELL + "/generate";
@@ -286,5 +288,6 @@ public class Admin {
 
     public static final String SELL_CLIENT = BASE + "/sellClient";
     public static final String SELL_CLIENT_GET_ALL = SELL_CLIENT + "/all";
+
 
 }

@@ -97,6 +97,13 @@ public ResponseEntity<?> create() {
 
 }
 
+    @PostMapping(Admin.SELL_CLIENT_CREATE)
+    public ResponseEntity<?> createSellClient() {
+            HoaDon hoaDon = new HoaDon();
+            hoaDon.setTrangThai("Chờ Xác Nhận");
+            return ResponseEntity.ok(hoaDonRepository.save(hoaDon));
+    }
+
 
     @PostMapping(Admin.SELL_DETAIL_CREATE)
 
@@ -214,21 +221,5 @@ public ResponseEntity<?> create() {
         );
         return ResponseEntity.ok(qrResponse);
     }
-
-    @GetMapping(Admin.SELL_CLIENT_GET_ALL)
-    public ResponseEntity<?> getbanHangClient(@RequestParam(value = "itemsPerPage", defaultValue = "25") int itemsPerPage,
-                                           @RequestParam(value = "page", defaultValue = "0") int page
-    ){
-        PageResponse<List<banHangClientResponse>> bhPage = sanPhamChiTietService.getbanHangClient(page, itemsPerPage);
-        ResponseData<PageResponse<List<banHangClientResponse>>> responseData = ResponseData.<PageResponse<List<banHangClientResponse>>>builder()
-                .message("Get all banHangCient done")
-                .status(HttpStatus.OK.value())
-                .data(bhPage)
-                .build();
-
-        return ResponseEntity.ok(responseData);
-    }
-
-
 
 }
