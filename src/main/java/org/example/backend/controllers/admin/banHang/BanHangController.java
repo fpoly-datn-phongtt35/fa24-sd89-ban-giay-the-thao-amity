@@ -39,6 +39,7 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.UUID;
 
+import static org.example.backend.constants.Status.CHO_THANH_TOAN;
 import static org.example.backend.constants.Status.CHO_XAC_NHAN_HOA_DON;
 
 @RestController
@@ -56,25 +57,45 @@ public class BanHangController {
     @Autowired
     VietQrService vietQrService;
 
+//    @GetMapping(Admin.SELL_GET_ALL)
+//    public ResponseEntity<?> getAll() {
+//        return ResponseEntity.ok(hoaDonRepository.getAllBanHang(CHO_XAC_NHAN_HOA_DON));
+//    }
     @GetMapping(Admin.SELL_GET_ALL)
     public ResponseEntity<?> getAll() {
-        return ResponseEntity.ok(hoaDonRepository.getAllBanHang(CHO_XAC_NHAN_HOA_DON));
+        List<String> trangThais = List.of(CHO_XAC_NHAN_HOA_DON, CHO_THANH_TOAN);
+        return ResponseEntity.ok(hoaDonRepository.getAllBanHang(trangThais));
     }
 
 
-    @PostMapping(Admin.SELL_CREATE)
-    public ResponseEntity<?> create() {
-
-        TrangThaiRespon trangThaiRespon = hoaDonRepository.getAllTrangThai(CHO_XAC_NHAN_HOA_DON).orElse(null);
-        System.out.println("lol"+ trangThaiRespon);
-        if(trangThaiRespon == null || trangThaiRespon.getCount() <5) {
-            System.out.println("lol thuong"+ trangThaiRespon);
-            HoaDon hoaDon = new HoaDon();
-            return ResponseEntity.ok(hoaDonRepository.save(hoaDon));
-        }
-        return null;
-
+//    @PostMapping(Admin.SELL_CREATE)
+//    public ResponseEntity<?> create() {
+//
+//        TrangThaiRespon trangThaiRespon = hoaDonRepository.getAllTrangThai(CHO_XAC_NHAN_HOA_DON).orElse(null);
+//        System.out.println("lol"+ trangThaiRespon);
+//        if(trangThaiRespon == null || trangThaiRespon.getCount() <5) {
+//            System.out.println("lol thuong"+ trangThaiRespon);
+//            HoaDon hoaDon = new HoaDon();
+//            return ResponseEntity.ok(hoaDonRepository.save(hoaDon));
+//        }
+//        return null;
+//
+//    }
+@PostMapping(Admin.SELL_CREATE)
+public ResponseEntity<?> create() {
+    List<String> trangThais = List.of(CHO_THANH_TOAN, CHO_XAC_NHAN_HOA_DON);
+    List<TrangThaiRespon> trangThaiRespon = hoaDonRepository.getAllTrangThai(trangThais);
+    long totalCount = trangThaiRespon.stream()
+            .mapToLong(TrangThaiRespon::getCount)
+            .sum();
+    if(trangThaiRespon == null || totalCount <5) {
+        System.out.println("lol thuong"+ trangThaiRespon);
+        HoaDon hoaDon = new HoaDon();
+        return ResponseEntity.ok(hoaDonRepository.save(hoaDon));
     }
+    return null;
+
+}
 
     @PostMapping(Admin.SELL_CLIENT_CREATE)
     public ResponseEntity<?> createSellClient() {
@@ -125,6 +146,7 @@ public class BanHangController {
         }
         hoaDon.setIdPhieuGiamGia(request.getIdPhieuGiamGia());
         hoaDon.setIdNguoiDung(request.getIdNguoiDung());
+        hoaDon.setNguoiTao(request.getNguoiTao());
         hoaDon.setIdDotGiamGia(request.getIdDotGiamGia());
         hoaDon.setSoDienThoai(request.getSoDienThoai());
         hoaDon.setDiaChi(request.getDiaChi());
