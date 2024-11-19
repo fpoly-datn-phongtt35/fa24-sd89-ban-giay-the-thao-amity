@@ -189,17 +189,54 @@ public class SanPhamChiTietController {
 
 
 
+//    @GetMapping(Admin.PRODUCT_DETAIL_SEARCH)
+//    public ResponseEntity<?> search(
+//            @RequestParam(value = "ten", defaultValue = "") String ten,
+//            @RequestParam(value = "giaLonHon", required = false) Double giaLonHon,
+//            @RequestParam(value = "giaNhoHon", required = false) Double giaNhoHon,
+//            @RequestParam(value = "trangThai", required = false) String trangThai
+//    ) {
+//        return ResponseEntity.ok(sanPhamChiTietRepository.search("%" + ten + "%", giaLonHon, giaNhoHon, trangThai));
+//    }
+
+
+//    @GetMapping(Admin.PRODUCT_DETAIL_SEARCH)
+//    public ResponseEntity<?> search(
+//            @RequestParam(value = "idHang", required = false) Long idHang,
+//            @RequestParam(value = "idMauSac", required = false) Long idMauSac,
+//            @RequestParam(value = "idKichThuoc", required = false) Long idKichThuoc
+//    ) {
+//        return ResponseEntity.ok(sanPhamChiTietRepository.search(idHang, idMauSac, idKichThuoc));
+//    }
+
     @GetMapping(Admin.PRODUCT_DETAIL_SEARCH)
     public ResponseEntity<?> search(
-            @RequestParam(value = "ten", defaultValue = "") String ten,
-            @RequestParam(value = "giaLonHon", required = false) Double giaLonHon,
-            @RequestParam(value = "giaNhoHon", required = false) Double giaNhoHon,
-            @RequestParam(value = "trangThai", required = false) String trangThai
-    ) {
-        return ResponseEntity.ok(sanPhamChiTietRepository.search("%" + ten + "%", giaLonHon, giaNhoHon, trangThai));
+                                         @RequestParam(value = "page", defaultValue = "0") int page,
+                                         @RequestParam(value = "size", defaultValue = "5") int size,
+                                         @RequestParam(defaultValue = "ngayTao") String sortBy,
+                                         @RequestParam(defaultValue = "desc") String sortDir,
+                                         @RequestParam(defaultValue = "") String hang,
+                                         @RequestParam(defaultValue = "") String mauSac,
+                                         @RequestParam(defaultValue = "") String kichThuoc) {
+        SanPhamChiTietSearchRequest searchRequest = new SanPhamChiTietSearchRequest();
+        searchRequest.setHang(hang);
+        searchRequest.setMauSac(mauSac);
+        searchRequest.setKichThuoc(kichThuoc);
+
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(sortDir), sortBy));
+        Page<SanPhamChiTietRespon> searchSPCTPaginate = sanPhamChiTietRepository.search(pageable, searchRequest);
+        PageResponse<List<SanPhamChiTietRespon>> data = PageResponse.<List<SanPhamChiTietRespon>>builder()
+                .page(searchSPCTPaginate.getNumber())
+                .size(searchSPCTPaginate.getSize())
+                .totalPage(searchSPCTPaginate.getTotalPages())
+                .items(searchSPCTPaginate.getContent()).build();
+        ResponseData<PageResponse<List<SanPhamChiTietRespon>>> responseData = ResponseData.<PageResponse<List<SanPhamChiTietRespon>>>builder()
+                .message("Search Sale")
+                .status(HttpStatus.OK.value())
+                .data(data).build();
+        return ResponseEntity.ok(responseData);
     }
-
-
 
     @GetMapping(Admin.PRODUCT_DETAIL_PAGE)
     public ResponseEntity<ResponseData<PageResponse<List<SanPhamChiTietRespon>>>> phanTrang(

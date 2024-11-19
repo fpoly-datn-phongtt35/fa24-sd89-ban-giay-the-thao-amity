@@ -118,6 +118,7 @@ public class BanHangController {
         }
         hoaDon.setIdPhieuGiamGia(request.getIdPhieuGiamGia());
         hoaDon.setIdNguoiDung(request.getIdNguoiDung());
+        hoaDon.setNguoiTao(request.getNguoiTao());
         hoaDon.setIdDotGiamGia(request.getIdDotGiamGia());
         hoaDon.setSoDienThoai(request.getSoDienThoai());
         hoaDon.setDiaChi(request.getDiaChi());
