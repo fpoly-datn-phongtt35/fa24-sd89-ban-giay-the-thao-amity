@@ -1,8 +1,17 @@
 package org.example.backend.controllers.admin.banHang;
 
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.EncodeHintType;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.QRCodeWriter;
+import org.example.backend.common.PageResponse;
+import org.example.backend.common.ResponseData;
 import org.example.backend.constants.api.Admin;
 import org.example.backend.dto.request.banHang.*;
 import org.example.backend.dto.response.banHang.TrangThaiRespon;
+import org.example.backend.dto.response.banHang.banHangClientResponse;
+import org.example.backend.dto.response.phieuGiamGia.phieuGiamGiaReponse;
 import org.example.backend.models.HoaDon;
 import org.example.backend.models.HoaDonChiTiet;
 import org.example.backend.models.PhieuGiamGia;
@@ -11,16 +20,26 @@ import org.example.backend.repositories.HoaDonChiTietRepository;
 import org.example.backend.repositories.HoaDonRepository;
 import org.example.backend.repositories.PhieuGiamGiaRepository;
 import org.example.backend.repositories.SanPhamChiTietRepository;
+import org.example.backend.services.SanPhamChiTietService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 //import net.glxn.qrgen.javase.QRCode;
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.nio.charset.StandardCharsets;
+import java.time.Instant;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.UUID;
 
+import static org.example.backend.constants.Status.CHO_THANH_TOAN;
 import static org.example.backend.constants.Status.CHO_XAC_NHAN_HOA_DON;
 
 @RestController
@@ -33,24 +52,56 @@ public class BanHangController {
     SanPhamChiTietRepository sanPhamChiTietRepository;
     @Autowired
     PhieuGiamGiaRepository phieuGiamGiaRepository;
+    @Autowired
+    SanPhamChiTietService sanPhamChiTietService;
+    @Autowired
+    VietQrService vietQrService;
+
+//    @GetMapping(Admin.SELL_GET_ALL)
+//    public ResponseEntity<?> getAll() {
+//        return ResponseEntity.ok(hoaDonRepository.getAllBanHang(CHO_XAC_NHAN_HOA_DON));
+//    }
     @GetMapping(Admin.SELL_GET_ALL)
     public ResponseEntity<?> getAll() {
-        return ResponseEntity.ok(hoaDonRepository.getAllBanHang(CHO_XAC_NHAN_HOA_DON));
+        List<String> trangThais = List.of(CHO_XAC_NHAN_HOA_DON, CHO_THANH_TOAN);
+        return ResponseEntity.ok(hoaDonRepository.getAllBanHang(trangThais));
     }
 
 
-    @PostMapping(Admin.SELL_CREATE)
-    public ResponseEntity<?> create() {
+//    @PostMapping(Admin.SELL_CREATE)
+//    public ResponseEntity<?> create() {
+//
+//        TrangThaiRespon trangThaiRespon = hoaDonRepository.getAllTrangThai(CHO_XAC_NHAN_HOA_DON).orElse(null);
+//        System.out.println("lol"+ trangThaiRespon);
+//        if(trangThaiRespon == null || trangThaiRespon.getCount() <5) {
+//            System.out.println("lol thuong"+ trangThaiRespon);
+//            HoaDon hoaDon = new HoaDon();
+//            return ResponseEntity.ok(hoaDonRepository.save(hoaDon));
+//        }
+//        return null;
+//
+//    }
+@PostMapping(Admin.SELL_CREATE)
+public ResponseEntity<?> create() {
+    List<String> trangThais = List.of(CHO_THANH_TOAN, CHO_XAC_NHAN_HOA_DON);
+    List<TrangThaiRespon> trangThaiRespon = hoaDonRepository.getAllTrangThai(trangThais);
+    long totalCount = trangThaiRespon.stream()
+            .mapToLong(TrangThaiRespon::getCount)
+            .sum();
+    if(trangThaiRespon == null || totalCount <5) {
+        System.out.println("lol thuong"+ trangThaiRespon);
+        HoaDon hoaDon = new HoaDon();
+        return ResponseEntity.ok(hoaDonRepository.save(hoaDon));
+    }
+    return null;
 
-        TrangThaiRespon trangThaiRespon = hoaDonRepository.getAllTrangThai(CHO_XAC_NHAN_HOA_DON).orElse(null);
-        System.out.println("lol"+ trangThaiRespon);
-        if(trangThaiRespon == null || trangThaiRespon.getCount() <5) {
-            System.out.println("lol thuong"+ trangThaiRespon);
+}
+
+    @PostMapping(Admin.SELL_CLIENT_CREATE)
+    public ResponseEntity<?> createSellClient() {
             HoaDon hoaDon = new HoaDon();
+            hoaDon.setTrangThai("Chờ Xác Nhận");
             return ResponseEntity.ok(hoaDonRepository.save(hoaDon));
-        }
-        return null;
-
     }
 
 
@@ -66,8 +117,10 @@ public class BanHangController {
 
                     SanPhamChiTiet spct = sanPhamChiTietRepository.findById(hdct.getIdSpct()).orElse(null);
                     HoaDonChiTiet hoaDonChiTiet = new HoaDonChiTiet();
+
                     hoaDonChiTiet.setIdHoaDon(hd);
                     hoaDonChiTiet.setIdSpct(spct);
+//                    hoaDonChiTiet.setNguoiTao(hdct.getIdNguoiDung());
                     hoaDonChiTiet.setSoLuong(hdct.getSoLuong());
                     hoaDonChiTiet.setGia(hdct.getGia());
                     hoaDonChiTiet.setTrangThai(hdct.getTrangThai());
@@ -92,6 +145,8 @@ public class BanHangController {
             return ResponseEntity.notFound().build();
         }
         hoaDon.setIdPhieuGiamGia(request.getIdPhieuGiamGia());
+        hoaDon.setIdNguoiDung(request.getIdNguoiDung());
+        hoaDon.setNguoiTao(request.getNguoiTao());
         hoaDon.setIdDotGiamGia(request.getIdDotGiamGia());
         hoaDon.setSoDienThoai(request.getSoDienThoai());
         hoaDon.setDiaChi(request.getDiaChi());
@@ -154,12 +209,17 @@ public class BanHangController {
     }
 
 
-
-//    @GetMapping(value = "/generate-qr", produces = MediaType.IMAGE_PNG_VALUE)
-//    public ResponseEntity<byte[]> generateQRCode(@RequestParam String orderId, @RequestParam double amount) {
-//        String qrData = "QRPAY|123456789|Ngân hàng ABC|" + amount + "|Thanh toán đơn hàng " + orderId;
-//        ByteArrayOutputStream stream = QRCode.from(qrData).withSize(250, 250).stream();
-//        return ResponseEntity.ok().body(stream.toByteArray());
-//    }
+    @PostMapping(Admin.SELL_QR)
+    public ResponseEntity<String> generateQrCode(@RequestBody QrRequest qrRequest) {
+        // Gọi service để tạo QR code
+        String qrResponse = vietQrService.generateQrCode(
+                qrRequest.getAccountNo(),
+                qrRequest.getAccountName(),
+                qrRequest.getAcqId(),
+                qrRequest.getAddInfo(),
+                qrRequest.getAmount()
+        );
+        return ResponseEntity.ok(qrResponse);
+    }
 
 }

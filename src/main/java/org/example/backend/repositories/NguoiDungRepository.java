@@ -177,6 +177,8 @@ public interface NguoiDungRepository extends JpaRepository<NguoiDung, UUID> {
 
 
 
+
+
     //    KhachHang
     @Query("""
     select new org.example.backend.dto.response.khachHang.KhachHangResponse(

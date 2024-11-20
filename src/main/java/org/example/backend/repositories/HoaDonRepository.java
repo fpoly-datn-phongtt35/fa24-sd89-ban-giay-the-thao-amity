@@ -22,14 +22,14 @@ import java.util.UUID;
 
 @Repository
 public interface HoaDonRepository extends JpaRepository<HoaDon, UUID> {
-//    @Query("""
-//      select new org.example.backend.dto.response.quanLyDonHang.QuanLyDonHangRespose(
-//            qldh.id,qldh.ma,count(hdct.idHoaDon),qldh.tongTien,qldh.idNguoiDung.ten,qldh.ngayTao,qldh.loaiHoaDon,qldh.trangThai,qldh.deleted
-//        )
-//        from HoaDon qldh, HoaDonChiTiet hdct
-//        where qldh.deleted = false
-//""")
-//    Page<QuanLyDonHangRespose> getByPageHoaDon(Pageable pageable);
+    @Query("""
+select new org.example.backend.dto.response.quanLyDonHang.QuanLyDonHangRespose(
+            hd.id, hd.ma, hd.idNguoiDung.ten, hd.soDienThoai, hd.diaChi, hd.tongTien, hd.loaiHoaDon, hd.ngayTao, hd.trangThai, hd.deleted
+        )
+        from HoaDon hd
+        where hd.deleted = false and hd.id =:id
+""")
+    QuanLyDonHangRespose getHoaDonbyID(UUID id);
 
 
     @Modifying
@@ -40,23 +40,39 @@ public interface HoaDonRepository extends JpaRepository<HoaDon, UUID> {
             """)
     void setDeleted(Boolean deleted, UUID id);
 
-    @Query("""
+//    @Query("""
+//
+//        select new   org.example.backend.dto.response.banHang.BanHangResponse(h.id,h.ma,h.trangThai)
+//        from HoaDon h where h.deleted = false and h.trangThai = :trangThai
+//        order by h.ngayTao desc
+//""")
+//    List<BanHangResponse> getAllBanHang(String trangThai);
 
-        select new   org.example.backend.dto.response.banHang.BanHangResponse(h.id,h.ma,h.trangThai)
-        from HoaDon h where h.deleted = false and h.trangThai = :trangThai
-        order by h.ngayTao desc 
+    @Query("""
+    select new org.example.backend.dto.response.banHang.BanHangResponse(h.id, h.ma, h.trangThai)
+    from HoaDon h 
+    where h.deleted = false and h.trangThai in :trangThais
+    order by h.ngayTao desc
 """)
-    List<BanHangResponse> getAllBanHang(String trangThai);
+    List<BanHangResponse> getAllBanHang(List<String> trangThais);
 
 
-    @Query("""
+//    @Query("""
+//                    select new  org.example.backend.dto.response.banHang.TrangThaiRespon(h.trangThai,count(h.id))
+//                    from HoaDon h
+//                    where h.deleted = false and h.trangThai = :trangThai
+//                    group by h.trangThai
+//
+//            """)
+//    Optional<TrangThaiRespon> getAllTrangThai(String trangThai);
+@Query("""
                     select new  org.example.backend.dto.response.banHang.TrangThaiRespon(h.trangThai,count(h.id))
                     from HoaDon h
-                    where h.deleted = false and h.trangThai = :trangThai
+                    where h.deleted = false and h.trangThai in :trangThais
                     group by h.trangThai
                     
             """)
-    Optional<TrangThaiRespon> getAllTrangThai(String trangThai);
+    List<TrangThaiRespon> getAllTrangThai(List<String> trangThais);
 
     @Query("""
                   select new org.example.backend.dto.response.quanLyDonHang.QuanLyDonHangRespose(
@@ -64,6 +80,7 @@ public interface HoaDonRepository extends JpaRepository<HoaDon, UUID> {
                     )
                     from HoaDon hd
                     where hd.deleted = false
+                    order by  hd.ngaySua desc
             """)
     List<QuanLyDonHangRespose> GetAllHoaDon();
 

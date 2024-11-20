@@ -1,6 +1,5 @@
-package org.example.backend.dto.request.nhanVien;
+package org.example.backend.dto.request.register;
 
-import jakarta.persistence.Entity;
 import lombok.*;
 
 import java.time.Instant;
@@ -15,7 +14,7 @@ import static org.example.backend.constants.Constant.TRANG_THAI_USER;
 @Getter
 @Setter
 
-public class NhanVienRequestUpdate {
+public class RegisterRequest {
     private UUID id;
 
     private String ma;
@@ -38,19 +37,20 @@ public class NhanVienRequestUpdate {
 
     private String cccd;
 
-//    private Integer diem;
-//
-//    private String nguoiTao;
-//
-//    private String nguoiSua;
-//
-//    private Instant ngayTao;
-//
-//    private Instant ngaySua;
+    private Integer diem;
+
+    private String nguoiTao;
+
+    private String nguoiSua;
+
+    private Instant ngayTao;
+
+    private Instant ngaySua;
 
     private String chucVu=NHAN_VIEN;
 
     private String trangThai=TRANG_THAI_USER;
 
     private Boolean deleted;
+
 }

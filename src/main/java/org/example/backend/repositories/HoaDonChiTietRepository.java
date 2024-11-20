@@ -1,6 +1,11 @@
 package org.example.backend.repositories;
 
+
 import org.example.backend.dto.response.quanLyDonHang.QuanLyDonHangRespose;
+import org.example.backend.dto.response.thongKe.ThongKeResponse;
+
+import org.example.backend.dto.response.quanLyDonHang.hoaDonChiTietReponse;
+
 import org.example.backend.models.HoaDonChiTiet;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,6 +18,7 @@ import java.util.UUID;
 
 @Repository
 public interface HoaDonChiTietRepository extends JpaRepository<HoaDonChiTiet, UUID> {
+
 //    @Query("""
 //        select new org.example.backend.dto.response.quanLyDonHang.QuanLyDonHangRespose(
 //            qldh.id, qldh.ma, count(hdct.idHoaDon), qldh.tongTien, qldh.idNguoiDung.ten,
@@ -26,6 +32,46 @@ public interface HoaDonChiTietRepository extends JpaRepository<HoaDonChiTiet, UU
 //""")
 //    Page<QuanLyDonHangRespose> getByPageHoaDon(Pageable pageable);
 
+//    @Query("""
+//    SELECT new org.example.backend.dto.response.thongKe.ThongKeResponse(
+//        hd.id,
+//        SUM(hdct.soLuong),
+//        SUM(hdct.soLuong * (hdct.gia - COALESCE(hdct.giaGiam, 0))),
+//        SUM(hdct.soLuong * spct.giaNhap),
+//        (SUM(hdct.soLuong * (hdct.gia - COALESCE(hdct.giaGiam, 0)))
+//            - SUM(hdct.soLuong * spct.giaNhap)),
+//        hd.trangThai,
+//        hd.deleted
+//    )
+//    FROM HoaDonChiTiet hdct
+//    JOIN HoaDon hd ON hdct.idHoaDon = hd.id
+//    JOIN SanPhamChiTiet spct ON hdct.idSpct = spct.id
+//    WHERE hd.trangThai = 'Đã thanh toán'
+//      AND hd.deleted = false
+//      AND FUNCTION('YEAR', hd.ngayTao) = FUNCTION('YEAR', CURRENT_DATE)
+//    GROUP BY hd.id, hd.trangThai, hd.deleted
+//""")
+//    List<ThongKeResponse> getAllThongKe();
+
+
+
+
+
+
+
+
+
+
+    @Query("""
+        select new org.example.backend.dto.response.quanLyDonHang.hoaDonChiTietReponse(
+        hdct.id,spct.id,hd.id,spct.idSanPham.ten,spct.idMauSac.ten,spct.idKichThuoc.ten,spct.idHang.ten,
+        hdct.soLuong,hdct.gia,spct.hinhAnh,hdct.ngayTao,hdct.deleted)
+        from HoaDonChiTiet hdct
+        join hdct.idHoaDon hd
+        join hdct.idSpct spct
+        where hdct.deleted = false and hd.id = :idHD
+""")
+    Page<hoaDonChiTietReponse> getByPageHoaDonChiTiet(Pageable pageable,UUID idHD);
 
 
 }
