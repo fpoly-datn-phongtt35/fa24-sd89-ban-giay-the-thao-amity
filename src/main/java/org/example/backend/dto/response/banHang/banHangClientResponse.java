@@ -23,6 +23,7 @@ public class banHangClientResponse {
     private String tenDeGiay;
     private String tenDanhMuc;
     private String tenHang;
+    private Integer soLuong;
     private UUID dotGiamGia;
     private Boolean loaiGiamGia;
     private BigDecimal giaTriGiam;

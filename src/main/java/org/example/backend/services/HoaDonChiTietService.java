@@ -30,6 +30,8 @@ public class HoaDonChiTietService extends GenericServiceImpl<HoaDonChiTiet, UUID
 //    public List<ThongKeResponse> getThongKeData() {
 //        return hoaDonChiTietRepository.getAllThongKe();
 
+
+
     public PageResponse<List<hoaDonChiTietReponse>> getHoaDonChiTiet(int page, int size,UUID idHD) {
         Pageable pageable = PageRequest.of(page, size);
         Page<hoaDonChiTietReponse> hdctPage = hoaDonChiTietRepository.getByPageHoaDonChiTiet(pageable,idHD);
