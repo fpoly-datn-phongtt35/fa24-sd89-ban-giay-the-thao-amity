@@ -113,7 +113,7 @@
             nd.setCccd(cccd);
             nd.setChucVu(chucVu);
             nd.setTrangThai(trangThai);
-            if (nd.getEmail().equals(email)){
+            if (nguoiDungRepository.findByEmail(email).isPresent()){
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                         .body("Email đã tồn tại vui lòng điền email khac");
             }
