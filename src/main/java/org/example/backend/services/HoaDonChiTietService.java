@@ -17,6 +17,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -30,6 +32,10 @@ public class HoaDonChiTietService extends GenericServiceImpl<HoaDonChiTiet, UUID
 
     public List<ThongKeResponse> getThongKeData(String trangThai) {
         return hoaDonChiTietRepository.getAllThongKe(trangThai);
+    }
+
+    public List<ThongKeResponse> getThongKeDataMonth(String trangThai, int month) {
+        return hoaDonChiTietRepository.getAllThongKeMONTH(trangThai,month);
     }
 
 

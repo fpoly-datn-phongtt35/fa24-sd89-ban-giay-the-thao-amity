@@ -53,6 +53,27 @@ public interface HoaDonChiTietRepository extends JpaRepository<HoaDonChiTiet, UU
 """)
     List<ThongKeResponse> getAllThongKe(@Param("trangThai") String trangThai);
 
+    @Query("""
+    SELECT new org.example.backend.dto.response.thongKe.ThongKeResponse(
+        hd.id,
+        SUM(hdct.soLuong),
+        SUM(hdct.soLuong * (hdct.gia - COALESCE(hdct.giaGiam, 0))),
+        SUM(hdct.soLuong * spct.giaNhap),
+        (SUM(hdct.soLuong * (hdct.gia - COALESCE(hdct.giaGiam, 0)))) - (SUM(hdct.soLuong * spct.giaNhap)),
+        hd.trangThai,
+        hd.deleted)
+    FROM HoaDonChiTiet hdct
+    JOIN HoaDon hd ON hdct.idHoaDon.id = hd.id
+    JOIN SanPhamChiTiet spct ON hdct.idSpct.id = spct.id
+    WHERE hd.trangThai = :trangThai
+      AND hd.deleted = false
+      AND FUNCTION('YEAR', hd.ngayTao) = FUNCTION('YEAR', CURRENT_DATE)
+       AND FUNCTION('MONTH', hd.ngayTao) = :month
+    GROUP BY hd.id, hd.trangThai, hd.deleted
+""")
+    List<ThongKeResponse> getAllThongKeMONTH(@Param("trangThai") String trangThai,@Param("month") int month);
+
+
 
 
 

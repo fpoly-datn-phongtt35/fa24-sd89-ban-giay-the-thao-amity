@@ -25,6 +25,15 @@ public class ThongKeController {
         List<ThongKeResponse> thongKeData = hoaDonChiTietService.getThongKeData(trangThai);
         return ResponseEntity.ok(thongKeData);  // Trả về đối tượng thống kê
     }
+    @GetMapping(Admin.THONG_KE_MONTH)
+    public ResponseEntity<List<ThongKeResponse>> getThongKeMouth(
+            @RequestParam(defaultValue = "Đã thanh toán") String trangThai,
+            @RequestParam(defaultValue = "0") int month
+    ) {
+        List<ThongKeResponse> thongKeData = hoaDonChiTietService.getThongKeDataMonth(trangThai,month);
+        return ResponseEntity.ok(thongKeData);  // Trả về đối tượng thống kê
+    }
+
 
 
 }

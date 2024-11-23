@@ -90,6 +90,7 @@ public class Admin {
     public static final String COUT_BY_STATUS_BILL = BILL + "/status";
     public static final String BILL_EXCEL = BILL + "/excel";
     public static final String THONG_KE = BILL + "/thongke";
+    public static final String THONG_KE_MONTH = BILL + "/month";
 
 
     // Endpoint BILL_DETAIL
