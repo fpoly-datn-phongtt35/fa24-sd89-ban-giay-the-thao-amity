@@ -113,8 +113,12 @@
             nd.setCccd(cccd);
             nd.setChucVu(chucVu);
             nd.setTrangThai(trangThai);
-
-            return ResponseEntity.ok(nhanVienService.save(nd));
+            if (nd.getEmail().equals(email)){
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body("Email đã tồn tại vui lòng điền email khac");
+            }
+            NguoiDung nguoiDung = nhanVienService.save(nd);
+            return ResponseEntity.ok(nguoiDung);
 
         }
 
