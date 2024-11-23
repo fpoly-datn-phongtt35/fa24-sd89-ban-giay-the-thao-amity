@@ -14,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,8 +28,9 @@ public class HoaDonChiTietService extends GenericServiceImpl<HoaDonChiTiet, UUID
         this.hoaDonChiTietRepository = hoaDonChiTietRepository;
     }
 
-//    public List<ThongKeResponse> getThongKeData() {
-//        return hoaDonChiTietRepository.getAllThongKe();
+    public List<ThongKeResponse> getThongKeData(String trangThai) {
+        return hoaDonChiTietRepository.getAllThongKe(trangThai);
+    }
 
     public PageResponse<List<hoaDonChiTietReponse>> getHoaDonChiTiet(int page, int size,UUID idHD) {
         Pageable pageable = PageRequest.of(page, size);

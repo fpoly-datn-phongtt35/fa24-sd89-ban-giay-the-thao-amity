@@ -11,9 +11,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Repository
@@ -32,26 +34,25 @@ public interface HoaDonChiTietRepository extends JpaRepository<HoaDonChiTiet, UU
 //""")
 //    Page<QuanLyDonHangRespose> getByPageHoaDon(Pageable pageable);
 
-//    @Query("""
-//    SELECT new org.example.backend.dto.response.thongKe.ThongKeResponse(
-//        hd.id,
-//        SUM(hdct.soLuong),
-//        SUM(hdct.soLuong * (hdct.gia - COALESCE(hdct.giaGiam, 0))),
-//        SUM(hdct.soLuong * spct.giaNhap),
-//        (SUM(hdct.soLuong * (hdct.gia - COALESCE(hdct.giaGiam, 0)))
-//            - SUM(hdct.soLuong * spct.giaNhap)),
-//        hd.trangThai,
-//        hd.deleted
-//    )
-//    FROM HoaDonChiTiet hdct
-//    JOIN HoaDon hd ON hdct.idHoaDon = hd.id
-//    JOIN SanPhamChiTiet spct ON hdct.idSpct = spct.id
-//    WHERE hd.trangThai = 'Đã thanh toán'
-//      AND hd.deleted = false
-//      AND FUNCTION('YEAR', hd.ngayTao) = FUNCTION('YEAR', CURRENT_DATE)
-//    GROUP BY hd.id, hd.trangThai, hd.deleted
-//""")
-//    List<ThongKeResponse> getAllThongKe();
+    @Query("""
+    SELECT new org.example.backend.dto.response.thongKe.ThongKeResponse(
+        hd.id,
+        SUM(hdct.soLuong),
+        SUM(hdct.soLuong * (hdct.gia - COALESCE(hdct.giaGiam, 0))),
+        SUM(hdct.soLuong * spct.giaNhap),
+        (SUM(hdct.soLuong * (hdct.gia - COALESCE(hdct.giaGiam, 0)))) - (SUM(hdct.soLuong * spct.giaNhap)),
+        hd.trangThai,
+        hd.deleted)
+    FROM HoaDonChiTiet hdct
+    JOIN HoaDon hd ON hdct.idHoaDon.id = hd.id
+    JOIN SanPhamChiTiet spct ON hdct.idSpct.id = spct.id
+    WHERE hd.trangThai = :trangThai
+      AND hd.deleted = false
+      AND FUNCTION('YEAR', hd.ngayTao) = FUNCTION('YEAR', CURRENT_DATE)
+    GROUP BY hd.id, hd.trangThai, hd.deleted
+""")
+    List<ThongKeResponse> getAllThongKe(@Param("trangThai") String trangThai);
+
 
 
 
