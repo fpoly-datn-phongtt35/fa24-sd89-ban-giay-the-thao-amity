@@ -23,10 +23,10 @@ import static org.example.backend.constants.Constant.CURRENT_TIME;
 
 public class ThongKeResponse {
     private UUID idHoaDon;           // ID hóa đơn
-    private double tongSoLuong;      // Tổng số lượng bán ra
-    private double doanhThu;         // Doanh thu sau chiết khấu
-    private double tongGiaNhap;      // Tổng giá nhập
-    private double lai;              // Lợi nhuận
+    private Long tongSoLuong;      // Tổng số lượng bán ra
+    private BigDecimal doanhThu;         // Doanh thu sau chiết khấu
+    private BigDecimal tongGiaNhap;      // Tổng giá nhập
+    private BigDecimal lai;              // Lợi nhuận
     private String trangThai;        // Trạng thái
     private Boolean deleted;
 }

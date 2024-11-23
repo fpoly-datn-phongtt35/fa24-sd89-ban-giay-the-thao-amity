@@ -226,10 +226,6 @@
                 @RequestParam(value = "password" , defaultValue = "") String password
 
         ) {
-//            ResponseData<PageResponse<List<NhanVienRespon>>> responseData = ResponseData.<PageResponse<List<NhanVienRespon>>>builder()
-//                    .message("Get paginated users done")
-//                    .status(HttpStatus.OK.value())
-//                    .build();
             return ResponseEntity.ok(nhanVienService.login(email, password));
         }
         @PostMapping(USER_REGISTER)
