@@ -116,32 +116,27 @@ public KhachHangController(KhachHangService khachHangService, NguoiDungRepositor
 
     }
 
-//    ){
-//
-//
-////        khachHangMapper.createNguoiDungFromDto(khachHangCreate,nguoiDung);
-////        ;
-//        return ResponseEntity.ok().body(khachHangService.save(nguoiDung));
-//    }
+
 @PutMapping(CUSTOMER_UPDATE)
-    public ResponseEntity<?> updateCustomer(
+public ResponseEntity<?> updateCustomer(
         @PathVariable UUID id,
-        @RequestParam(value = "ma",defaultValue = "") String ma,
-        @RequestParam(value = "email",defaultValue = "") String email,
-        @RequestParam(value = "sdt",defaultValue = "") String sdt,
-        @RequestParam(value = "matKhau",defaultValue = "") String matKhau,
-        @RequestParam(value = "ten",defaultValue = "") String ten,
-        @RequestParam(value = "diaChi",defaultValue = "") String diaChi,
-        @RequestParam(value = "ngaySinh",defaultValue = "") Instant ngaySinh,
-        @RequestParam(value = "gioiTinh",defaultValue = "") String gioiTinh,
-        @RequestParam(value = "hinhAnh" ,defaultValue = "") MultipartFile hinhAnh,
+        @RequestParam(value = "ma", defaultValue = "") String ma,
+        @RequestParam(value = "email", defaultValue = "") String email,
+        @RequestParam(value = "sdt", defaultValue = "") String sdt,
+        @RequestParam(value = "matKhau", defaultValue = "") String matKhau,
+        @RequestParam(value = "ten", defaultValue = "") String ten,
+        @RequestParam(value = "diaChi", defaultValue = "") String diaChi,
+        @RequestParam(value = "ngaySinh", defaultValue = "") Instant ngaySinh,
+        @RequestParam(value = "gioiTinh", defaultValue = "") String gioiTinh,
+        @RequestParam(value = "hinhAnh", required = false) MultipartFile hinhAnh,
         @RequestParam(value = "chucVu", defaultValue = "") String chucVu,
-        @RequestParam(value = "trangThai" ,defaultValue = "") String trangThai
+        @RequestParam(value = "trangThai", defaultValue = "") String trangThai
 ) throws IOException {
     Optional<NguoiDung> exitNguoiDung = khachHangService.findById(id);
     if (exitNguoiDung.isEmpty()) {
-        return null;
+        return ResponseEntity.notFound().build(); // Trả về 404 nếu không tìm thấy người dùng
     }
+
     NguoiDung nguoiDung = exitNguoiDung.get();
     nguoiDung.setId(id);
     nguoiDung.setMa(ma);
@@ -152,14 +147,23 @@ public KhachHangController(KhachHangService khachHangService, NguoiDungRepositor
     nguoiDung.setDiaChi(diaChi);
     nguoiDung.setNgaySinh(ngaySinh);
     nguoiDung.setGioiTinh(gioiTinh);
-    Map<String, Object> uploadResult = cloudinary.uploader().upload(hinhAnh.getBytes(), ObjectUtils.emptyMap());
-    String imageUrl = (String) uploadResult.get("secure_url");
-    nguoiDung.setHinhAnh(imageUrl);
+
+    // Kiểm tra xem có hình ảnh mới không
+    if (hinhAnh != null && !hinhAnh.isEmpty()) {
+        // Nếu có hình ảnh mới, upload và cập nhật
+        Map<String, Object> uploadResult = cloudinary.uploader().upload(hinhAnh.getBytes(), ObjectUtils.emptyMap());
+        String imageUrl = (String) uploadResult.get("secure_url");
+        nguoiDung.setHinhAnh(imageUrl);
+    } else {
+        // Nếu không có hình ảnh mới, giữ nguyên hình ảnh cũ
+        nguoiDung.setHinhAnh(nguoiDung.getHinhAnh()); // Giữ nguyên giá trị hiện tại
+    }
+
     nguoiDung.setChucVu(chucVu);
     nguoiDung.setTrangThai(trangThai);
 
     khachHangService.save(nguoiDung);
-    return ResponseEntity.ok(khachHangService.save(nguoiDung));
+    return ResponseEntity.ok(nguoiDung); // Trả về đối tượng người dùng đã cập nhật
 }
 @DeleteMapping(CUSTOMER_DELETE)
     public ResponseEntity<?> deleteCustomer(@PathVariable UUID id){
