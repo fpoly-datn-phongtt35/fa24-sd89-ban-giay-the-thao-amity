@@ -30,6 +30,10 @@ public class HoaDonChiTietService extends GenericServiceImpl<HoaDonChiTiet, UUID
         this.hoaDonChiTietRepository = hoaDonChiTietRepository;
     }
 
+
+//    public List<ThongKeResponse> getThongKeData() {
+//        return hoaDonChiTietRepository.getAllThongKe();
+
     public List<ThongKeResponse> getThongKeData(String trangThai) {
         return hoaDonChiTietRepository.getAllThongKe(trangThai);
     }
