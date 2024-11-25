@@ -113,8 +113,12 @@
             nd.setCccd(cccd);
             nd.setChucVu(chucVu);
             nd.setTrangThai(trangThai);
-
-            return ResponseEntity.ok(nhanVienService.save(nd));
+            if (nguoiDungRepository.findByEmail(email).isPresent()){
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body("Email đã tồn tại vui lòng điền email khac");
+            }
+            NguoiDung nguoiDung = nhanVienService.save(nd);
+            return ResponseEntity.ok(nguoiDung);
 
         }
 
@@ -222,10 +226,6 @@
                 @RequestParam(value = "password" , defaultValue = "") String password
 
         ) {
-//            ResponseData<PageResponse<List<NhanVienRespon>>> responseData = ResponseData.<PageResponse<List<NhanVienRespon>>>builder()
-//                    .message("Get paginated users done")
-//                    .status(HttpStatus.OK.value())
-//                    .build();
             return ResponseEntity.ok(nhanVienService.login(email, password));
         }
         @PostMapping(USER_REGISTER)

@@ -14,8 +14,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -27,8 +30,19 @@ public class HoaDonChiTietService extends GenericServiceImpl<HoaDonChiTiet, UUID
         this.hoaDonChiTietRepository = hoaDonChiTietRepository;
     }
 
+
 //    public List<ThongKeResponse> getThongKeData() {
 //        return hoaDonChiTietRepository.getAllThongKe();
+
+    public List<ThongKeResponse> getThongKeData(String trangThai) {
+        return hoaDonChiTietRepository.getAllThongKe(trangThai);
+    }
+
+    public List<ThongKeResponse> getThongKeDataMonth(String trangThai, int month) {
+        return hoaDonChiTietRepository.getAllThongKeMONTH(trangThai,month);
+    }
+
+
 
     public PageResponse<List<hoaDonChiTietReponse>> getHoaDonChiTiet(int page, int size,UUID idHD) {
         Pageable pageable = PageRequest.of(page, size);

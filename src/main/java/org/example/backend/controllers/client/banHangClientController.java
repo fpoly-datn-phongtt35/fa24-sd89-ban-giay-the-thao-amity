@@ -8,7 +8,9 @@ import org.example.backend.dto.response.banHang.banHangClientResponse;
 import org.example.backend.models.GioHang;
 import org.example.backend.models.GioHangChiTiet;
 import org.example.backend.models.PhieuGiamGia;
+import org.example.backend.repositories.GioHangChiTietRepository;
 import org.example.backend.services.GioHangChiTietService;
+import org.example.backend.services.GioHangService;
 import org.example.backend.services.SanPhamChiTietService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -38,6 +40,10 @@ public class banHangClientController {
     SanPhamChiTietService sanPhamChiTietService;
     @Autowired
     GioHangChiTietService gioHangChiTietService;
+    @Autowired
+    GioHangService gioHangService;
+//    @Autowired
+//    GioHangChiTietService gioHangChiTietService;
 
     @GetMapping(Admin.SELL_CLIENT_GET_ALL)
     public ResponseEntity<?> getbanHangClient(@RequestParam(value = "itemsPerPage", defaultValue = "5") int itemsPerPage,
@@ -50,6 +56,17 @@ public class banHangClientController {
                 .data(bhPage)
                 .build();
         return ResponseEntity.ok(responseData);
+    }
+
+    @GetMapping(Admin.CART_GET_BY_ID)
+    public ResponseEntity<?> finbyIDKH(@PathVariable UUID id
+    ){
+        return ResponseEntity.ok().body(gioHangService.finbyIDGioHang(id));
+    }
+
+    @GetMapping(Admin.CART_DETAIL_GET_ALL)
+    public ResponseEntity<?> getALLCart(){
+        return ResponseEntity.ok().body(gioHangChiTietService.findAll());
     }
 
     @PostMapping(CART_CREATE)
