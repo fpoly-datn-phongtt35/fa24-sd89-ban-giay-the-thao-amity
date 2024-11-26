@@ -12,6 +12,7 @@
     import org.example.backend.dto.request.nhanVien.NhanVienRequestUpdate;
     import org.example.backend.dto.response.NhanVien.NhanVienRespon;
     import org.example.backend.dto.response.dotGiamGia.DotGiamGiaResponse;
+    import org.example.backend.dto.response.phieuGiamGia.phieuGiamGiaReponse;
     import org.example.backend.mapper.NhanVienMapper;
     import org.example.backend.models.NguoiDung;
     import org.example.backend.repositories.NguoiDungRepository;
@@ -133,7 +134,7 @@
                 @RequestParam(value = "diaChi",defaultValue = "") String diaChi,
                 @RequestParam(value = "ngaySinh",defaultValue = "") Instant ngaySinh,
                 @RequestParam(value = "gioiTinh",defaultValue = "") String gioiTinh,
-                @RequestParam(value = "hinhAnh" ,defaultValue = "") MultipartFile hinhAnh,
+                @RequestParam(value = "hinhAnh" , required = false) MultipartFile hinhAnh,
                 @RequestParam(value = "cccd" , defaultValue = "") String cccd,
                 @RequestParam(value = "chucVu",defaultValue = "") String chucVu,
                 @RequestParam(value = "trangThai" ,defaultValue = "") String trangThai
@@ -152,9 +153,15 @@
             nd.setDiaChi(diaChi);
             nd.setNgaySinh(ngaySinh);
             nd.setGioiTinh(gioiTinh);
-            Map<String, Object> uploadResult = cloudinary.uploader().upload(hinhAnh.getBytes(), ObjectUtils.emptyMap());
-            String imageUrl = (String) uploadResult.get("secure_url");
-            nd.setHinhAnh(imageUrl);
+            if (hinhAnh != null && !hinhAnh.isEmpty()) {
+                // Nếu có hình ảnh mới, upload và cập nhật
+                Map<String, Object> uploadResult = cloudinary.uploader().upload(hinhAnh.getBytes(), ObjectUtils.emptyMap());
+                String imageUrl = (String) uploadResult.get("secure_url");
+                nd.setHinhAnh(imageUrl);
+            } else {
+                // Nếu không có hình ảnh mới, giữ nguyên hình ảnh cũ
+                nd.setHinhAnh(nd.getHinhAnh()); // Giữ nguyên giá trị hiện tại
+            }
             nd.setCccd(cccd);
             nd.setChucVu(chucVu);
             nd.setTrangThai(trangThai);
@@ -256,6 +263,19 @@
             }
             return ResponseEntity.ok(nhanVienService.save(nd));
         }
-
+//        @GetMapping(USER_SAVE_EXCEL)
+//        public ResponseEntity<byte[]> exportExcel() {
+//            try {
+//                List<NhanVienRespon> voucherList = nhanVienService.getAllNhanVien(); // Lấy dữ liệu phiếu giảm giá
+//                byte[] excelData = nhanVienService.exportToExcel(voucherList);
+//                return ResponseEntity.ok()
+//                        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=phieuGiamGia.xlsx")
+//                        .contentType(MediaType.APPLICATION_OCTET_STREAM)
+//                        .body(excelData);
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//                return ResponseEntity.status(500).build();
+//            }
+//        }
 
     }
