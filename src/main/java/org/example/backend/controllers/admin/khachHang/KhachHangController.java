@@ -4,6 +4,8 @@ import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import org.example.backend.common.PageResponse;
 import org.example.backend.common.ResponseData;
+import org.example.backend.constants.Constant;
+import org.example.backend.constants.Status;
 import org.example.backend.dto.request.khachHang.KhachHangCreate;
 import org.example.backend.dto.request.khachHang.KhachHangUpdate;
 import org.example.backend.dto.response.NhanVien.NhanVienRespon;
@@ -111,6 +113,57 @@ public KhachHangController(KhachHangService khachHangService, NguoiDungRepositor
         nguoiDung.setHinhAnh(imageUrl);
         nguoiDung.setChucVu(chucVu);
         nguoiDung.setTrangThai(trangThai);
+        return ResponseEntity.ok(nguoiDungRepository.save(nguoiDung));
+
+
+    }
+    @PostMapping(CUSTOMER_CREATE_SELL)
+    public ResponseEntity<?> createCustomerSell(
+            @RequestParam("ma") String ma,
+            @RequestParam("sdt") String sdt,
+            @RequestParam("ten") String ten,
+            @RequestParam("ngaySinh") Instant ngaySinh,
+            @RequestParam("gioiTinh") String gioiTinh,
+            @RequestParam("diaChi") String diaChi
+    ) throws IOException {
+
+        NguoiDung nguoiDung = new NguoiDung();
+        nguoiDung.setMa(ma);
+        nguoiDung.setSdt(sdt);
+        nguoiDung.setMatKhau(passwordEncoder.encode("a1234bb5c"));
+        nguoiDung.setTen(ten);
+        nguoiDung.setNgaySinh(ngaySinh);
+        nguoiDung.setGioiTinh(gioiTinh);
+        nguoiDung.setDiaChi(diaChi);
+
+        nguoiDung.setHinhAnh("");
+        nguoiDung.setChucVu(Constant.KHACH_HANG);
+        nguoiDung.setTrangThai(Status.HOAT_DONG);
+        return ResponseEntity.ok(nguoiDungRepository.save(nguoiDung));
+
+
+    }
+
+    @PutMapping(CUSTOMER_UPDATE_SELL)
+    public ResponseEntity<?> updateCustomerSell(
+            @RequestParam("id") UUID id,
+            @RequestParam("sdt") String sdt,
+            @RequestParam("ten") String ten,
+            @RequestParam("diaChi") String diaChi
+    ) throws IOException {
+
+        NguoiDung nguoiDung = nguoiDungRepository.findById(id).orElse(null);
+
+        if(nguoiDung == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        nguoiDung.setSdt(sdt);
+
+        nguoiDung.setTen(ten);
+
+        nguoiDung.setDiaChi(diaChi);
+
         return ResponseEntity.ok(nguoiDungRepository.save(nguoiDung));
 
 
