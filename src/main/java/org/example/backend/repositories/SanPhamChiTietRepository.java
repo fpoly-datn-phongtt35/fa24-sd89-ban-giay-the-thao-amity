@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -202,6 +203,59 @@ public interface SanPhamChiTietRepository extends JpaRepository<SanPhamChiTiet, 
 """)
     Page<banHangClientResponse> getBanHangClient(Pageable pageable);
 
+
+
+    // tim kiem spct ben client
+
+    @Query("""
+    select new org.example.backend.dto.response.banHang.banHangClientResponse(
+        s.id, 
+        s.idSanPham.ten as tenSp, 
+        s.ten as tenSpct, 
+        s.idMauSac.ten as tenMauSac, 
+        s.idKichThuoc.ten as tenKichThuoc, 
+        s.idDeGiay.ten as tenDeGiay, 
+        s.idDanhMuc.ten as tenDanhMuc, 
+        s.idHang.ten as tenHang, 
+        s.soLuong as soLuong,
+        COALESCE(d.id, '00000000-0000-0000-0000-000000000000') as dotGiamGia, 
+        COALESCE(d.loai, false) as loaiGiamGia, 
+        COALESCE(d.giaTri, 0) as giaTriGiam, 
+        s.giaBan as giaBan, 
+        CASE 
+            WHEN COALESCE(d.loai, false) = false THEN s.giaBan * COALESCE(d.giaTri, 0) / 100
+            ELSE COALESCE(d.giaTri, 0) 
+        END as giaGiam, 
+        s.giaBan - 
+        CASE 
+            WHEN COALESCE(d.loai, false) = false THEN s.giaBan * COALESCE(d.giaTri, 0) / 100
+            ELSE COALESCE(d.giaTri, 0) 
+        END as giaSauGiam, 
+        s.hinhAnh, 
+        COALESCE(s.moTa, 'Sản Phẩm Chất Lượng') as moTa,
+        COALESCE(d.trangThai, 'Không Có') as trangThai
+    )
+    from SanPhamChiTiet s
+    left join DotGiamGiaSpct ds on s.id = ds.idSpct.id
+    left join DotGiamGia d on d.id = ds.idDotGiamGia.id
+    where (:tenSp is null or s.idSanPham.ten like %:tenSp%)
+      and (:tenKichThuoc is null or s.idKichThuoc.ten like %:tenKichThuoc%)
+      and (:tenMauSac is null or s.idMauSac.ten like %:tenMauSac%)
+      and (:tenDanhMuc is null or s.idDanhMuc.ten like %:tenDanhMuc%)
+      and (:tenHang is null or s.idHang.ten like %:tenHang%)
+      and (:giaMin is null or s.giaBan >= :giaMin)
+      and (:giaMax is null or s.giaBan <= :giaMax)
+""")
+    Page<banHangClientResponse> searchBanHangClient(
+            @Param("tenSp") String tenSp,
+            @Param("tenKichThuoc") String tenKichThuoc,
+            @Param("tenMauSac") String tenMauSac,
+            @Param("tenDanhMuc") String tenDanhMuc,
+            @Param("tenHang") String tenHang,
+            @Param("giaMin") BigDecimal giaMin,
+            @Param("giaMax") BigDecimal giaMax,
+            Pageable pageable
+    );
 
 
 }

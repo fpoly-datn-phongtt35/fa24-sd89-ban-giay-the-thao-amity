@@ -24,14 +24,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.example.backend.constants.api.Admin.CART_CREATE;
-import static org.example.backend.constants.api.Admin.CART_DELETE;
-import static org.example.backend.constants.api.Admin.CART_UPDATE;
-import static org.example.backend.constants.api.Admin.VOUCHER_CREATE;
+import static org.example.backend.constants.api.Admin.*;
 
 @RestController
 public class banHangClientController {
@@ -88,5 +86,34 @@ public class banHangClientController {
         }
         return ResponseEntity.noContent().build();
     }
+
+    //tim kiem spct client
+
+    @GetMapping(SELL_CLIENT_SEARCH_1)
+public ResponseEntity<?> getBanHangClient(
+        @RequestParam(value = "itemsPerPage", defaultValue = "5") int itemsPerPage,
+        @RequestParam(value = "page", defaultValue = "0") int page,
+        @RequestParam(value = "tenSp", required = false) String tenSp,
+        @RequestParam(value = "tenKichThuoc", required = false) String tenKichThuoc,
+        @RequestParam(value = "tenMauSac", required = false) String tenMauSac,
+        @RequestParam(value = "tenDanhMuc", required = false) String tenDanhMuc,
+        @RequestParam(value = "tenHang", required = false) String tenHang,
+        @RequestParam(value = "giaMin", required = false) BigDecimal giaMin,
+        @RequestParam(value = "giaMax", required = false) BigDecimal giaMax
+) {
+    // Gọi service để lấy dữ liệu
+    PageResponse<List<banHangClientResponse>> bhPage = sanPhamChiTietService.searchBanHangClient(
+            page, itemsPerPage, tenSp, tenKichThuoc, tenMauSac,tenDanhMuc,tenHang,giaMin, giaMax
+    );
+
+    // Tạo ResponseData
+    ResponseData<PageResponse<List<banHangClientResponse>>> responseData = ResponseData.<PageResponse<List<banHangClientResponse>>>builder()
+            .message("Get all banHangClient done")
+            .status(HttpStatus.OK.value())
+            .data(bhPage)
+            .build();
+
+    return ResponseEntity.ok(responseData);
+}
 
 }
