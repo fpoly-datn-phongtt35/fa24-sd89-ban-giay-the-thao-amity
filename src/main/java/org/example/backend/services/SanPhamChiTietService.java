@@ -15,6 +15,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
@@ -35,6 +36,23 @@ public class SanPhamChiTietService extends GenericServiceImpl<SanPhamChiTiet, UU
                 .size(bhPage.getSize())
                 .totalPage(bhPage.getTotalPages())
                 .items(bhPage.getContent()).build();
+    }
+
+    public PageResponse<List<banHangClientResponse>> searchBanHangClient(
+            int page, int itemsPerPage,
+            String tenSp, String tenKichThuoc, String tenMauSac,String tenDanhMuc,String tenHang,
+            BigDecimal giaMin, BigDecimal giaMax
+    ) {
+        Pageable pageable = PageRequest.of(page, itemsPerPage);
+        Page<banHangClientResponse> results = SPCTRepository.searchBanHangClient(
+                tenSp, tenKichThuoc, tenMauSac,tenDanhMuc,tenHang, giaMin, giaMax, pageable
+        );
+
+        return PageResponse.<List<banHangClientResponse>>builder()
+                .page(results.getNumber())
+                .size(results.getSize())
+                .totalPage(results.getTotalPages())
+                .items(results.getContent()).build();
     }
 
 }
