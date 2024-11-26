@@ -28,6 +28,8 @@ public class Admin {
     public static final String CUSTOMER_GET_ALL = CUSTOMER + "/all";
     public static final String CUSTOMER_GET_BY_ID = CUSTOMER + "/{id}";
     public static final String CUSTOMER_CREATE = CUSTOMER + "/create";
+    public static final String CUSTOMER_CREATE_SELL = CUSTOMER + "/create_sell";
+    public static final String CUSTOMER_UPDATE_SELL = CUSTOMER + "/update_sell";
     public static final String CUSTOMER_UPDATE = CUSTOMER + "/update/{id}";
     public static final String CUSTOMER_DELETE = CUSTOMER + "/delete/{id}";
     public static final String CUSTOMER_SORT = CUSTOMER + "/sort";
