@@ -86,13 +86,7 @@ public class NguoiDungService extends GenericServiceImpl<NguoiDung, UUID> {
         if (user.isPresent()) {
             NguoiDung nguoiDung = user.get();
             if (passwordEncoder.matches(password, nguoiDung.getMatKhau())) {
-                  if (nguoiDung.getChucVu().contains("nhanvien")){
                       return ResponseEntity.ok(nguoiDung);
-                  }else if (nguoiDung.getChucVu().contains("khachhang")){
-                      return ResponseEntity.ok(nguoiDung);
-                  }else {
-                      return ResponseEntity.ok(nguoiDung);
-                  }
 
             } else {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
