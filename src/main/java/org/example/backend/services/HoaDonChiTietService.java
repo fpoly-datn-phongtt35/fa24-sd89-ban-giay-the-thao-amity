@@ -58,5 +58,9 @@ public class HoaDonChiTietService extends GenericServiceImpl<HoaDonChiTiet, UUID
 //        return hoaDonChiTietRepository.getByPageHoaDon(pageable);
 
 //    }
+    public List<hoaDonChiTietReponse> getHoaDonChiTietByMa(String maHD) {
+        return hoaDonChiTietRepository.getByMaHoaDonChiTiet(maHD);
+    }
+
 
 }

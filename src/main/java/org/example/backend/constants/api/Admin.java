@@ -20,6 +20,7 @@ public class Admin {
     public static final String USER_SAVE_EXCEL = USER + "/excel";
     public static final String USER_LOGIN = USER + "/login";
     public static final String USER_REGISTER = USER + "/createUser";
+    public static final String USER_UPDATE_PASSWORD = USER + "/updateUser/{id}";
 
 
 
@@ -100,6 +101,7 @@ public class Admin {
     public static final String BILL_DETAIL = BASE + "/bill_detail";
     public static final String BILL_DETAIL_GET_ALL = BILL_DETAIL + "/all";
     public static final String BILL_DETAIL_GET_BY_ID = BILL_DETAIL + "/{id}";
+    public static final String BILL_DETAIL_GET_BY_MA = BILL_DETAIL ;
     public static final String BILL_DETAIL_CREATE = BILL_DETAIL + "/create";
     public static final String BILL_DETAIL_UPDATE = BILL_DETAIL + "/update/{id}";
     public static final String BILL_DETAIL_DELETE = BILL_DETAIL + "/delete/{id}";

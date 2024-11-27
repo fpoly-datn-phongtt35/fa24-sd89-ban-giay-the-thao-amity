@@ -263,6 +263,35 @@
             }
             return ResponseEntity.ok(nhanVienService.save(nd));
         }
+        @PutMapping(USER_UPDATE_PASSWORD)
+        public ResponseEntity<?> updatePasswordUser(
+                @PathVariable UUID id,
+                @RequestParam(value = "matKhauCu", defaultValue = "") String matKhauCu,
+                @RequestParam(value = "matKhauMoi", defaultValue = "") String matKhauMoi,
+                @RequestParam(value = "matKhauNhapLai", defaultValue = "") String matKhauNhapLai
+        ) {
+            Optional<NguoiDung> nguoiDungById = nguoiDungRepository.findById(id);
+            if (nguoiDungById.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Người dùng không tồn tại.");
+            }
+            NguoiDung nguoiDung = nguoiDungById.get();
+
+            if (!passwordEncoder.matches(matKhauCu, nguoiDung.getMatKhau())) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body("Mật khẩu cũ không đúng.");
+            }
+            if (!matKhauMoi.equals(matKhauNhapLai)) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body("Mật khẩu mới và mật khẩu nhập lại chưa khớp.");
+            }
+            String matKhauMoiEncoded = passwordEncoder.encode(matKhauMoi);
+            nguoiDung.setMatKhau(matKhauMoiEncoded);
+            nguoiDungRepository.save(nguoiDung);
+
+            return ResponseEntity.ok("Cập nhật mật khẩu thành công.");
+        }
+
+
 //        @GetMapping(USER_SAVE_EXCEL)
 //        public ResponseEntity<byte[]> exportExcel() {
 //            try {
