@@ -34,12 +34,16 @@ public class HoaDonChiTietService extends GenericServiceImpl<HoaDonChiTiet, UUID
 //    public List<ThongKeResponse> getThongKeData() {
 //        return hoaDonChiTietRepository.getAllThongKe();
 
-    public List<ThongKeResponse> getThongKeData(String trangThai) {
-        return hoaDonChiTietRepository.getAllThongKe(trangThai);
+    public List<ThongKeResponse> getThongKeData(String trangThai,int month,int year) {
+        if (month == 0) {
+            return hoaDonChiTietRepository.getAllThongKe(trangThai, year);
+        } else {
+            return hoaDonChiTietRepository.getAllThongKeByMonth(trangThai, year, month);
+        }
     }
 
-    public List<ThongKeResponse> getThongKeDataMonth(String trangThai, int month) {
-        return hoaDonChiTietRepository.getAllThongKeMONTH(trangThai,month);
+    public List<ThongKeResponse> getThongKeDataMonth(String trangThai,int year, int month) {
+        return hoaDonChiTietRepository.getAllThongKeByMonth(trangThai,year,month);
     }
 
 
