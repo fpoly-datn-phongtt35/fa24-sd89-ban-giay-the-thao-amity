@@ -291,6 +291,46 @@
             return ResponseEntity.ok("Cập nhật mật khẩu thành công.");
         }
 
+        @GetMapping(USER_SEARCH_EMAIL)
+        public ResponseEntity<?> searchEmail(@RequestParam String email) {
+            Optional<NguoiDung> nguoiDung = nguoiDungService.searchByEmail(email);
+
+            if (nguoiDung.isPresent()) {
+                return ResponseEntity.ok(nguoiDung.get());  // Trả về người dùng tìm được
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found with the email: " + email);
+            }
+        }
+
+        @PutMapping(USER_UPDATE_PASSWORD_BY_EMAIL)
+        public ResponseEntity<?> updatePasswordUserByEmail(
+                @PathVariable String email,
+                @RequestParam(value = "matKhauMoi", defaultValue = "") String matKhauMoi,
+                @RequestParam(value = "matKhauNhapLai", defaultValue = "") String matKhauNhapLai
+        ) {
+            // Check if new password and confirm password are provided
+            if (matKhauMoi.isEmpty() || matKhauNhapLai.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body("Mật khẩu mới và mật khẩu nhập lại không được để trống.");
+            }
+            Optional<NguoiDung> nguoiDungByEmail = nguoiDungService.searchByEmail(email);
+            NguoiDung nguoiDung = nguoiDungByEmail.get();
+            if (!matKhauMoi.equals(matKhauNhapLai)) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body("Mật khẩu mới và mật khẩu nhập lại chưa khớp.");
+            }
+            if (matKhauMoi.length() < 8) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body("Mật khẩu mới phải có ít nhất 8 ký tự.");
+            }
+            String matKhauMoiEncoded = passwordEncoder.encode(matKhauMoi);
+            nguoiDung.setMatKhau(matKhauMoiEncoded);
+            nguoiDungRepository.save(nguoiDung);
+
+            return ResponseEntity.ok("Cập nhật mật khẩu thành công.");
+        }
+
+
 
 //        @GetMapping(USER_SAVE_EXCEL)
 //        public ResponseEntity<byte[]> exportExcel() {
