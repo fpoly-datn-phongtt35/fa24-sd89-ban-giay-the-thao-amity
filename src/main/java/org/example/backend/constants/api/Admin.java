@@ -118,6 +118,7 @@ public class Admin {
     // Endpoint SALE
     public static final String SALE = BASE + "/sale";
     public static final String SALE_GET_ALL = SALE + "/all";
+    public static final String SALE_PRODUCT_DETAIL_GET_ALL = SALE + "/product_detail";
     public static final String SALE_GET_BY_ID = SALE + "/{id}";
     public static final String SALE_CREATE = SALE + "/create";
     public static final String SALE_UPDATE = SALE + "/update/{id}";
