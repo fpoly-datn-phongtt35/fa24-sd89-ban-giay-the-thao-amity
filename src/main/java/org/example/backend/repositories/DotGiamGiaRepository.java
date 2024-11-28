@@ -2,6 +2,7 @@ package org.example.backend.repositories;
 
 import org.example.backend.dto.request.dotGiamGia.DotGiamGiaSearch;
 import org.example.backend.dto.response.dotGiamGia.DotGiamGiaResponse;
+import org.example.backend.dto.response.dotGiamGia.DotGiamGiaSpctResponse;
 import org.example.backend.models.DotGiamGia;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -72,6 +73,11 @@ public interface DotGiamGiaRepository extends JpaRepository<DotGiamGia, UUID> {
     """)
     Page<DotGiamGiaResponse> searchDotGiamGiaPaginate(Pageable pageable, DotGiamGiaSearch dotGiamGiaSearch);
 
-
+    @Query("""
+    select new org.example.backend.dto.response.dotGiamGia.DotGiamGiaSpctResponse(
+    dggspct.id, dggspct.idSpct.id, dggspct.idDotGiamGia.id
+    ) from DotGiamGiaSpct dggspct
+""")
+    List<DotGiamGiaSpctResponse> getAllDotGiamGiaSpct();
 
 }

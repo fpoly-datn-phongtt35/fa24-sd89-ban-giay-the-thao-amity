@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.example.backend.constants.api.Admin.BILL_DETAIL_GET_BY_ID;
+import static org.example.backend.constants.api.Admin.BILL_DETAIL_GET_BY_MA;
 
 @RestController
 public class hoaDonChiTietController {
@@ -49,4 +50,17 @@ public class hoaDonChiTietController {
                 .build();
         return ResponseEntity.ok(responseData);
     }
+    @GetMapping(BILL_DETAIL_GET_BY_MA)
+    public ResponseEntity<ResponseData<List<hoaDonChiTietReponse>>> getAllBillByMa(
+            @RequestParam(value = "ma") String ma // Lấy 'ma' từ query parameter
+    ) {
+        List<hoaDonChiTietReponse> hdctList = hoaDonChiTietService.getHoaDonChiTietByMa(ma); // Gọi Service
+        ResponseData<List<hoaDonChiTietReponse>> responseData = ResponseData.<List<hoaDonChiTietReponse>>builder()
+                .message("Get bill details by ma done")
+                .status(HttpStatus.OK.value())
+                .data(hdctList)
+                .build();
+        return ResponseEntity.ok(responseData);
+    }
+
 }

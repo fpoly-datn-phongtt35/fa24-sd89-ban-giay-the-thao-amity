@@ -5,6 +5,7 @@ import org.example.backend.common.ResponseData;
 import org.example.backend.constants.PaginationConstants;
 import org.example.backend.dto.request.dotGiamGia.DotGiamGiaSearch;
 import org.example.backend.dto.response.dotGiamGia.DotGiamGiaResponse;
+import org.example.backend.dto.response.dotGiamGia.DotGiamGiaSpctResponse;
 import org.example.backend.models.DotGiamGia;
 import org.example.backend.repositories.DotGiamGiaRepository;
 import org.springframework.data.domain.Page;
@@ -63,7 +64,7 @@ public class DotGiamGiaService extends GenericServiceImpl<DotGiamGia, UUID> {
 //         return dotGiamGiaRepository.getAllDotGiamGiaById(id);
 //
 //    }
-    @Scheduled(fixedRate = 60000)
+    @Scheduled(fixedRate = 10000)
     public void updateDotGiamGia(){
     List<DotGiamGia> dotGiamGias = dotGiamGiaRepository.findAll();
     Instant now = Instant.now();
@@ -80,6 +81,10 @@ public class DotGiamGiaService extends GenericServiceImpl<DotGiamGia, UUID> {
     }
     dotGiamGiaRepository.saveAll(dotGiamGias);
 }
+
+    public List<DotGiamGiaSpctResponse> getAllDotGiamGiaSpct() {
+        return dotGiamGiaRepository.getAllDotGiamGiaSpct();
+    }
 
 
 }

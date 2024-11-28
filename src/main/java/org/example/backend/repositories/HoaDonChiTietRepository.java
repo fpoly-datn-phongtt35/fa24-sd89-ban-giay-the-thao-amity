@@ -95,5 +95,15 @@ public interface HoaDonChiTietRepository extends JpaRepository<HoaDonChiTiet, UU
 """)
     Page<hoaDonChiTietReponse> getByPageHoaDonChiTiet(Pageable pageable,UUID idHD);
 
+    @Query("""
+    select new org.example.backend.dto.response.quanLyDonHang.hoaDonChiTietReponse(
+    hdct.id, spct.id, hd.id, spct.idSanPham.ten, spct.idMauSac.ten, spct.idKichThuoc.ten, spct.idHang.ten,
+    hdct.soLuong, hdct.gia, spct.hinhAnh, hdct.ngayTao, hdct.deleted)
+    from HoaDonChiTiet hdct
+    join hdct.idHoaDon hd
+    join hdct.idSpct spct
+    where hdct.deleted = false and hd.ma = :ma
+""")
+    List<hoaDonChiTietReponse> getByMaHoaDonChiTiet(String ma);
 
 }
