@@ -14,6 +14,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -48,10 +49,10 @@ public interface HoaDonChiTietRepository extends JpaRepository<HoaDonChiTiet, UU
     JOIN SanPhamChiTiet spct ON hdct.idSpct.id = spct.id
     WHERE hd.trangThai = :trangThai
       AND hd.deleted = false
-      AND FUNCTION('YEAR', hd.ngayTao) = FUNCTION('YEAR', CURRENT_DATE)
+      AND FUNCTION('YEAR', hd.ngayTao) = :year
     GROUP BY hd.id, hd.trangThai, hd.deleted
 """)
-    List<ThongKeResponse> getAllThongKe(@Param("trangThai") String trangThai);
+    List<ThongKeResponse> getAllThongKe(@Param("trangThai") String trangThai, @Param("year") int year);
 
     @Query("""
     SELECT new org.example.backend.dto.response.thongKe.ThongKeResponse(
@@ -67,11 +68,11 @@ public interface HoaDonChiTietRepository extends JpaRepository<HoaDonChiTiet, UU
     JOIN SanPhamChiTiet spct ON hdct.idSpct.id = spct.id
     WHERE hd.trangThai = :trangThai
       AND hd.deleted = false
-      AND FUNCTION('YEAR', hd.ngayTao) = FUNCTION('YEAR', CURRENT_DATE)
-       AND FUNCTION('MONTH', hd.ngayTao) = :month
+      AND FUNCTION('YEAR', hd.ngayTao) = :year
+      AND FUNCTION('MONTH', hd.ngayTao) = :month
     GROUP BY hd.id, hd.trangThai, hd.deleted
 """)
-    List<ThongKeResponse> getAllThongKeMONTH(@Param("trangThai") String trangThai,@Param("month") int month);
+    List<ThongKeResponse> getAllThongKeByMonth(@Param("trangThai") String trangThai, @Param("year") int year, @Param("month") int month);
 
 
 
