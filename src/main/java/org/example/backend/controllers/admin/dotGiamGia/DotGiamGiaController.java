@@ -31,13 +31,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.example.backend.constants.api.Admin.SALE_CREATE;
-import static org.example.backend.constants.api.Admin.SALE_DELETE;
-import static org.example.backend.constants.api.Admin.SALE_GET_ALL;
-import static org.example.backend.constants.api.Admin.SALE_GET_BY_ID;
-import static org.example.backend.constants.api.Admin.SALE_SEARCH_VALUE;
-import static org.example.backend.constants.api.Admin.SALE_SET_DELETE;
-import static org.example.backend.constants.api.Admin.SALE_UPDATE;
+import static org.example.backend.constants.Status.HOAT_DONG;
+import static org.example.backend.constants.Status.SAP_DIEN_RA;
+import static org.example.backend.constants.api.Admin.*;
 
 @RestController
 public class DotGiamGiaController {
@@ -68,7 +64,13 @@ public class DotGiamGiaController {
                 .data(dotGiamGiaPage).build();
         return ResponseEntity.ok().body(responseData);
     }
+    //dot gg ben client
 
+    @GetMapping(SALE_GET_ALL_CLIENT)
+    public ResponseEntity<?> getAllClientPaginate(){
+        List<String> trangThais = List.of(HOAT_DONG,SAP_DIEN_RA);
+        return ResponseEntity.ok(dotGiamGiaRepository.getAllDotGiamGiaClient(trangThais));
+    }
     @GetMapping(SALE_SEARCH_VALUE)
     public ResponseEntity<?> searchSalePaginate(@RequestParam(value = "page", defaultValue = "0") int page,
                                                 @RequestParam(value = "size", defaultValue = "5") int size,

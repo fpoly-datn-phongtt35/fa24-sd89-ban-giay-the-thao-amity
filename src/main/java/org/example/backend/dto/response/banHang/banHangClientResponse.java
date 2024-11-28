@@ -33,4 +33,5 @@ public class banHangClientResponse {
     private String hinhAnh;
     private String moTa;
     private String trangThai;
+//   private String ngayTao;
 }

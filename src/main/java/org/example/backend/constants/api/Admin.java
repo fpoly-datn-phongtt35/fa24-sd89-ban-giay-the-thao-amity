@@ -122,6 +122,7 @@ public class Admin {
     public static final String SALE_DELETE = SALE + "/delete/{id}";
     public static final String SALE_SET_DELETE = SALE + "/deleted/{id}";
     public static final String SALE_SEARCH_VALUE = SALE + "/search";
+    public static final String SALE_GET_ALL_CLIENT = BASE_CLIENT + "/sale/all";
 
     // Endpoint SALE_DETAIL
     public static final String SALE_DETAIL = BASE + "/sale-detail";
