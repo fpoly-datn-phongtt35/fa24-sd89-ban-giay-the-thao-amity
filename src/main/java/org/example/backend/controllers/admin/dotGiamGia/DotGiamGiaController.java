@@ -35,6 +35,7 @@ import static org.example.backend.constants.api.Admin.SALE_CREATE;
 import static org.example.backend.constants.api.Admin.SALE_DELETE;
 import static org.example.backend.constants.api.Admin.SALE_GET_ALL;
 import static org.example.backend.constants.api.Admin.SALE_GET_BY_ID;
+import static org.example.backend.constants.api.Admin.SALE_PRODUCT_DETAIL_GET_ALL;
 import static org.example.backend.constants.api.Admin.SALE_SEARCH_VALUE;
 import static org.example.backend.constants.api.Admin.SALE_SET_DELETE;
 import static org.example.backend.constants.api.Admin.SALE_UPDATE;
@@ -149,6 +150,11 @@ public class DotGiamGiaController {
             return ResponseEntity.ok().body("Set deleted id: " + id);
         }
         return ResponseEntity.notFound().build();
+    }
+
+    @GetMapping(SALE_PRODUCT_DETAIL_GET_ALL)
+    public ResponseEntity<?> getAllDotGiamGiaSpct() {
+        return ResponseEntity.ok().body(dotGiamGiaService.getAllDotGiamGiaSpct());
     }
 
 }
