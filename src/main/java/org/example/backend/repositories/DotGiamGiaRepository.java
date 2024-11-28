@@ -24,6 +24,13 @@ public interface DotGiamGiaRepository extends JpaRepository<DotGiamGia, UUID> {
             """)
     List<DotGiamGiaResponse> getAllDotGiamGia();
 
+    // hien thi dot giam gia ben clinet
+    @Query("""
+                select new org.example.backend.dto.response.dotGiamGia.DotGiamGiaResponse(d.id, d.ma, d.ten, d.giaTri, d.ngayBatDau, d.ngayKetThuc, d.loai, d.trangThai, d.hinhThuc, d.dieuKien)
+                from DotGiamGia d where d.deleted=false  and d.trangThai in :trangThais
+            """)
+    List<DotGiamGiaResponse> getAllDotGiamGiaClient(List<String> trangThais);
+
     @Query("""
                 select new org.example.backend.dto.response.dotGiamGia.DotGiamGiaResponse(d.id, d.ma, d.ten, d.giaTri, d.ngayBatDau, d.ngayKetThuc, d.loai, d.trangThai, d.hinhThuc, d.dieuKien)
                 from DotGiamGia d where d.deleted=false and d.id=:id

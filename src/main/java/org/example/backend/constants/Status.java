@@ -17,6 +17,10 @@ public class Status {
     public static final String TRA_HANG_THAT_BAI = "Trả hàng thất bại";
     public static final String DA_THANH_TOAN_TIEN_TRA_HANG = "Đã hoàn tiền trả hàng";
 
+    // dgg client
+    public static final String SAP_DIEN_RA = "Sắp diễn ra";
+
+
 
     public static final String CHO_XAC_NHAN_HOA_DON = "Chờ xác nhận hóa đơn";
     public static final String CHO_THANH_TOAN= "Chờ thanh toán";

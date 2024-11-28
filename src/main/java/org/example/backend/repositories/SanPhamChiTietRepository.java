@@ -196,6 +196,7 @@ public interface SanPhamChiTietRepository extends JpaRepository<SanPhamChiTiet, 
         s.hinhAnh, 
         COALESCE(s.moTa, 'Sản Phẩm Chất Lượng') as moTa,
         COALESCE(d.trangThai, 'Không Có') as trangThai
+
     )
     from SanPhamChiTiet s
     left join DotGiamGiaSpct ds on s.id = ds.idSpct.id
@@ -234,6 +235,8 @@ public interface SanPhamChiTietRepository extends JpaRepository<SanPhamChiTiet, 
         s.hinhAnh, 
         COALESCE(s.moTa, 'Sản Phẩm Chất Lượng') as moTa,
         COALESCE(d.trangThai, 'Không Có') as trangThai
+
+        
     )
     from SanPhamChiTiet s
     left join DotGiamGiaSpct ds on s.id = ds.idSpct.id
@@ -257,5 +260,7 @@ public interface SanPhamChiTietRepository extends JpaRepository<SanPhamChiTiet, 
             Pageable pageable
     );
 
+
+    // lấy ra 5 sản phẩm mới nhất
 
 }
