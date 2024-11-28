@@ -1,14 +1,19 @@
 package org.example.backend.sendEmail;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.example.backend.models.NguoiDung;
+import org.example.backend.repositories.NguoiDungRepository;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
+
 @RestController
 @RequestMapping("${spring.application.api-prefix}/email")
 @RequiredArgsConstructor
 public class EmailController {
     private final EmailService emailService;
+    private final NguoiDungRepository nguoiDungRepository;
 
     @GetMapping("/sendNewAccountNVEmail")
     public String sendNewAccountNVEmail() {
@@ -45,6 +50,37 @@ public class EmailController {
         }
         return "Email not sent";
     }
+    @GetMapping("/gui-thong-tin-khach-hang")
+    public String guiThongTinKhachHang(
+            @RequestParam(required = false) String email
+    ) {
+        try {
+            emailService.sendInfomationToEmail(email);
+            return "Email sent successfully";
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "Email not sent";
+    }
+    @PutMapping("/reset-password")
+    public ResponseEntity<?> resetPassword(@RequestParam(required = false) String email) {
+        Optional<NguoiDung> optionalNguoiDung = nguoiDungRepository.findByEmail(email);
+        if (optionalNguoiDung.isEmpty()) {
+            return ResponseEntity.status(404).body("Email không tồn tại.");
+        }
+
+        NguoiDung nguoiDung = optionalNguoiDung.get();
+        try {
+            emailService.sendForgotPasswordEmail(email, nguoiDung);
+            return ResponseEntity.ok("Email đã được gửi thành công.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).body("Có lỗi xảy ra khi gửi email.");
+        }
+    }
+
+
 
 
 }

@@ -98,5 +98,9 @@ public class NguoiDungService extends GenericServiceImpl<NguoiDung, UUID> {
                     .body("Email hoặc mật khẩu không đúng");
         }
     }
+    public Optional<NguoiDung> searchByEmail(String email) {
+        return nguoiDungRepository.findByEmail(email);
+    }
+
 }
 
