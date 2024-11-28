@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.UUID;
 
 @Builder
@@ -33,5 +34,5 @@ public class banHangClientResponse {
     private String hinhAnh;
     private String moTa;
     private String trangThai;
-//   private String ngayTao;
+     private Instant ngayTao;
 }

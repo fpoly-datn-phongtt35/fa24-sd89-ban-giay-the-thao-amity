@@ -298,6 +298,8 @@ public class Admin {
     public static final String SELL_CLIENT_GET_ALL = SELL_CLIENT + "/all";
     public static final String SELL_CLIENT_SEARCH_1 = BASE_CLIENT+"/sellClient" + "/search";
     public static final String SELL_CLIENT_SEARCH = SELL_CLIENT + "/client/search";
+    public static final String SELL_CLIENT_TOP = BASE_CLIENT + "/client/top5";
+    public static final String SELL_CLIENT_SALE_SP = BASE_CLIENT + "/client/sale/sp";
 
 
 }

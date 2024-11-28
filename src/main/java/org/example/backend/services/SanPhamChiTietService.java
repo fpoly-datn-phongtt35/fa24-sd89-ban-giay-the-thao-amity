@@ -55,4 +55,13 @@ public class SanPhamChiTietService extends GenericServiceImpl<SanPhamChiTiet, UU
                 .items(results.getContent()).build();
     }
 
+
+    public List<banHangClientResponse> getTop5SanPhamMoiNhat() {
+        return SPCTRepository.getTop5SanPhamMoiNhat();
+    }
+
+    public List<banHangClientResponse> getSanPhamGiamGia(List<String> trangThais, UUID id) {
+        return SPCTRepository.showGiamGiaTheoSp(trangThais, id);
+    }
+
 }
