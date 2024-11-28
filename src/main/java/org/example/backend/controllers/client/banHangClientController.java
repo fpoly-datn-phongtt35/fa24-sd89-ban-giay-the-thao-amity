@@ -90,30 +90,48 @@ public class banHangClientController {
     //tim kiem spct client
 
     @GetMapping(SELL_CLIENT_SEARCH_1)
-public ResponseEntity<?> getBanHangClient(
-        @RequestParam(value = "itemsPerPage", defaultValue = "5") int itemsPerPage,
-        @RequestParam(value = "page", defaultValue = "0") int page,
-        @RequestParam(value = "tenSp", required = false) String tenSp,
-        @RequestParam(value = "tenKichThuoc", required = false) String tenKichThuoc,
-        @RequestParam(value = "tenMauSac", required = false) String tenMauSac,
-        @RequestParam(value = "tenDanhMuc", required = false) String tenDanhMuc,
-        @RequestParam(value = "tenHang", required = false) String tenHang,
-        @RequestParam(value = "giaMin", required = false) BigDecimal giaMin,
-        @RequestParam(value = "giaMax", required = false) BigDecimal giaMax
-) {
-    // Gọi service để lấy dữ liệu
-    PageResponse<List<banHangClientResponse>> bhPage = sanPhamChiTietService.searchBanHangClient(
-            page, itemsPerPage, tenSp, tenKichThuoc, tenMauSac,tenDanhMuc,tenHang,giaMin, giaMax
-    );
+    public ResponseEntity<?> getBanHangClient(
+            @RequestParam(value = "itemsPerPage", defaultValue = "5") int itemsPerPage,
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "tenSp", required = false) String tenSp,
+            @RequestParam(value = "tenKichThuoc", required = false) String tenKichThuoc,
+            @RequestParam(value = "tenMauSac", required = false) String tenMauSac,
+            @RequestParam(value = "tenDanhMuc", required = false) String tenDanhMuc,
+            @RequestParam(value = "tenHang", required = false) String tenHang,
+            @RequestParam(value = "giaMin", required = false) BigDecimal giaMin,
+            @RequestParam(value = "giaMax", required = false) BigDecimal giaMax
+    ) {
+        // Gọi service để lấy dữ liệu
+        PageResponse<List<banHangClientResponse>> bhPage = sanPhamChiTietService.searchBanHangClient(
+                page, itemsPerPage, tenSp, tenKichThuoc, tenMauSac,tenDanhMuc,tenHang,giaMin, giaMax
+        );
 
-    // Tạo ResponseData
-    ResponseData<PageResponse<List<banHangClientResponse>>> responseData = ResponseData.<PageResponse<List<banHangClientResponse>>>builder()
-            .message("Get all banHangClient done")
-            .status(HttpStatus.OK.value())
-            .data(bhPage)
-            .build();
+        // Tạo ResponseData
+        ResponseData<PageResponse<List<banHangClientResponse>>> responseData = ResponseData.<PageResponse<List<banHangClientResponse>>>builder()
+                .message("Get all banHangClient done")
+                .status(HttpStatus.OK.value())
+                .data(bhPage)
+                .build();
 
-    return ResponseEntity.ok(responseData);
-}
+        return ResponseEntity.ok(responseData);
+    }
+
+    //lay 5 san pham moi nhat
+
+    @GetMapping(Admin.SELL_CLIENT_TOP)
+    public ResponseEntity<List<banHangClientResponse>> getTop5SanPhamMoiNhat() {
+        List<banHangClientResponse> top5SanPham = sanPhamChiTietService.getTop5SanPhamMoiNhat();
+        return ResponseEntity.ok(top5SanPham); // Trả về danh sách dưới dạng JSON
+    }
+
+    // hien cac sp da ap dung dot giam gia
+    @GetMapping(Admin.SELL_CLIENT_SALE_SP)
+    public ResponseEntity<List<banHangClientResponse>> getSanPhamGiamGia(
+            @RequestParam List<String> trangThais,
+            @RequestParam UUID id
+    ) {
+        List<banHangClientResponse> sanPhamGiamGia = sanPhamChiTietService.getSanPhamGiamGia(trangThais, id);
+        return ResponseEntity.ok(sanPhamGiamGia);
+    }
 
 }
