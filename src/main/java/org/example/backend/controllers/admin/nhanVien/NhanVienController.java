@@ -336,7 +336,6 @@
                 @RequestParam(value = "ma",defaultValue = "") String ma,
                 @RequestParam(value = "email",defaultValue = "") String email,
                 @RequestParam(value = "sdt",defaultValue = "") String sdt,
-                @RequestParam(value = "matKhau",defaultValue = "") String matKhau,
                 @RequestParam(value = "ten",defaultValue = "") String ten,
                 @RequestParam(value = "diaChi",defaultValue = "") String diaChi,
                 @RequestParam(value = "ngaySinh",defaultValue = "") Instant ngaySinh,
@@ -355,7 +354,6 @@
             nd.setMa(ma);
             nd.setEmail(email);
             nd.setSdt(sdt);
-            nd.setMatKhau(passwordEncoder.encode(matKhau));
             nd.setTen(ten);
             nd.setDiaChi(diaChi);
             nd.setNgaySinh(ngaySinh);
