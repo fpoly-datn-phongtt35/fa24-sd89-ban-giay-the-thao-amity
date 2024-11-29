@@ -35,12 +35,15 @@ public class PaymentController {
         String status = request.getParameter("vnp_ResponseCode");
         String amount = request.getParameter("vnp_Amount");
         String transactionNo = request.getParameter("vnp_TransactionNo");
+        String idHoaDon = request.getParameter("vnp_OrderInfo");
+
 
         // Kiểm tra trạng thái giao dịch
         if ("00".equals(status)) {
-            response.sendRedirect("http://localhost:3000/payment/result?status=success&amount=" + amount + "&transactionNo=" + transactionNo);
+            response.sendRedirect("http://localhost:3000/payment/result?status=success&amount="
+                    + amount + "&transactionNo=" + transactionNo + "&idHoaDon=" + idHoaDon);
         } else {
-            response.sendRedirect("http://localhost:3000/payment/result?status=failed");
+            response.sendRedirect("http://localhost:3000/payment/result?status=failed" + "&idHoaDon=" + idHoaDon);
         }
     }
 }
