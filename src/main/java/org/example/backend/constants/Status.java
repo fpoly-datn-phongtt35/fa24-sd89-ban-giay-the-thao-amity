@@ -32,6 +32,8 @@ public class Status {
     public static final String DANG_CHO_THANH_TOAN = "Đang chờ thanh toán";
     public static final String DA_THANH_TOAN = "Đã thanh toán";
 
+    public static final String DANG_XU_LY = "Đang xử lý";
+
 
 
 }
