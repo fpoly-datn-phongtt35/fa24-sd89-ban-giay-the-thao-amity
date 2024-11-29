@@ -330,6 +330,52 @@
             return ResponseEntity.ok("Cập nhật mật khẩu thành công.");
         }
 
+        @PutMapping(USER_UPDATE_HO_SO)
+        public ResponseEntity<?> updateUser(
+                @PathVariable UUID id,
+                @RequestParam(value = "ma",defaultValue = "") String ma,
+                @RequestParam(value = "email",defaultValue = "") String email,
+                @RequestParam(value = "sdt",defaultValue = "") String sdt,
+                @RequestParam(value = "matKhau",defaultValue = "") String matKhau,
+                @RequestParam(value = "ten",defaultValue = "") String ten,
+                @RequestParam(value = "diaChi",defaultValue = "") String diaChi,
+                @RequestParam(value = "ngaySinh",defaultValue = "") Instant ngaySinh,
+                @RequestParam(value = "gioiTinh",defaultValue = "") String gioiTinh,
+                @RequestParam(value = "hinhAnh" , required = false) MultipartFile hinhAnh,
+                @RequestParam(value = "cccd" , defaultValue = "") String cccd,
+                @RequestParam(value = "chucVu",defaultValue = "") String chucVu,
+                @RequestParam(value = "trangThai" ,defaultValue = "") String trangThai
+        ) throws IOException {
+            Optional<NguoiDung> exitNguoiDung = nhanVienService.findById(id);
+            if (exitNguoiDung.isEmpty()){
+                return null;
+            }
+            NguoiDung nd = exitNguoiDung.get();
+            nd.setId(id);
+            nd.setMa(ma);
+            nd.setEmail(email);
+            nd.setSdt(sdt);
+            nd.setMatKhau(passwordEncoder.encode(matKhau));
+            nd.setTen(ten);
+            nd.setDiaChi(diaChi);
+            nd.setNgaySinh(ngaySinh);
+            nd.setGioiTinh(gioiTinh);
+            if (hinhAnh != null && !hinhAnh.isEmpty()) {
+                // Nếu có hình ảnh mới, upload và cập nhật
+                Map<String, Object> uploadResult = cloudinary.uploader().upload(hinhAnh.getBytes(), ObjectUtils.emptyMap());
+                String imageUrl = (String) uploadResult.get("secure_url");
+                nd.setHinhAnh(imageUrl);
+            } else {
+                // Nếu không có hình ảnh mới, giữ nguyên hình ảnh cũ
+                nd.setHinhAnh(nd.getHinhAnh()); // Giữ nguyên giá trị hiện tại
+            }
+            nd.setCccd(cccd);
+            nd.setChucVu(chucVu);
+            nd.setTrangThai(trangThai);
+
+            nhanVienService.save(nd);
+            return ResponseEntity.ok(nhanVienService.save(nd));
+        }
 
 
 //        @GetMapping(USER_SAVE_EXCEL)
