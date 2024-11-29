@@ -19,6 +19,8 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import static org.example.backend.constants.Constant.CURRENT_TIME;
+
 @Service
 public class GioHangService extends GenericServiceImpl<GioHang, UUID> {
     public GioHangService(JpaRepository<GioHang, UUID> repository, GioHangRepository gioHangRepository,
@@ -45,6 +47,8 @@ public class GioHangService extends GenericServiceImpl<GioHang, UUID> {
                 .orElseGet(() -> {
                     GioHang newGioHang = new GioHang();
                     newGioHang.setIdNguoiDung(nguoiDung);
+                    newGioHang.setNgayTao(CURRENT_TIME);
+                    newGioHang.setNgaySua(CURRENT_TIME);
                     newGioHang.setDeleted(false);
                     return gioHangRepository.save(newGioHang);
                 });
@@ -66,6 +70,8 @@ public class GioHangService extends GenericServiceImpl<GioHang, UUID> {
                 .orElseGet(() -> {
                     GioHang newGioHang = new GioHang();
                     newGioHang.setIdNguoiDung(nguoiDung);
+                    newGioHang.setNgayTao(CURRENT_TIME);
+                    newGioHang.setNgaySua(CURRENT_TIME);
                     newGioHang.setDeleted(false);
                     return gioHangRepository.save(newGioHang);
                 });
@@ -92,7 +98,7 @@ public class GioHangService extends GenericServiceImpl<GioHang, UUID> {
 
         // Cập nhật thông tin
         gioHangChiTiet.setSoLuong(request.getSoLuong());
-        gioHangChiTiet.setThanhTien(sanPhamChiTiet.getGiaBan().multiply(BigDecimal.valueOf(request.getSoLuong())));
+        gioHangChiTiet.setThanhTien(request.getGiaBan().multiply(BigDecimal.valueOf(request.getSoLuong())));
 
         return convertToResponse(gioHangChiTietRepository.save(gioHangChiTiet));
     }

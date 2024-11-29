@@ -30,10 +30,10 @@ public class GioHangController {
     }
 
     @DeleteMapping("/{userId}/xoa-san-pham/{gioHangChiTietId}")
-public ResponseEntity<Void> deleteFromCart(
-        @PathVariable UUID userId,
-        @PathVariable UUID gioHangChiTietId) {
-    gioHangService.deleteFromCart(userId, gioHangChiTietId);
-    return ResponseEntity.ok().build();
-}
+    public ResponseEntity<Void> deleteFromCart(
+            @PathVariable UUID userId,
+            @PathVariable UUID gioHangChiTietId) {
+        gioHangService.deleteFromCart(userId, gioHangChiTietId);
+        return ResponseEntity.ok().build();
+    }
 }
