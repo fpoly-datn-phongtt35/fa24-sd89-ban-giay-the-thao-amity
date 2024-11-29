@@ -269,8 +269,14 @@ public class Admin {
     public static final String PRODUCT_RETURN_GET_ALL = PRODUCT_RETURN + "/all";
     public static final String PRODUCT_RETURN_GET_BY_ID = PRODUCT_RETURN + "/{id}";
     public static final String PRODUCT_RETURN_CREATE = PRODUCT_RETURN + "/create";
-    public static final String PRODUCT_RETURN_UPDATE = PRODUCT_RETURN + "/update/{id}";
+    public static final String PRODUCT_RETURN_UPDATE = PRODUCT_RETURN + "/update";
     public static final String PRODUCT_RETURN_DELETE = PRODUCT_RETURN + "/delete/{id}";
+    //tra hang client
+    public static final String PRODUCT_RETURN_CLIENT = BASE_CLIENT + "/product-return";
+    public static final String PRODUCT_RETURN_GET_ALL_CLIENT = PRODUCT_RETURN_CLIENT + "/all";
+    public static final String PRODUCT_RETURN_CREATE_CLIENT = PRODUCT_RETURN_CLIENT + "/create";
+    public static final String PRODUCT_RETURN_UPDATE_CLIENT = PRODUCT_RETURN + "/update/{id}";
+
 
 
     public static final String SELL = BASE + "/sell";
