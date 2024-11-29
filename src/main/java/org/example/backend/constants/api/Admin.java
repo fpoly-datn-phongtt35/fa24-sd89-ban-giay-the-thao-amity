@@ -12,6 +12,7 @@ public class Admin {
     public static final String USER_GET_BY_ID = USER + "/{id}";
     public static final String USER_CREATE = USER + "/create";
     public static final String USER_UPDATE = USER + "/update/{id}";
+    public static final String USER_UPDATE_HO_SO = "/api/v1/profile/updateHs/{id}";
     public static final String USER_DELETE = USER + "/delete/{id}";
     public static final String USER_SORT = USER + "/sort";
     public static final String PAGE_USER = USER + "/page";
