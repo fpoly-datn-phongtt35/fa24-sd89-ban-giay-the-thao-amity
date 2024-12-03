@@ -97,6 +97,49 @@ public KhachHangController(KhachHangService khachHangService, NguoiDungRepositor
             @RequestParam("chucVu") String chucVu,
              @RequestParam("trangThai") String trangThai
     ) throws IOException {
+        if (ma.trim().isEmpty()) {
+            return ResponseEntity.badRequest().body("Mã không được để trống.");
+        }
+        if (email.trim().isEmpty()) {
+            return ResponseEntity.badRequest().body("Email không được để trống.");
+        }
+        if (sdt.trim().isEmpty()) {
+            return ResponseEntity.badRequest().body("Số điện thoại không được để trống.");
+        }
+        if (matKhau.trim().isEmpty()) {
+            return ResponseEntity.badRequest().body("Mật khẩu không được để trống.");
+        }
+        if (ten.trim().isEmpty()) {
+            return ResponseEntity.badRequest().body("Tên không được để trống.");
+        }
+        if (diaChi.trim().isEmpty()) {
+            return ResponseEntity.badRequest().body("Địa chỉ không được để trống.");
+        }
+        if (ngaySinh == null) {
+            return ResponseEntity.badRequest().body("Ngày sinh không được để trống.");
+        }
+        if (gioiTinh.trim().isEmpty()) {
+            return ResponseEntity.badRequest().body("Giới tính không được để trống.");
+        }
+        if (fileHinhAnh.isEmpty()) {
+            return ResponseEntity.badRequest().body("Hình ảnh không được để trống.");
+        }
+        if (chucVu.trim().isEmpty()) {
+            return ResponseEntity.badRequest().body("Chức vụ không được để trống.");
+        }
+        if (trangThai.trim().isEmpty()) {
+            return ResponseEntity.badRequest().body("Trạng thái không được để trống.");
+        }
+
+        if (nguoiDungRepository.findByEmail(email).isPresent()) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Email đã tồn tại, vui lòng sử dụng email khác.");
+        }
+        if (!sdt.matches("\\d{10}")) {
+            return ResponseEntity.badRequest().body("Số điện thoại phải có đúng 10 chữ số.");
+        }
+        if (!email.matches("^[\\w-.]+@(gmail\\.com|fpt\\.edu\\.vn)$")) {
+            return ResponseEntity.badRequest().body("Email không hợp lệ. Chỉ chấp nhận email có đuôi @gmail.com hoặc @fpt.edu.vn.");
+        }
 
         NguoiDung nguoiDung = new NguoiDung();
         nguoiDung.setMa(ma);
@@ -176,7 +219,6 @@ public ResponseEntity<?> updateCustomer(
         @RequestParam(value = "ma", defaultValue = "") String ma,
         @RequestParam(value = "email", defaultValue = "") String email,
         @RequestParam(value = "sdt", defaultValue = "") String sdt,
-        @RequestParam(value = "matKhau", defaultValue = "") String matKhau,
         @RequestParam(value = "ten", defaultValue = "") String ten,
         @RequestParam(value = "diaChi", defaultValue = "") String diaChi,
         @RequestParam(value = "ngaySinh", defaultValue = "") Instant ngaySinh,
@@ -189,27 +231,56 @@ public ResponseEntity<?> updateCustomer(
     if (exitNguoiDung.isEmpty()) {
         return ResponseEntity.notFound().build(); // Trả về 404 nếu không tìm thấy người dùng
     }
-
+    if (ma.trim().isEmpty()) {
+        return ResponseEntity.badRequest().body("Mã không được để trống.");
+    }
+    if (email.trim().isEmpty()) {
+        return ResponseEntity.badRequest().body("Email không được để trống.");
+    }
+    if (sdt.trim().isEmpty()) {
+        return ResponseEntity.badRequest().body("Số điện thoại không được để trống.");
+    }
+    if (ten.trim().isEmpty()) {
+        return ResponseEntity.badRequest().body("Tên không được để trống.");
+    }
+    if (diaChi.trim().isEmpty()) {
+        return ResponseEntity.badRequest().body("Địa chỉ không được để trống.");
+    }
+    if (ngaySinh == null) {
+        return ResponseEntity.badRequest().body("Ngày sinh không được để trống.");
+    }
+    if (gioiTinh.trim().isEmpty()) {
+        return ResponseEntity.badRequest().body("Giới tính không được để trống.");
+    }
+    if (chucVu.trim().isEmpty()) {
+        return ResponseEntity.badRequest().body("Chức vụ không được để trống.");
+    }
+    if (trangThai.trim().isEmpty()) {
+        return ResponseEntity.badRequest().body("Trạng thái không được để trống.");
+    }
+    if (!sdt.matches("\\d{10}")) {
+        return ResponseEntity.badRequest().body("Số điện thoại phải có đúng 10 chữ số.");
+    }
+    if (!email.matches("^[\\w-.]+@(gmail\\.com|fpt\\.edu\\.vn)$")) {
+        return ResponseEntity.badRequest().body("Email không hợp lệ. Chỉ chấp nhận email có đuôi @gmail.com hoặc @fpt.edu.vn.");
+    }
     NguoiDung nguoiDung = exitNguoiDung.get();
     nguoiDung.setId(id);
     nguoiDung.setMa(ma);
     nguoiDung.setEmail(email);
     nguoiDung.setSdt(sdt);
-    nguoiDung.setMatKhau(passwordEncoder.encode(matKhau));
     nguoiDung.setTen(ten);
     nguoiDung.setDiaChi(diaChi);
     nguoiDung.setNgaySinh(ngaySinh);
     nguoiDung.setGioiTinh(gioiTinh);
 
-    // Kiểm tra xem có hình ảnh mới không
+
     if (hinhAnh != null && !hinhAnh.isEmpty()) {
-        // Nếu có hình ảnh mới, upload và cập nhật
         Map<String, Object> uploadResult = cloudinary.uploader().upload(hinhAnh.getBytes(), ObjectUtils.emptyMap());
         String imageUrl = (String) uploadResult.get("secure_url");
         nguoiDung.setHinhAnh(imageUrl);
     } else {
-        // Nếu không có hình ảnh mới, giữ nguyên hình ảnh cũ
-        nguoiDung.setHinhAnh(nguoiDung.getHinhAnh()); // Giữ nguyên giá trị hiện tại
+        nguoiDung.setHinhAnh(nguoiDung.getHinhAnh());
     }
 
     nguoiDung.setChucVu(chucVu);
