@@ -91,8 +91,6 @@ public class QuanLyDonHangController {
 
     @GetMapping(COUT_BY_STATUS_BILL)
     public ResponseEntity<List<Long>> countHoaDonByStatuses(@RequestParam List<String> statuses) {
-        // In ra giá trị của các trạng thái nhận được
-        System.out.println("test1" + statuses);
         // Gọi service để xử lý
         List<Long> statusCounts = hoaDonService.countHoaDonByStatuses(statuses);
         return ResponseEntity.ok(statusCounts);
