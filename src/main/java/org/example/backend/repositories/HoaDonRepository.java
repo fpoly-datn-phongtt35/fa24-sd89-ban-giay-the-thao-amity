@@ -126,6 +126,7 @@ select new org.example.backend.dto.response.quanLyDonHang.QuanLyDonHangRespose(
                 AND ((COALESCE(:#{#minGia}, null) IS NULL OR hd.tongTien >= :#{#minGia})
                 AND (COALESCE(:#{#maxGia}, null) IS NULL OR hd.tongTien <= :#{#maxGia}))
                 AND (COALESCE(:#{#status}, '') = '' OR hd.trangThai = :#{#status})
+                order by hd.ngayTao desc
                 """)
     Page<QuanLyDonHangRespose> searchHoaDon(Pageable pageable, String keyFind, String loai,
                                                  Instant minNgay, Instant maxNgay, BigDecimal minGia, BigDecimal maxGia,String status);
