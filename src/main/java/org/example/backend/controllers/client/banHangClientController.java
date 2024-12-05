@@ -9,10 +9,13 @@ import org.example.backend.models.GioHang;
 import org.example.backend.models.GioHangChiTiet;
 import org.example.backend.models.PhieuGiamGia;
 import org.example.backend.repositories.GioHangChiTietRepository;
+import org.example.backend.repositories.SanPhamChiTietRepository;
 import org.example.backend.services.GioHangChiTietService;
 import org.example.backend.services.GioHangService;
 import org.example.backend.services.SanPhamChiTietService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -37,6 +40,8 @@ public class banHangClientController {
     @Autowired
     SanPhamChiTietService sanPhamChiTietService;
     @Autowired
+    SanPhamChiTietRepository sanPhamChiTietRepository;
+    @Autowired
     GioHangChiTietService gioHangChiTietService;
     @Autowired
     GioHangService gioHangService;
@@ -48,6 +53,20 @@ public class banHangClientController {
                                               @RequestParam(value = "page", defaultValue = "0") int page
     ){
         PageResponse<List<banHangClientResponse>> bhPage = sanPhamChiTietService.getbanHangClient(page, itemsPerPage);
+        ResponseData<PageResponse<List<banHangClientResponse>>> responseData = ResponseData.<PageResponse<List<banHangClientResponse>>>builder()
+                .message("Get all banHangCient done")
+                .status(HttpStatus.OK.value())
+                .data(bhPage)
+                .build();
+        return ResponseEntity.ok(responseData);
+    }
+
+    @GetMapping(Admin.SELL_CLIENT_GET_BY_ID_DGG)
+    public ResponseEntity<?> getbanHangClientbyIDDGG(@RequestParam(value = "itemsPerPage", defaultValue = "5") int itemsPerPage,
+                                              @RequestParam(value = "page", defaultValue = "0") int page,
+                                              @PathVariable UUID id
+    ){
+        PageResponse<List<banHangClientResponse>> bhPage = sanPhamChiTietService.getbanHangClientbyIDDGG(page,itemsPerPage,id);
         ResponseData<PageResponse<List<banHangClientResponse>>> responseData = ResponseData.<PageResponse<List<banHangClientResponse>>>builder()
                 .message("Get all banHangCient done")
                 .status(HttpStatus.OK.value())

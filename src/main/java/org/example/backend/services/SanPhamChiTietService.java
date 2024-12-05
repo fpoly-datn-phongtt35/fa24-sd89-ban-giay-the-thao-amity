@@ -38,6 +38,16 @@ public class SanPhamChiTietService extends GenericServiceImpl<SanPhamChiTiet, UU
                 .items(bhPage.getContent()).build();
     }
 
+    public PageResponse<List<banHangClientResponse>> getbanHangClientbyIDDGG(int page, int size,UUID id) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<banHangClientResponse> bhPage = SPCTRepository.getBanHangClientbyIDDGG(pageable,id);
+        return PageResponse.<List<banHangClientResponse>>builder()
+                .page(bhPage.getNumber())
+                .size(bhPage.getSize())
+                .totalPage(bhPage.getTotalPages())
+                .items(bhPage.getContent()).build();
+    }
+
     public PageResponse<List<banHangClientResponse>> searchBanHangClient(
             int page, int itemsPerPage,
             String tenSp, String tenKichThuoc, String tenMauSac,String tenDanhMuc,String tenHang,
