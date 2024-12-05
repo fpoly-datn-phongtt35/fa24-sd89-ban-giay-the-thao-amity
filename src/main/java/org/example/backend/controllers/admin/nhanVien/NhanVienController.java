@@ -314,6 +314,12 @@
                 @RequestParam(value = "password" , defaultValue = "") String password
 
         ) {
+            if (email.trim().isEmpty()) {
+                return ResponseEntity.badRequest().body("Email không được để trống.");
+            }
+            if (password.trim().isEmpty()) {
+                return ResponseEntity.badRequest().body("Mật khẩu không được để trống.");
+            }
             return ResponseEntity.ok(nhanVienService.login(email, password));
         }
         @PostMapping(USER_REGISTER)
@@ -327,6 +333,26 @@
                 @RequestParam(value = "trangThai",defaultValue = "") String trangThai
         ){
             String ma = "KH" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
+            if (ten.trim().isEmpty()) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Tên không được để trống.");
+            }
+            if (email.trim().isEmpty()) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email không được để trống.");
+            }
+            if (matKhau.trim().isEmpty()) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Mật khẩu không được để trống.");
+            }
+            if (matKhauNhapLai.trim().isEmpty()) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Mật khẩu nhập lại không được để trống.");
+            }
+            String emailChecked = "^[\\w-\\.]+@[\\w-]+\\.(gmail\\.com|fpt\\.edu\\.vn)$";
+            if (!email.matches(emailChecked)) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body("Email không hợp lệ. Chỉ chấp nhận email @gmail.com hoặc @fpt.edu.vn.");
+            }
+            if (matKhau.length() < 8) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Mật khẩu phải có ít nhất 8 ký tự.");
+            }
             NguoiDung nd = new NguoiDung();
             nd.setMa(ma);
             nd.setEmail(email);
@@ -379,7 +405,7 @@
             if (nguoiDung.isPresent()) {
                 return ResponseEntity.ok(nguoiDung.get());
             } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found with the email: " + email);
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("khong tim thay email : " + email);
             }
         }
 

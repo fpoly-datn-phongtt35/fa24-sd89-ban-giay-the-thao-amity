@@ -26,13 +26,19 @@ public class ThongKeController {
     public ResponseEntity<List<ThongKeResponse>> getThongKe(
             @RequestParam(defaultValue = "Đã thanh toán") String trangThai,
             @RequestParam(defaultValue = "0") int year,
-            @RequestParam(defaultValue = "0") int month
+            @RequestParam(defaultValue = "0") int month,
+            @RequestParam(defaultValue = "0") int day
     ) {
-        if (year == 0) {
+        if (year <= 0) {
             year = LocalDate.now().getYear();
         }
-        List<ThongKeResponse> thongKeData = hoaDonChiTietService.getThongKeData(trangThai, month, year);
-        return ResponseEntity.ok(thongKeData);  // Trả về kết quả thống kê
+        try {
+            // Lấy dữ liệu thống kê
+            List<ThongKeResponse> thongKeData = hoaDonChiTietService.getThongKeData(trangThai, year, month, day);
+            return ResponseEntity.ok(thongKeData);
+        } catch (Exception ex) {
+            return null;
+        }
     }
 
 
@@ -46,7 +52,7 @@ public class ThongKeController {
             year = LocalDate.now().getYear();
         }
         List<ThongKeResponse> thongKeData = hoaDonChiTietService.getThongKeDataMonth(trangThai,year,month);
-        return ResponseEntity.ok(thongKeData);  // Trả về đối tượng thống kê
+        return ResponseEntity.ok(thongKeData);
     }
 
 

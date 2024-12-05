@@ -1,6 +1,9 @@
 package org.example.backend.dto.request.dotGiamGia;
 
 import lombok.Builder;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -10,14 +13,32 @@ import static org.example.backend.constants.Constant.CURRENT_TIME;
 @Builder
 
 public class DotGiamGiaCreate {
+    @NotBlank(message = "Mã không được để trống")
     private String ma;
+
+    @NotBlank(message = "Tên không được để trống")
     private String ten;
+
+    @NotNull(message = "Giá trị không được để trống")
+    @Positive(message = "Giá trị phải lớn hơn 0")
     private BigDecimal giaTri;
+
+    @NotNull(message = "Ngày bắt đầu không được để trống")
     private Instant ngayBatDau;
+
+    @NotNull(message = "Ngày kết thúc không được để trống")
     private Instant ngayKetThuc;
+
+    @NotNull(message = "Loại không được để trống")
     private Boolean loai;
+
+    @NotBlank(message = "Trạng thái không được để trống")
     private String trangThai;
+
+    @NotBlank(message = "Hình thức không được để trống")
     private String hinhThuc;
+
+    @NotNull(message = "Điều kiện không được để trống")
     private Integer dieuKien;
 
 
