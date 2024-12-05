@@ -100,7 +100,7 @@ select new org.example.backend.dto.response.quanLyDonHang.QuanLyDonHangRespose(
     // Đếm hóa đơn dựa trên từng trạng thái cụ thể
     @Query("SELECT COUNT(hd) from HoaDon hd" +
             " where hd.deleted = false" +
-            " AND (COALESCE(:#{#status}, '') = '' OR hd.trangThai = :#{#status})")
+            " AND (COALESCE(:#{#status}, '') = '' OR hd.trangThai like %:#{#status}%)")
     Long countHoaDonByTrangThai(String status);
 
     // Trả về số lượng hóa đơn theo danh sách trạng thái (giữ thứ tự của danh sách trạng thái)
@@ -125,7 +125,7 @@ select new org.example.backend.dto.response.quanLyDonHang.QuanLyDonHangRespose(
                 AND (COALESCE(:#{#loai}, '') = '' OR hd.loaiHoaDon = :#{#loai})
                 AND ((COALESCE(:#{#minGia}, null) IS NULL OR hd.tongTien >= :#{#minGia})
                 AND (COALESCE(:#{#maxGia}, null) IS NULL OR hd.tongTien <= :#{#maxGia}))
-                AND (COALESCE(:#{#status}, '') = '' OR hd.trangThai = :#{#status})
+                AND (COALESCE(:#{#status}, '') = '' OR hd.trangThai like %:#{#status}%)
                 order by hd.ngayTao desc
                 """)
     Page<QuanLyDonHangRespose> searchHoaDon(Pageable pageable, String keyFind, String loai,
