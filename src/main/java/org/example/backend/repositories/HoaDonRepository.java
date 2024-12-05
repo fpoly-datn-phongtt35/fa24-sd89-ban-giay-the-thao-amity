@@ -5,12 +5,14 @@ import org.example.backend.dto.response.banHang.BanHangResponse;
 import org.example.backend.dto.response.banHang.TrangThaiRespon;
 import org.example.backend.dto.response.phieuGiamGia.phieuGiamGiaReponse;
 import org.example.backend.dto.response.quanLyDonHang.QuanLyDonHangRespose;
+import org.example.backend.dto.response.quanLyDonHang.hoaDonChiTietReponse;
 import org.example.backend.models.HoaDon;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
@@ -30,6 +32,7 @@ select new org.example.backend.dto.response.quanLyDonHang.QuanLyDonHangRespose(
         where hd.deleted = false and hd.id =:id
 """)
     QuanLyDonHangRespose getHoaDonbyID(UUID id);
+
 
 
     @Modifying
