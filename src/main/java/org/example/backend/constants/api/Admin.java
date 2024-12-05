@@ -275,7 +275,9 @@ public class Admin {
     public static final String PRODUCT_RETURN_CLIENT = BASE_CLIENT + "/product-return";
     public static final String PRODUCT_RETURN_GET_ALL_CLIENT = PRODUCT_RETURN_CLIENT + "/all";
     public static final String PRODUCT_RETURN_CREATE_CLIENT = PRODUCT_RETURN_CLIENT + "/create";
-    public static final String PRODUCT_RETURN_UPDATE_CLIENT = PRODUCT_RETURN + "/update/{id}";
+    public static final String PRODUCT_RETURN_UPDATE_CLIENT = PRODUCT_RETURN_CLIENT + "/update/{id}";
+    public static final String PRODUCT_RETURN_GET_BY_IDKH = PRODUCT_RETURN_CLIENT + "/bill/{idNguoiDung}";
+    public static final String PRODUCT_RETURN_DETAIL_BY_ID = PRODUCT_RETURN_CLIENT + "/bill-detail/{id}";
 
 
 

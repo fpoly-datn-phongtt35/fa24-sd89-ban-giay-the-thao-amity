@@ -107,4 +107,9 @@ public interface HoaDonChiTietRepository extends JpaRepository<HoaDonChiTiet, UU
 """)
     List<hoaDonChiTietReponse> getByMaHoaDonChiTiet(String ma);
 
+
+
+
+
+
 }

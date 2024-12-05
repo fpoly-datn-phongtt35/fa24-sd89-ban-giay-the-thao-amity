@@ -2,11 +2,16 @@ package org.example.backend.controllers.admin.traHang;
 
 import org.example.backend.constants.Status;
 import org.example.backend.dto.request.traHang.traHangRequest;
+import org.example.backend.dto.response.quanLyDonHang.hoaDonChiTietReponse;
 import org.example.backend.dto.response.traHang.TraHangResponse;
+import org.example.backend.models.HoaDon;
 import org.example.backend.models.SanPhamChiTiet;
 import org.example.backend.models.TraHang;
 import org.example.backend.repositories.SanPhamChiTietRepository;
 import org.example.backend.repositories.TraHangRepository;
+import org.example.backend.services.HoaDonChiTietService;
+import org.example.backend.services.HoaDonService;
+import org.example.backend.services.TraHangService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +30,10 @@ public class traHangController {
     @Autowired
     SanPhamChiTietRepository sanPhamChiTietRepository;
     /// trar hang tai quay
-
+    @Autowired
+    private HoaDonChiTietService hoaDonChiTietService;
+    @Autowired
+    private TraHangService traHangService;
     @PostMapping(PRODUCT_RETURN_CREATE_CLIENT)
     public ResponseEntity<?> traHang(@RequestBody traHangRequest request) {
         // 1. Tìm sản phẩm chi tiết
@@ -83,54 +91,22 @@ public class traHangController {
         return ResponseEntity.ok(listTraHang);
     }
 
-    // tra hang client
-
-//    @PostMapping(PRODUCT_RETURN_CREATE_CLIENT)
-//    public ResponseEntity<?> traHang_client(@RequestBody traHangRequest request) {
-//        // 1. Tìm sản phẩm chi tiết
-//        Optional<SanPhamChiTiet> optionalSanPhamChiTiet = sanPhamChiTietRepository.findById(request.getId());
-//        if (optionalSanPhamChiTiet.isEmpty()) {
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Không tìm thấy sản phẩm chi tiết");
-//        }
-//        SanPhamChiTiet sanPhamChiTiet = optionalSanPhamChiTiet.get();
-//
-//        // 2. Tạo phiếu trả hàng
-//        TraHang traHang = TraHang.builder()
-//                .idSpct(sanPhamChiTiet)
-//                .soLuong(request.getSoLuong())
-//                .lyDo(request.getLyDo())
-//                .nguoiTao(request.getNguoiTao())
-//                .trangThai("Đang xử lý") // hoặc "Hoàn tất" nếu xử lý ngay
-//                .build();
-//        traHangRepository.save(traHang);
-//
-//        // 3. Cập nhật số lượng trong SanPhamChiTiet
-//        sanPhamChiTiet.setSoLuong(sanPhamChiTiet.getSoLuong() + request.getSoLuong());
-//        sanPhamChiTiet.setSoLuongTra(
-//                sanPhamChiTiet.getSoLuongTra() != null ?
-//                        sanPhamChiTiet.getSoLuongTra() + request.getSoLuong() :
-//                        request.getSoLuong()
-//        );
-//        sanPhamChiTietRepository.save(sanPhamChiTiet);
-//
-//        return ResponseEntity.ok("Tạo phiếu trả hàng thành công");
-//    }
-//
-
-//
-//    @PutMapping(PRODUCT_RETURN_UPDATE_CLIENT)
-//    public ResponseEntity<?> updateTraHangStatus(@PathVariable UUID id, @RequestBody String trangThai) {
-//        Optional<TraHang> optionalTraHang = traHangRepository.findById(id);
-//        if (optionalTraHang.isEmpty()) {
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Không tìm thấy phiếu trả hàng");
-//        }
-//
-//        TraHang traHang = optionalTraHang.get();
-//        traHang.setTrangThai(trangThai);
-//        traHangRepository.save(traHang);
-//
-//        return ResponseEntity.ok("Cập nhật trạng thái thành công");
-//    }
-
+//    // API để lấy hóa đơn theo ID khách hàng
+    @GetMapping(PRODUCT_RETURN_GET_BY_IDKH)
+    public ResponseEntity<List<hoaDonChiTietReponse>> getHoaDonByIdNguoiDung(@PathVariable UUID idNguoiDung) {
+        List<hoaDonChiTietReponse> hoaDonChiTietList = traHangService.getHoaDonByIdNguoiDung(idNguoiDung);
+        if (hoaDonChiTietList.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(hoaDonChiTietList);
+    }
+    @GetMapping(PRODUCT_RETURN_DETAIL_BY_ID)
+    public ResponseEntity<List<hoaDonChiTietReponse>> getHoaDonCtById(@PathVariable UUID id) {
+        List<hoaDonChiTietReponse> hoaDonChiTietList = traHangService.getHoaDonCtById(id);
+        if (hoaDonChiTietList.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(hoaDonChiTietList);
+    }
 
 }

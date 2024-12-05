@@ -1,5 +1,6 @@
 package org.example.backend.repositories;
 
+import org.example.backend.dto.response.quanLyDonHang.hoaDonChiTietReponse;
 import org.example.backend.models.TraHang;
 import org.example.backend.dto.response.traHang.TraHangResponse;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -33,7 +34,27 @@ public interface TraHangRepository extends JpaRepository<TraHang, UUID> {
 """)
     List<TraHangResponse> getAllTraHangClient(String nguoiTao);
 
+    //    // Tìm các hóa đơn kh đã mua theo ID người dùng
+    @Query("""
+    select new org.example.backend.dto.response.quanLyDonHang.hoaDonChiTietReponse(
+        hdct.id, spct.id, hd.id, spct.idSanPham.ten, spct.idMauSac.ten, spct.idKichThuoc.ten, spct.idHang.ten,
+        hdct.soLuong, hdct.gia, spct.hinhAnh, hdct.ngayTao, hdct.deleted)
+    from HoaDonChiTiet hdct
+    join hdct.idHoaDon hd
+    join hdct.idSpct spct
+    where hdct.deleted = false and hd.idNguoiDung.id = :idNguoiDung
+""")
+    List<hoaDonChiTietReponse> getHoaDonByIdKh(UUID idNguoiDung);
 
-
+    @Query("""
+    select new org.example.backend.dto.response.quanLyDonHang.hoaDonChiTietReponse(
+        hdct.id, spct.id, hd.id, spct.idSanPham.ten, spct.idMauSac.ten, spct.idKichThuoc.ten, spct.idHang.ten,
+        hdct.soLuong, hdct.gia, spct.hinhAnh, hdct.ngayTao, hdct.deleted)
+    from HoaDonChiTiet hdct
+    join hdct.idHoaDon hd
+    join hdct.idSpct spct
+    where hdct.deleted = false and hdct.id =:id
+""")
+    List<hoaDonChiTietReponse> getHoaDonCtByID(UUID id);
 
 }
