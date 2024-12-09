@@ -24,7 +24,7 @@ public class phieuGiamGiaRequestAdd {
 	private Instant ngayBatDau;
 	private Instant ngayKetThuc;
 	private Integer soLuong;
-	private String dieuKien;
+	private Integer dieuKien;
 	private String trangThai;
 
 }

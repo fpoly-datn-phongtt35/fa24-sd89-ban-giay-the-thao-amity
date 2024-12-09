@@ -4,6 +4,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.example.backend.common.PageResponse;
 import org.example.backend.common.ResponseData;
+import org.example.backend.constants.Constant;
 import org.example.backend.constants.api.Admin;
 import org.example.backend.dto.request.phieuGiamGia.phieuGiamGiaRequestAdd;
 import org.example.backend.dto.request.phieuGiamGia.phieuGiamGiaRequestUpdate;
@@ -39,16 +40,17 @@ import static org.example.backend.constants.api.Admin.VOUCHER_EXCEL;
 import static org.example.backend.constants.api.Admin.VOUCHER_GET_BY_ID;
 import static org.example.backend.constants.api.Admin.VOUCHER_SEARCH;
 import static org.example.backend.constants.api.Admin.VOUCHER_UPDATE;
+import static org.example.backend.constants.api.Admin.VOUCHER_UPDATE_STATUS;
 
 @RestController
 public class PhieuGiamGiaController {
 
-//    @Autowired
+    //    @Autowired
     final PhieuGiamGiaService PGGService;
 
     final phieuGiamGiaMapper PGGMapper;
 
-    public PhieuGiamGiaController(PhieuGiamGiaService PGGService,phieuGiamGiaMapper PGGMapper){
+    public PhieuGiamGiaController(PhieuGiamGiaService PGGService, phieuGiamGiaMapper PGGMapper) {
         this.PGGService = PGGService;
         this.PGGMapper = PGGMapper;
     }
@@ -64,8 +66,8 @@ public class PhieuGiamGiaController {
                                            @RequestParam(required = false) BigDecimal maxGia,
 //                                           @RequestParam(value = "loai",required = false, defaultValue = "0") Integer loai,
                                            @RequestParam(required = false, defaultValue = "1") Integer sapXep
-    ){
-        PageResponse<List<phieuGiamGiaReponse>> PGGPage = PGGService.searchPGG(page, itemsPerPage,keyFind,trangThai,sapXep,minNgay,maxNgay,minGia,maxGia);
+    ) {
+        PageResponse<List<phieuGiamGiaReponse>> PGGPage = PGGService.searchPGG(page, itemsPerPage, keyFind, trangThai, sapXep, minNgay, maxNgay, minGia, maxGia);
         ResponseData<PageResponse<List<phieuGiamGiaReponse>>> responseData = ResponseData.<PageResponse<List<phieuGiamGiaReponse>>>builder()
                 .message("Get all voucher done")
                 .status(HttpStatus.OK.value())
@@ -78,7 +80,25 @@ public class PhieuGiamGiaController {
     @PostMapping(VOUCHER_CREATE)
     public ResponseEntity<?> createVoucher(@RequestBody phieuGiamGiaRequestAdd PGGadd) {
         PhieuGiamGia pgg = new PhieuGiamGia();
+
+        // Xác định trạng thái dựa trên thời gian
+        Instant now = Constant.CURRENT_TIME;
+        String trangThai;
+
+        if (now.isBefore(PGGadd.getNgayBatDau())) {
+            trangThai = "Sắp diễn ra";
+        } else if (now.isAfter(PGGadd.getNgayBatDau()) && now.isBefore(PGGadd.getNgayKetThuc())) {
+            trangThai = "Đang diễn ra";
+        } else {
+            trangThai = "Đã kết thúc";
+        }
+
+        // Set trạng thái vào request trước khi mapping
+        PGGadd.setTrangThai(trangThai);
+
+        // Map các thuộc tính từ request vào entity
         PGGMapper.createPhieuGiamGiaFromDto(PGGadd, pgg);
+
         return ResponseEntity.ok().body(PGGService.save(pgg));
     }
 
@@ -122,6 +142,26 @@ public class PhieuGiamGiaController {
         if (pgg != null) {
             PGGService.setDeletedPhieuGiamGia(!pgg.getDeleted(), id);
             return ResponseEntity.ok().body("Set deleted id: " + id);
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    @GetMapping(VOUCHER_UPDATE_STATUS)
+    public ResponseEntity<?> setVoucherUpdateStatus(@PathVariable UUID id) {
+        PhieuGiamGia pgg = PGGService.findById(id).orElse(null);
+        if (pgg != null) {
+            String currentStatus = pgg.getTrangThai();
+            Instant now = Instant.now();
+
+            if ("Sắp diễn ra".equals(currentStatus)) {
+                PGGService.updateTrangThaiAndNgayKetThuc("Đã hủy",pgg.getNgayKetThuc(), id);
+                return ResponseEntity.ok().body("Voucher id: " + id + " đã được hủy.");
+            } else if ("Đang diễn ra".equals(currentStatus)) {
+                PGGService.updateTrangThaiAndNgayKetThuc("Đã kết thúc", now, id);
+                return ResponseEntity.ok().body("Voucher id: " + id + " đã kết thúc.");
+            } else {
+                return ResponseEntity.badRequest().body("Không thể thay đổi trạng thái của voucher id: " + id);
+            }
         }
         return ResponseEntity.notFound().build();
     }

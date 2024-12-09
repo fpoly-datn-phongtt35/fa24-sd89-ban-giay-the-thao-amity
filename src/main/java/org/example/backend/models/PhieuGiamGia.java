@@ -76,7 +76,7 @@ public class PhieuGiamGia {
 
     @Nationalized
     @Column(name = "dieu_kien")
-    private String dieuKien;
+    private Integer dieuKien;
 
     @Nationalized
     @Column(name = "nguoi_tao", length = 50)

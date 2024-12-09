@@ -39,23 +39,14 @@ public interface PhieuGiamGiaRepository extends JpaRepository<PhieuGiamGia, UUID
     @Transactional
     void updateDetailPhieuGiamGia(Boolean deleted, UUID id);
 
-    @Query("SELECT new org.example.backend.dto.response.phieuGiamGia.phieuGiamGiaReponse(" +
-            "p.id, p.ma, p.ten, p.loai, p.giaTri, p.giamToiDa, p.mucDo, p.ngayBatDau, p.ngayKetThuc, p.soLuong, p.dieuKien, p.trangThai) " +
-            "FROM PhieuGiamGia p " +
-            "WHERE p.deleted = false AND (p.ma LIKE :find OR p.ten LIKE :find OR p.dieuKien LIKE :find)")
-    List<phieuGiamGiaReponse> searchPGG(String find);
-
-    @Query("SELECT new org.example.backend.dto.response.phieuGiamGia.phieuGiamGiaReponse(" +
-            "p.id, p.ma, p.ten, p.loai, p.giaTri, p.giamToiDa, p.mucDo, p.ngayBatDau, p.ngayKetThuc, p.soLuong, p.dieuKien, p.trangThai) " +
-            "FROM PhieuGiamGia p " +
-            "WHERE p.deleted = false AND p.loai = :loai AND (p.ma LIKE :find OR p.ten LIKE :find OR p.dieuKien LIKE :find)")
-    List<phieuGiamGiaReponse> searchByLoaiAndFind(Boolean loai, String find);
-
-    @Query("SELECT new org.example.backend.dto.response.phieuGiamGia.phieuGiamGiaReponse(" +
-            "p.id, p.ma, p.ten, p.loai, p.giaTri, p.giamToiDa, p.mucDo, p.ngayBatDau, p.ngayKetThuc, p.soLuong, p.dieuKien, p.trangThai) " +
-            "FROM PhieuGiamGia p " +
-            "WHERE p.deleted = false AND p.trangThai LIKE :trangThai AND (p.ma LIKE :find OR p.ten LIKE :find OR p.dieuKien LIKE :find)")
-    List<phieuGiamGiaReponse> searchByTrangThaiAndFind(String trangThai, String find);
+    @Query("""
+        update PhieuGiamGia p 
+        set p.trangThai = :trangThai, p.ngayKetThuc = :ngayKetThuc 
+        where p.id = :id
+    """)
+    @Modifying
+    @Transactional
+    void updateTrangThaiAndNgayKetThuc(String trangThai, Instant ngayKetThuc, UUID id);
 
     @Query("""
             select new org.example.backend.dto.response.phieuGiamGia.phieuGiamGiaReponse(
