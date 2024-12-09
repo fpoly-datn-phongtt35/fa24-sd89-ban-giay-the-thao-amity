@@ -51,6 +51,10 @@ public class PhieuGiamGiaService extends GenericServiceImpl<PhieuGiamGia , UUID>
         PGGrepository.updateDetailPhieuGiamGia(deleted, id);
     }
 
+    public void updateTrangThaiAndNgayKetThuc(String trangThai, Instant ngayKetThuc, UUID id) {
+        PGGrepository.updateTrangThaiAndNgayKetThuc(trangThai, ngayKetThuc, id);
+    }
+
     public PageResponse<List<phieuGiamGiaReponse>> searchPGG(int page, int itemsPerPage,String keyFind,
       String trangThai, Integer sapXep, Instant minNgay, Instant maxNgay, BigDecimal minGia, BigDecimal maxGia) {
         // Tạo đối tượng Sort dựa trên giá trị của tham số sapXep
@@ -67,6 +71,7 @@ public class PhieuGiamGiaService extends GenericServiceImpl<PhieuGiamGia , UUID>
                 sort = Sort.by(Sort.Order.desc("ngaySua")); // sapXep = 3, sắp xếp theo ngaySua giảm dần
                 break;
             default:
+                sort = Sort.by(Sort.Order.desc("ngayTao"));
                 break; // Không sắp xếp nếu sapXep không có giá trị mong đợi
         }
 
@@ -124,7 +129,7 @@ public class PhieuGiamGiaService extends GenericServiceImpl<PhieuGiamGia , UUID>
             row.createCell(7).setCellValue(voucher.getNgayBatDau() != null ? voucher.getNgayBatDau().toString() : "Không xác định");
             row.createCell(8).setCellValue(voucher.getNgayKetThuc() != null ? voucher.getNgayKetThuc().toString() : "Không xác định");
             row.createCell(9).setCellValue(voucher.getSoLuong() != null ? voucher.getSoLuong() : 0);
-            row.createCell(10).setCellValue(voucher.getDieuKien() != null ? voucher.getDieuKien() : "Không xác định");
+            row.createCell(10).setCellValue(voucher.getDieuKien() != null ? voucher.getDieuKien() : 0);
             row.createCell(11).setCellValue(voucher.getTrangThai() != null ? voucher.getTrangThai() : "Không xác định");
         }
 
