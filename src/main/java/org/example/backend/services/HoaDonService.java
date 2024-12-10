@@ -60,7 +60,8 @@ public class HoaDonService extends GenericServiceImpl<HoaDon, UUID> {
     public PageResponse<List<QuanLyDonHangRespose>> searchHoaDon(int page, int itemsPerPage, String keyFind,
                                                              String loai, Instant minNgay, Instant maxNgay, BigDecimal minGia, BigDecimal maxGia,String status) {
         Pageable pageable = PageRequest.of(page, itemsPerPage);
-        Page<QuanLyDonHangRespose> HDPage = hoaDonRepository.searchHoaDon(pageable,keyFind,loai,minNgay,maxNgay,minGia,maxGia,status);
+        String choXacNhan = "Chờ Xác Nhận";
+        Page<QuanLyDonHangRespose> HDPage = hoaDonRepository.searchHoaDon(pageable,keyFind,loai,minNgay,maxNgay,minGia,maxGia,status,choXacNhan);
         return PageResponse.<List<QuanLyDonHangRespose>>builder()
                 .page(HDPage.getNumber())
                 .size(HDPage.getSize())
