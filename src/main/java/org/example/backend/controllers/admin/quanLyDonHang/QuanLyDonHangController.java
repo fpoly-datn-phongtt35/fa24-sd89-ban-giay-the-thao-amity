@@ -6,6 +6,7 @@ import org.example.backend.common.ResponseData;
 import org.example.backend.dto.response.dotGiamGia.DotGiamGiaResponse;
 import org.example.backend.dto.response.quanLyDonHang.QuanLyDonHangRespose;
 import org.example.backend.models.DotGiamGia;
+import org.example.backend.models.HoaDon;
 import org.example.backend.repositories.HoaDonChiTietRepository;
 import org.example.backend.repositories.HoaDonRepository;
 import org.example.backend.services.HoaDonChiTietService;
@@ -46,7 +47,7 @@ public class QuanLyDonHangController {
     }
     @GetMapping(BILL_GET_BY_ID)
     public ResponseEntity<?> getHoaDonById(@PathVariable UUID id) {
-        QuanLyDonHangRespose HoaDon = hoaDonService.getHoaDonByID(id);
+        HoaDon HoaDon = hoaDonRepository.findById(id).orElse(null);
         if (HoaDon != null) {
             return ResponseEntity.ok().body(HoaDon);
         }
