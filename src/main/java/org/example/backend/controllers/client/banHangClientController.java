@@ -5,14 +5,19 @@ import org.example.backend.common.ResponseData;
 import org.example.backend.constants.api.Admin;
 import org.example.backend.dto.request.phieuGiamGia.phieuGiamGiaRequestAdd;
 import org.example.backend.dto.response.banHang.banHangClientResponse;
+import org.example.backend.dto.response.quanLyDonHang.hoaDonChiTietReponse;
+import org.example.backend.dto.response.quanLyDonHang.hoaDonClientResponse;
 import org.example.backend.models.GioHang;
 import org.example.backend.models.GioHangChiTiet;
+import org.example.backend.models.HoaDon;
 import org.example.backend.models.PhieuGiamGia;
 import org.example.backend.repositories.GioHangChiTietRepository;
 import org.example.backend.repositories.SanPhamChiTietRepository;
 import org.example.backend.services.GioHangChiTietService;
 import org.example.backend.services.GioHangService;
+import org.example.backend.services.HoaDonChiTietService;
 import org.example.backend.services.SanPhamChiTietService;
+import org.example.backend.services.TraHangService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -47,6 +52,10 @@ public class banHangClientController {
     GioHangService gioHangService;
 //    @Autowired
 //    GioHangChiTietService gioHangChiTietService;
+    @Autowired
+    private TraHangService traHangService;
+    @Autowired
+    private HoaDonChiTietService hoaDonChiTietService;
 
     @GetMapping(Admin.SELL_CLIENT_GET_ALL)
     public ResponseEntity<?> getbanHangClient(@RequestParam(value = "itemsPerPage", defaultValue = "5") int itemsPerPage,
@@ -151,6 +160,30 @@ public class banHangClientController {
     ) {
         List<banHangClientResponse> sanPhamGiamGia = sanPhamChiTietService.getSanPhamGiamGia(trangThais, id);
         return ResponseEntity.ok(sanPhamGiamGia);
+    }
+
+       // API để lấy hóa đơn theo ID khách hàng
+    @GetMapping(PRODUCT_RETURN_GET_BY_IDKH)
+    public ResponseEntity<List<hoaDonClientResponse>> getHoaDonByIdNguoiDung(@PathVariable UUID idNguoiDung) {
+        List<hoaDonClientResponse> hoaDonChiTietList = traHangService.getHoaDonByIdNguoiDung(idNguoiDung);
+        if (hoaDonChiTietList.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(hoaDonChiTietList);
+    }
+
+    
+    @GetMapping(PRODUCT_RETURN_DETAIL_BY_ID)
+    public ResponseEntity<hoaDonClientResponse> getHoaDonCtById(
+            @RequestParam(value = "itemsPerPage", defaultValue = "5") int itemsPerPage,
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @PathVariable UUID id
+    ) {
+        hoaDonClientResponse hoaDonChiTiet = traHangService.getHoaDonById(id);
+        if (hoaDonChiTiet != null) {
+            return ResponseEntity.ok().body(hoaDonChiTiet);
+        }
+        return ResponseEntity.notFound().build();
     }
 
 }
