@@ -91,22 +91,22 @@ public class traHangController {
         return ResponseEntity.ok(listTraHang);
     }
 
-//    // API để lấy hóa đơn theo ID khách hàng
-    @GetMapping(PRODUCT_RETURN_GET_BY_IDKH)
-    public ResponseEntity<List<hoaDonChiTietReponse>> getHoaDonByIdNguoiDung(@PathVariable UUID idNguoiDung) {
-        List<hoaDonChiTietReponse> hoaDonChiTietList = traHangService.getHoaDonByIdNguoiDung(idNguoiDung);
-        if (hoaDonChiTietList.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.ok(hoaDonChiTietList);
-    }
-    @GetMapping(PRODUCT_RETURN_DETAIL_BY_ID)
-    public ResponseEntity<List<hoaDonChiTietReponse>> getHoaDonCtById(@PathVariable UUID id) {
-        List<hoaDonChiTietReponse> hoaDonChiTietList = traHangService.getHoaDonCtById(id);
-        if (hoaDonChiTietList.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.ok(hoaDonChiTietList);
-    }
+// //    // API để lấy hóa đơn theo ID khách hàng
+//     @GetMapping(PRODUCT_RETURN_GET_BY_IDKH)
+//     public ResponseEntity<List<hoaDonChiTietReponse>> getHoaDonByIdNguoiDung(@PathVariable UUID idNguoiDung) {
+//         List<hoaDonChiTietReponse> hoaDonChiTietList = traHangService.getHoaDonByIdNguoiDung(idNguoiDung);
+//         if (hoaDonChiTietList.isEmpty()) {
+//             return ResponseEntity.noContent().build();
+//         }
+//         return ResponseEntity.ok(hoaDonChiTietList);
+// //     }
+//     @GetMapping(PRODUCT_RETURN_DETAIL_BY_ID)
+//     public ResponseEntity<List<hoaDonChiTietReponse>> getHoaDonCtById(@PathVariable UUID id) {
+//         List<hoaDonChiTietReponse> hoaDonChiTietList = traHangService.getHoaDonCtById(id);
+//         if (hoaDonChiTietList.isEmpty()) {
+//             return ResponseEntity.noContent().build();
+//         }
+//         return ResponseEntity.ok(hoaDonChiTietList);
+//     }
 
 }
