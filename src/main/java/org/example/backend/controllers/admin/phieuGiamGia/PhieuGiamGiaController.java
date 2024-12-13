@@ -38,6 +38,7 @@ import static org.example.backend.constants.api.Admin.VOUCHER_CREATE;
 import static org.example.backend.constants.api.Admin.VOUCHER_DELETE;
 import static org.example.backend.constants.api.Admin.VOUCHER_EXCEL;
 import static org.example.backend.constants.api.Admin.VOUCHER_GET_BY_ID;
+import static org.example.backend.constants.api.Admin.VOUCHER_GET_BY_ID_KH;
 import static org.example.backend.constants.api.Admin.VOUCHER_SEARCH;
 import static org.example.backend.constants.api.Admin.VOUCHER_UPDATE;
 import static org.example.backend.constants.api.Admin.VOUCHER_UPDATE_STATUS;
@@ -134,6 +135,12 @@ public class PhieuGiamGiaController {
             return ResponseEntity.ok().body(pggReponse);
         }
         return ResponseEntity.notFound().build();
+    }
+
+    @GetMapping(VOUCHER_GET_BY_ID_KH)
+    public ResponseEntity<List<phieuGiamGiaReponse>> getVoucherByIdKH(@PathVariable UUID id) {
+        List<phieuGiamGiaReponse> pgg = PGGService.getPGGGetAllbyIDKH(id);
+        return ResponseEntity.ok(pgg);
     }
 
     @GetMapping(VOUCHER_DELETE)

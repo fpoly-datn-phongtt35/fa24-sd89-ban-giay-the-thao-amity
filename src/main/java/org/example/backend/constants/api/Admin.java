@@ -112,6 +112,7 @@ public class Admin {
     public static final String VOUCHER = BASE + "/voucher";
     public static final String VOUCHER_GET_ALL = VOUCHER + "/all";
     public static final String VOUCHER_GET_BY_ID = VOUCHER + "/{id}";
+    public static final String VOUCHER_GET_BY_ID_KH = VOUCHER + "/kh/{id}";
     public static final String VOUCHER_CREATE = VOUCHER + "/create";
     public static final String VOUCHER_UPDATE = VOUCHER + "/update/{id}";
     public static final String VOUCHER_DELETE = VOUCHER + "/delete/{id}";

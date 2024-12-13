@@ -25,7 +25,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @Entity
-@Table(name = "phieu_giam_gia_chi_tiet")
+@Table(name = "phieu_giam_gia_nguoi_dung")
 public class PhieuGiamGiaChiTiet {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
