@@ -12,14 +12,9 @@ import org.example.backend.dto.request.banHang.*;
 import org.example.backend.dto.response.banHang.TrangThaiRespon;
 import org.example.backend.dto.response.banHang.banHangClientResponse;
 import org.example.backend.dto.response.phieuGiamGia.phieuGiamGiaReponse;
-import org.example.backend.models.HoaDon;
-import org.example.backend.models.HoaDonChiTiet;
-import org.example.backend.models.PhieuGiamGia;
-import org.example.backend.models.SanPhamChiTiet;
-import org.example.backend.repositories.HoaDonChiTietRepository;
-import org.example.backend.repositories.HoaDonRepository;
-import org.example.backend.repositories.PhieuGiamGiaRepository;
-import org.example.backend.repositories.SanPhamChiTietRepository;
+import org.example.backend.models.*;
+import org.example.backend.repositories.*;
+import org.example.backend.services.DotGiamGiaSpctService;
 import org.example.backend.services.SanPhamChiTietService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -37,6 +32,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.example.backend.constants.Status.CHO_THANH_TOAN;
@@ -56,8 +52,12 @@ public class BanHangController {
     SanPhamChiTietService sanPhamChiTietService;
     @Autowired
     VietQrService vietQrService;
+    @Autowired
+    private DotGiamGiaSpctService dotGiamGiaSpctService;
+    @Autowired
+    private DotGiamGiaSpctRepository dotGiamGiaSpctRepository;
 
-//    @GetMapping(Admin.SELL_GET_ALL)
+    //    @GetMapping(Admin.SELL_GET_ALL)
 //    public ResponseEntity<?> getAll() {
 //        return ResponseEntity.ok(hoaDonRepository.getAllBanHang(CHO_XAC_NHAN_HOA_DON));
 //    }
@@ -104,39 +104,65 @@ public ResponseEntity<?> create() {
             return ResponseEntity.ok(hoaDonRepository.save(hoaDon));
     }
 
-
     @PostMapping(Admin.SELL_DETAIL_CREATE)
-
-    public ResponseEntity<?> detailCreate(@RequestBody List<HoaDonChiTietRequest> list ) {
-        try{
-
-            if(list.size()>0){
-
+    public ResponseEntity<?> detailCreate(@RequestBody List<HoaDonChiTietRequest> list) {
+        try {
+            if (list.size() > 0) {
                 for (HoaDonChiTietRequest hdct : list) {
+                    // Tìm hóa đơn và sản phẩm chi tiết
                     HoaDon hd = hoaDonRepository.findById(hdct.getIdHoaDon()).orElse(null);
-
                     SanPhamChiTiet spct = sanPhamChiTietRepository.findById(hdct.getIdSpct()).orElse(null);
-                    HoaDonChiTiet hoaDonChiTiet = new HoaDonChiTiet();
 
-                    hoaDonChiTiet.setIdHoaDon(hd);
-                    hoaDonChiTiet.setIdSpct(spct);
-//                    hoaDonChiTiet.setNguoiTao(hdct.getIdNguoiDung());
-                    hoaDonChiTiet.setSoLuong(hdct.getSoLuong());
-                    hoaDonChiTiet.setGia(hdct.getGia());
-                    hoaDonChiTiet.setTrangThai(hdct.getTrangThai());
-                    hoaDonChiTiet.setGiaGiam(hdct.getGiaGiam());
+                    if (hd != null && spct != null) {
+                        HoaDonChiTiet hoaDonChiTiet = new HoaDonChiTiet();
+                        hoaDonChiTiet.setIdHoaDon(hd);
+                        hoaDonChiTiet.setIdSpct(spct);
+                        hoaDonChiTiet.setSoLuong(hdct.getSoLuong());
+                        hoaDonChiTiet.setGia(hdct.getGia());
+                        hoaDonChiTiet.setTrangThai(hdct.getTrangThai());
 
-                    hoaDonChiTietRepository.save(hoaDonChiTiet);
+                        // Tìm tất cả các đợt giảm giá đang hoạt động
+                        List<DotGiamGiaSpct> discounts =
+                                dotGiamGiaSpctRepository.findActiveDiscountsByProductDetail(hdct.getIdSpct());
+                        System.out.println("discount: " + discounts);
+
+                        BigDecimal giaGiamTotNhat = BigDecimal.ZERO;
+
+                        // Tính toán đợt giảm giá tốt nhất
+                        for (DotGiamGiaSpct discount : discounts) {
+                            DotGiamGia dotGiamGia = discount.getIdDotGiamGia();
+                            BigDecimal giaGiamHienTai;
+
+                            if (!dotGiamGia.getLoai()) { // Giảm giá theo tiền mawjt (loai = false)
+                                giaGiamHienTai = hdct.getGia().multiply(dotGiamGia.getGiaTri())
+                                        .divide(BigDecimal.valueOf(100));
+                            } else { // Giảm giá theo tiền mặt
+                                giaGiamHienTai = dotGiamGia.getGiaTri();
+                            }
+
+                            // So sánh và chọn giá giảm lớn nhất
+                            if (giaGiamHienTai.compareTo(giaGiamTotNhat) > 0) {
+                                giaGiamTotNhat = giaGiamHienTai;
+                            }
+                        }
+
+                        // Set giá giảm tốt nhất vào hóa đơn chi tiết
+                        hoaDonChiTiet.setGiaGiam(giaGiamTotNhat);
+
+                        // Lưu hóa đơn chi tiết
+                        hoaDonChiTietRepository.save(hoaDonChiTiet);
+                    }
                 }
-
             }
-
-        }catch (Exception e){
+            return ResponseEntity.ok("Chi tiết hóa đơn đã được tạo thành công!");
+        } catch (Exception e) {
             e.printStackTrace();
-
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Có lỗi xảy ra khi tạo chi tiết hóa đơn");
         }
-        return null;
     }
+
+
+
 
     @PutMapping(Admin.SELL_UPDATE)
     public ResponseEntity<?> update(@RequestBody BanHangRequest request ) {
