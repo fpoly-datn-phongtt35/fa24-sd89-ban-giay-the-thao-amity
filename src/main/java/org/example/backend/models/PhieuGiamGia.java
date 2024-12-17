@@ -22,7 +22,6 @@ import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.UUID;
 
-import static org.example.backend.constants.Constant.CURRENT_TIME;
 
 @Builder
 @AllArgsConstructor
@@ -105,7 +104,7 @@ public class PhieuGiamGia {
     @PrePersist
     public void prePersist() {
         // Set default creation and modification dates
-        this.ngayTao = CURRENT_TIME;
+        this.ngayTao = Instant.now();
         this.deleted = Boolean.FALSE;
 //        this.trangThai = Status.HOAT_DONG;
 //        this.hinhThuc = Status.TAT_CA;
@@ -115,7 +114,7 @@ public class PhieuGiamGia {
     @PreUpdate
     public void preUpdate() {
         // Update modification date when the record is updated
-        this.ngaySua = CURRENT_TIME;
+        this.ngaySua = Instant.now();
     }
 
 }

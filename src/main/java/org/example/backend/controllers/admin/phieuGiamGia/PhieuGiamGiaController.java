@@ -46,7 +46,7 @@ import static org.example.backend.constants.api.Admin.VOUCHER_UPDATE_STATUS;
 @RestController
 public class PhieuGiamGiaController {
 
-    //    @Autowired
+    // @Autowired
     final PhieuGiamGiaService PGGService;
 
     final phieuGiamGiaMapper PGGMapper;
@@ -58,18 +58,20 @@ public class PhieuGiamGiaController {
 
     @GetMapping(Admin.VOUCHER_GET_ALL)
     public ResponseEntity<?> getALlVoucher(@RequestParam(value = "itemsPerPage", defaultValue = "5") int itemsPerPage,
-                                           @RequestParam(value = "page", defaultValue = "0") int page,
-                                           @RequestParam(required = false, defaultValue = "") String keyFind,
-                                           @RequestParam(required = false, defaultValue = "") String trangThai,
-                                           @RequestParam(required = false) Instant minNgay,
-                                           @RequestParam(required = false) Instant maxNgay,
-                                           @RequestParam(required = false) BigDecimal minGia,
-                                           @RequestParam(required = false) BigDecimal maxGia,
-//                                           @RequestParam(value = "loai",required = false, defaultValue = "0") Integer loai,
-                                           @RequestParam(required = false, defaultValue = "1") Integer sapXep
-    ) {
-        PageResponse<List<phieuGiamGiaReponse>> PGGPage = PGGService.searchPGG(page, itemsPerPage, keyFind, trangThai, sapXep, minNgay, maxNgay, minGia, maxGia);
-        ResponseData<PageResponse<List<phieuGiamGiaReponse>>> responseData = ResponseData.<PageResponse<List<phieuGiamGiaReponse>>>builder()
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(required = false, defaultValue = "") String keyFind,
+            @RequestParam(required = false, defaultValue = "") String trangThai,
+            @RequestParam(required = false) Instant minNgay,
+            @RequestParam(required = false) Instant maxNgay,
+            @RequestParam(required = false) BigDecimal minGia,
+            @RequestParam(required = false) BigDecimal maxGia,
+            // @RequestParam(value = "loai",required = false, defaultValue = "0") Integer
+            // loai,
+            @RequestParam(required = false, defaultValue = "1") Integer sapXep) {
+        PageResponse<List<phieuGiamGiaReponse>> PGGPage = PGGService.searchPGG(page, itemsPerPage, keyFind, trangThai,
+                sapXep, minNgay, maxNgay, minGia, maxGia);
+        ResponseData<PageResponse<List<phieuGiamGiaReponse>>> responseData = ResponseData
+                .<PageResponse<List<phieuGiamGiaReponse>>>builder()
                 .message("Get all voucher done")
                 .status(HttpStatus.OK.value())
                 .data(PGGPage)
@@ -83,7 +85,7 @@ public class PhieuGiamGiaController {
         PhieuGiamGia pgg = new PhieuGiamGia();
 
         // Xác định trạng thái dựa trên thời gian
-        Instant now = Constant.CURRENT_TIME;
+        Instant now = Instant.now();
         String trangThai;
 
         if (now.isBefore(PGGadd.getNgayBatDau())) {
@@ -108,23 +110,35 @@ public class PhieuGiamGiaController {
             @PathVariable UUID id,
             @RequestBody phieuGiamGiaRequestUpdate PGGupdate) {
         Optional<PhieuGiamGia> existingPGG = PGGService.findById(id);
+        // Xác định trạng thái dựa trên thời gian
+        Instant now = Instant.now();
+        String trangThai;
+
+        if (now.isBefore(PGGupdate.getNgayBatDau())) {
+            trangThai = "Sắp diễn ra";
+        } else if (now.isAfter(PGGupdate.getNgayBatDau()) && now.isBefore(PGGupdate.getNgayKetThuc())) {
+            trangThai = "Đang diễn ra";
+        } else {
+            trangThai = "Đã kết thúc";
+        }
         if (existingPGG.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
         PhieuGiamGia pgg = existingPGG.get();
         PGGMapper.updatePhieuGiamGiaFromDto(PGGupdate, pgg);
+        pgg.setTrangThai(trangThai);
         return ResponseEntity.ok(PGGService.save(pgg));
     }
 
-//    @DeleteMapping(VOUCHER_DELETE)
-//    public ResponseEntity<?> deleteVoucher(@PathVariable UUID id) {
-//        Optional<PhieuGiamGia> pgg = PGGService.findById(id);
-//        if (pgg.isPresent()) {
-//            PGGService.deleteById(id);
-//            return ResponseEntity.ok().body("Delete id: " + id);
-//        }
-//        return ResponseEntity.notFound().build();
-//    }
+    // @DeleteMapping(VOUCHER_DELETE)
+    // public ResponseEntity<?> deleteVoucher(@PathVariable UUID id) {
+    // Optional<PhieuGiamGia> pgg = PGGService.findById(id);
+    // if (pgg.isPresent()) {
+    // PGGService.deleteById(id);
+    // return ResponseEntity.ok().body("Delete id: " + id);
+    // }
+    // return ResponseEntity.notFound().build();
+    // }
 
     @GetMapping(VOUCHER_GET_BY_ID)
     public ResponseEntity<?> getVoucherById(@PathVariable UUID id) {
@@ -161,7 +175,7 @@ public class PhieuGiamGiaController {
             Instant now = Instant.now();
 
             if ("Sắp diễn ra".equals(currentStatus)) {
-                PGGService.updateTrangThaiAndNgayKetThuc("Đã hủy",pgg.getNgayKetThuc(), id);
+                PGGService.updateTrangThaiAndNgayKetThuc("Đã hủy", pgg.getNgayKetThuc(), id);
                 return ResponseEntity.ok().body("Voucher id: " + id + " đã được hủy.");
             } else if ("Đang diễn ra".equals(currentStatus)) {
                 PGGService.updateTrangThaiAndNgayKetThuc("Đã kết thúc", now, id);
@@ -173,21 +187,24 @@ public class PhieuGiamGiaController {
         return ResponseEntity.notFound().build();
     }
 
-//    @GetMapping(VOUCHER_SEARCH)
-//    public ResponseEntity<?> SearchPGG(@PathVariable String find,
-//                                       @PathVariable String filterType
-//    ){
-//        String filter = "";
-//        if(filterType.equals("tienMat")) filter = "and p.loai = true ";
-//        if(filterType.equals("phanTram")) filter = "and p.loai = false";
-//        if(filterType.equals("dangHoatDong")) filter = "and p.trangThai like \"%Hoạt Động%\"";
-//        if(filterType.equals("ngungHoatDong")) filter = "and p.trangThai like \"%ngừng hoạt động%\"";
-//        List<phieuGiamGiaReponse> result = PGGService.searchPGG("%"+find+"%" , filterType);
-//        if(result.isEmpty()){
-//            return ResponseEntity.noContent().build();
-//        }
-//        return ResponseEntity.ok(result);
-//    }
+    // @GetMapping(VOUCHER_SEARCH)
+    // public ResponseEntity<?> SearchPGG(@PathVariable String find,
+    // @PathVariable String filterType
+    // ){
+    // String filter = "";
+    // if(filterType.equals("tienMat")) filter = "and p.loai = true ";
+    // if(filterType.equals("phanTram")) filter = "and p.loai = false";
+    // if(filterType.equals("dangHoatDong")) filter = "and p.trangThai like \"%Hoạt
+    // Động%\"";
+    // if(filterType.equals("ngungHoatDong")) filter = "and p.trangThai like
+    // \"%ngừng hoạt động%\"";
+    // List<phieuGiamGiaReponse> result = PGGService.searchPGG("%"+find+"%" ,
+    // filterType);
+    // if(result.isEmpty()){
+    // return ResponseEntity.noContent().build();
+    // }
+    // return ResponseEntity.ok(result);
+    // }
 
     @GetMapping(VOUCHER_EXCEL)
     public ResponseEntity<byte[]> exportExcel() {
@@ -204,4 +221,3 @@ public class PhieuGiamGiaController {
         }
     }
 }
-

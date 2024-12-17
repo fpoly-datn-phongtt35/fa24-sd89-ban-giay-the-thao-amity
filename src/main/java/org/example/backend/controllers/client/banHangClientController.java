@@ -10,13 +10,18 @@ import org.example.backend.dto.response.quanLyDonHang.hoaDonClientResponse;
 import org.example.backend.models.GioHang;
 import org.example.backend.models.GioHangChiTiet;
 import org.example.backend.models.HoaDon;
+import org.example.backend.models.LichSuHoaDon;
 import org.example.backend.models.PhieuGiamGia;
+import org.example.backend.models.ThanhToan;
 import org.example.backend.repositories.GioHangChiTietRepository;
+import org.example.backend.repositories.HoaDonRepository;
 import org.example.backend.repositories.SanPhamChiTietRepository;
 import org.example.backend.services.GioHangChiTietService;
 import org.example.backend.services.GioHangService;
 import org.example.backend.services.HoaDonChiTietService;
+import org.example.backend.services.LichSuHoaDonService;
 import org.example.backend.services.SanPhamChiTietService;
+import org.example.backend.services.ThanhToanService;
 import org.example.backend.services.TraHangService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -56,6 +61,13 @@ public class banHangClientController {
     private TraHangService traHangService;
     @Autowired
     private HoaDonChiTietService hoaDonChiTietService;
+    @Autowired
+    private LichSuHoaDonService lichSuHoaDonService;
+    @Autowired
+    private ThanhToanService thanhToanService;
+    @Autowired
+    private HoaDonRepository hoaDonRepository;
+
 
     @GetMapping(Admin.SELL_CLIENT_GET_ALL)
     public ResponseEntity<?> getbanHangClient(@RequestParam(value = "itemsPerPage", defaultValue = "5") int itemsPerPage,
@@ -184,6 +196,42 @@ public class banHangClientController {
             return ResponseEntity.ok().body(hoaDonChiTiet);
         }
         return ResponseEntity.notFound().build();
+    }
+
+    // set phuong thuc thanh toan bên client khi thanh toan
+    @PostMapping(SELL_CLIENT_SET_PHUONG_THUC_THANH_TOAN)
+    public ResponseEntity<ThanhToan> setPhuongThucThanhToan(
+            @RequestParam UUID idHoaDon,
+            @RequestParam String phuongThucThanhToan
+    ) {
+        ThanhToan thanhToan = thanhToanService.createThanhToan(idHoaDon, phuongThucThanhToan);
+        return ResponseEntity.ok(thanhToan);
+    }
+
+    // set lich su thanh toan bên client khi thanh toan
+    @PostMapping(SELL_CLIENT_SET_LICH_SU_HOA_DON)
+    public ResponseEntity<LichSuHoaDon> setLichSuHoaDon(
+            @RequestParam UUID idHoaDon,
+            @RequestParam String trangThai,
+            @RequestParam String moTa
+    ) {
+        HoaDon hoaDon = hoaDonRepository.findById(idHoaDon).orElse(null);
+        hoaDon.setTrangThai(trangThai);
+        hoaDonRepository.save(hoaDon);
+        LichSuHoaDon lichSuHoaDon = lichSuHoaDonService.createLichSuHoaDon(idHoaDon, trangThai, moTa);
+        return ResponseEntity.ok(lichSuHoaDon);
+    }
+
+    // set lich su thanh toan bên client khi thanh toan
+    @GetMapping(SELL_CLIENT_GET_LICH_SU_HOA_DON)
+    public ResponseEntity<List<LichSuHoaDon>> getLichSuHoaDon(
+            @PathVariable UUID id
+    ) {
+        List<LichSuHoaDon> lichSuHoaDon = lichSuHoaDonService.getLichSuHoaDonById(id);
+        if (lichSuHoaDon.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(lichSuHoaDon);
     }
 
 }

@@ -22,7 +22,6 @@ import org.hibernate.annotations.Nationalized;
 
 import java.util.UUID;
 
-import static org.example.backend.constants.Constant.CURRENT_TIME;
 import static org.example.backend.constants.Constant.CURRENT_UUID;
 
 @Builder
