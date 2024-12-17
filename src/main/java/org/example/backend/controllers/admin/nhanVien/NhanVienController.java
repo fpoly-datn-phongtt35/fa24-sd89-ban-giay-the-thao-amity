@@ -345,10 +345,8 @@
             if (matKhauNhapLai.trim().isEmpty()) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Mật khẩu nhập lại không được để trống.");
             }
-            String emailChecked = "^[\\w-\\.]+@[\\w-]+\\.(gmail\\.com|fpt\\.edu\\.vn)$";
-            if (!email.matches(emailChecked)) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body("Email không hợp lệ. Chỉ chấp nhận email @gmail.com hoặc @fpt.edu.vn.");
+            if (!email.matches("^[\\w-.]+@(gmail\\.com|fpt\\.edu\\.vn)$")) {
+                return ResponseEntity.badRequest().body("Email không hợp lệ. Chỉ chấp nhận email có đuôi @gmail.com hoặc @fpt.edu.vn.");
             }
             if (matKhau.length() < 8) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Mật khẩu phải có ít nhất 8 ký tự.");
