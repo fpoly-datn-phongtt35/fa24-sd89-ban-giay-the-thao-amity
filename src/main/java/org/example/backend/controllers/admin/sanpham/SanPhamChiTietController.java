@@ -6,15 +6,18 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.backend.common.PageResponse;
 import org.example.backend.common.ResponseData;
 import org.example.backend.constants.api.Admin;
-import org.example.backend.dto.request.sanPham.SanPhamChiTietRequest;
 import org.example.backend.dto.request.sanPham.SanPhamChiTietSearchRequest;
+import org.example.backend.dto.request.sanPhamV2.SanPhamChiTietRequest;
 import org.example.backend.dto.response.SanPham.SanPhamChiTietRespon;
 import org.example.backend.dto.response.SanPham.SanPhamClientResponse;
 import org.example.backend.dto.response.SanPham.SanPhamResponse;
 import org.example.backend.dto.response.dotGiamGia.DotGiamGiaResponse;
+import org.example.backend.dto.response.sanPhamV2.SanPhamChiTietDTO;
+import org.example.backend.dto.response.sanPhamV2.SanPhamChiTietResponse;
 import org.example.backend.models.*;
 import org.example.backend.repositories.SanPhamChiTietRepository;
 import org.example.backend.repositories.SanPhamRepository;
+import org.example.backend.services.SanPhamChiTietService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -348,5 +351,33 @@ public class SanPhamChiTietController {
             errorResponse.put("error", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
         }
+    }
+    @Autowired
+    private SanPhamChiTietService sanPhamChiTietService;
+    @PostMapping("/api/v1/admin/product/generate")
+    public ResponseEntity<?> generateSanPhamChiTiet(@RequestBody SanPhamChiTietRequest request) {
+        List<SanPhamChiTiet> sanPhamChiTiets = sanPhamChiTietService.generateSanPhamChiTiet(request);
+        return ResponseEntity.ok(sanPhamChiTiets);
+    }
+
+    @GetMapping("/api/v1/admin/product/get-all")
+    public ResponseEntity<?> getAllSanPhamChiTiet() {
+        return ResponseEntity.ok(sanPhamChiTietRepository.findAll());
+    }
+
+    @GetMapping("/api/v1/product/{idSanPham}")
+    public ResponseEntity<?> getSanPhamChiTietById(@PathVariable UUID idSanPham) {
+        SanPhamChiTietResponse response = sanPhamChiTietService.getSanPhamChiTietById(idSanPham);
+        return ResponseEntity.ok(response);
+    }
+    @GetMapping("/api/v1/admin/variants/{idSanPham}")
+    public ResponseEntity<List<SanPhamChiTietDTO>> getVariants(@PathVariable UUID idSanPham) {
+        List<SanPhamChiTietDTO> variantDTOs = sanPhamChiTietService.getVariantsBySanPhamId(idSanPham);
+        return ResponseEntity.ok(variantDTOs);
+    }
+
+    @GetMapping("/api/v1/product_v2")
+    public ResponseEntity<?> getAllSanPhamV2() {
+        return ResponseEntity.ok(sanPhamChiTietService.getAllSanPham());
     }
 }
