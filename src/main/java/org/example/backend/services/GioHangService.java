@@ -15,11 +15,10 @@ import org.springframework.stereotype.Service;
 import jakarta.transaction.Transactional;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
-
-import static org.example.backend.constants.Constant.CURRENT_TIME;
 
 @Service
 public class GioHangService extends GenericServiceImpl<GioHang, UUID> {
@@ -47,8 +46,8 @@ public class GioHangService extends GenericServiceImpl<GioHang, UUID> {
                 .orElseGet(() -> {
                     GioHang newGioHang = new GioHang();
                     newGioHang.setIdNguoiDung(nguoiDung);
-                    newGioHang.setNgayTao(CURRENT_TIME);
-                    newGioHang.setNgaySua(CURRENT_TIME);
+                    newGioHang.setNgayTao(Instant.now());
+                    newGioHang.setNgaySua(Instant.now());
                     newGioHang.setDeleted(false);
                     return gioHangRepository.save(newGioHang);
                 });
@@ -70,8 +69,56 @@ public class GioHangService extends GenericServiceImpl<GioHang, UUID> {
                 .orElseGet(() -> {
                     GioHang newGioHang = new GioHang();
                     newGioHang.setIdNguoiDung(nguoiDung);
-                    newGioHang.setNgayTao(CURRENT_TIME);
-                    newGioHang.setNgaySua(CURRENT_TIME);
+                    newGioHang.setNgayTao(Instant.now());
+                    newGioHang.setNgaySua(Instant.now());
+                    newGioHang.setDeleted(false);
+                    return gioHangRepository.save(newGioHang);
+                });
+
+        // Kiểm tra sản phẩm
+        SanPhamChiTiet sanPhamChiTiet = sanPhamChiTietRepository.findById(request.getIdSanPhamChiTiet())
+                .orElseThrow(() -> new RuntimeException("Sản phẩm không tồn tại"));
+
+        // Tìm hoặc tạo chi tiết giỏ hàng
+        GioHangChiTiet gioHangChiTiet = gioHangChiTietRepository
+                .findByIdGioHangAndIdSpctAndDeletedFalse(gioHang, sanPhamChiTiet)
+                .orElseGet(() -> {
+                    GioHangChiTiet newChiTiet = new GioHangChiTiet();
+                    newChiTiet.setIdGioHang(gioHang);
+                    newChiTiet.setIdSpct(sanPhamChiTiet);
+                    newChiTiet.setDeleted(false);
+                    newChiTiet.setSoLuong(0); // Khởi tạo số lượng = 0 cho giỏ hàng chi tiết mới
+                    return newChiTiet;
+                });
+
+        // Tính toán số lượng mới (số lượng hiện tại + số lượng thêm vào)
+        int newQuantity = gioHangChiTiet.getSoLuong() + request.getSoLuong();
+
+        // Kiểm tra số lượng tồn
+        if (sanPhamChiTiet.getSoLuong() < newQuantity) {
+            throw new RuntimeException("Số lượng sản phẩm không đủ");
+        }
+
+        // Cập nhật thông tin
+        gioHangChiTiet.setSoLuong(newQuantity);
+        gioHangChiTiet.setThanhTien(request.getGiaBan().multiply(BigDecimal.valueOf(newQuantity)));
+
+        return convertToResponse(gioHangChiTietRepository.save(gioHangChiTiet));
+    }
+    
+    @Transactional
+    public GioHangChiTietResponse updateToCart(UUID userId, GioHangChiTietRequest request) {
+        // Kiểm tra và lấy thông tin người dùng
+        NguoiDung nguoiDung = new NguoiDung();
+        nguoiDung.setId(userId);
+
+        // Tìm hoặc tạo giỏ hàng
+        GioHang gioHang = gioHangRepository.findByIdNguoiDungAndDeletedFalse(nguoiDung)
+                .orElseGet(() -> {
+                    GioHang newGioHang = new GioHang();
+                    newGioHang.setIdNguoiDung(nguoiDung);
+                    newGioHang.setNgayTao(Instant.now());
+                    newGioHang.setNgaySua(Instant.now());
                     newGioHang.setDeleted(false);
                     return gioHangRepository.save(newGioHang);
                 });

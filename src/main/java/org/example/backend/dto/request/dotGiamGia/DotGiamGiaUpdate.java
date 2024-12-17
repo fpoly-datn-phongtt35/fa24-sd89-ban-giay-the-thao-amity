@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.UUID;
 
-import static org.example.backend.constants.Constant.CURRENT_TIME;
 
 public class DotGiamGiaUpdate {
     private UUID id;
