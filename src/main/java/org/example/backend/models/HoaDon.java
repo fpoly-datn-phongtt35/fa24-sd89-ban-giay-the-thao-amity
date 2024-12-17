@@ -14,7 +14,6 @@ import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.UUID;
 
-import static org.example.backend.constants.Constant.CURRENT_TIME;
 
 @Builder
 @AllArgsConstructor
@@ -132,7 +131,7 @@ public class HoaDon {
     @PrePersist
     public void prePersist() {
         // Set default creation and modification dates
-        this.ngayTao = CURRENT_TIME;
+        this.ngayTao = Instant.now();
         this.deleted = Boolean.FALSE;
         this.trangThai = Status.CHO_XAC_NHAN_HOA_DON;
 
@@ -141,6 +140,6 @@ public class HoaDon {
     @PreUpdate
     public void preUpdate() {
         // Update modification date when the record is updated
-        this.ngaySua = CURRENT_TIME;
+        this.ngaySua = Instant.now();
     }
 }

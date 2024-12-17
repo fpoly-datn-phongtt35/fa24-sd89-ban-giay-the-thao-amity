@@ -85,7 +85,7 @@ public class PhieuGiamGiaController {
         PhieuGiamGia pgg = new PhieuGiamGia();
 
         // Xác định trạng thái dựa trên thời gian
-        Instant now = Constant.CURRENT_TIME;
+        Instant now = Instant.now();
         String trangThai;
 
         if (now.isBefore(PGGadd.getNgayBatDau())) {
@@ -111,7 +111,7 @@ public class PhieuGiamGiaController {
             @RequestBody phieuGiamGiaRequestUpdate PGGupdate) {
         Optional<PhieuGiamGia> existingPGG = PGGService.findById(id);
         // Xác định trạng thái dựa trên thời gian
-        Instant now = Constant.CURRENT_TIME;
+        Instant now = Instant.now();
         String trangThai;
 
         if (now.isBefore(PGGupdate.getNgayBatDau())) {

@@ -29,6 +29,13 @@ public class GioHangController {
         return ResponseEntity.ok(gioHangService.addToCart(userId, request));
     }
 
+    @PostMapping("/{userId}/update-san-pham")
+    public ResponseEntity<GioHangChiTietResponse> updateToCart(
+            @PathVariable UUID userId,
+            @RequestBody GioHangChiTietRequest request) {
+        return ResponseEntity.ok(gioHangService.updateToCart(userId, request));
+    }
+
     @DeleteMapping("/{userId}/xoa-san-pham/{gioHangChiTietId}")
     public ResponseEntity<Void> deleteFromCart(
             @PathVariable UUID userId,

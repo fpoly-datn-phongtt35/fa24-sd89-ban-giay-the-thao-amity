@@ -92,7 +92,7 @@ public interface HoaDonRepository extends JpaRepository<HoaDon, UUID> {
                     )
                     from HoaDon hd
                     where hd.deleted = false
-                    AND (COALESCE(:#{#status}, '') = '' OR hd.trangThai = :#{#status})
+                    AND (COALESCE(:#{#status}, '') = '' OR hd.trangThai like %:#{#status}%)
             """)
     Page<QuanLyDonHangRespose> GetAllHoaDonByTrangThai(Pageable pageable, String status);
 

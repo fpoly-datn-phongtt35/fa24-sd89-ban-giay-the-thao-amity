@@ -8,7 +8,6 @@ import jakarta.validation.constraints.Positive;
 import java.math.BigDecimal;
 import java.time.Instant;
 
-import static org.example.backend.constants.Constant.CURRENT_TIME;
 
 @Builder
 
