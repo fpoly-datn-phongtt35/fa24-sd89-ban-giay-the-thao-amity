@@ -12,6 +12,7 @@ import org.example.backend.models.GioHangChiTiet;
 import org.example.backend.models.HoaDon;
 import org.example.backend.models.LichSuHoaDon;
 import org.example.backend.models.PhieuGiamGia;
+import org.example.backend.models.SanPhamChiTiet;
 import org.example.backend.models.ThanhToan;
 import org.example.backend.repositories.GioHangChiTietRepository;
 import org.example.backend.repositories.HoaDonRepository;
@@ -38,6 +39,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -243,6 +245,21 @@ public class banHangClientController {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.ok(thanhToan);
+    }
+
+    @PutMapping(Admin.SELL_CLIENT_HOAN_LAI_SO_LUONG_SP)
+    public ResponseEntity<SanPhamChiTiet> hoanLaiSoLuongSP(
+        @RequestParam UUID idSPCT,
+        @RequestParam Integer soLuong
+    ) {
+        Optional<SanPhamChiTiet> sanPhamChiTiet = sanPhamChiTietRepository.findById(idSPCT);
+        if (sanPhamChiTiet.isPresent()) {
+            SanPhamChiTiet spct = sanPhamChiTiet.get();
+            spct.setSoLuong(spct.getSoLuong() + soLuong);
+            sanPhamChiTietRepository.save(spct);
+            return ResponseEntity.ok(spct);
+        }
+        return ResponseEntity.notFound().build();
     }
 
 }

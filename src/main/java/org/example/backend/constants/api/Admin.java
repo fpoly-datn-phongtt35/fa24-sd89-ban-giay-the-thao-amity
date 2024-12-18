@@ -321,4 +321,5 @@ public class Admin {
     public static final String SELL_CLIENT_SET_LICH_SU_HOA_DON = BASE_CLIENT + "/sellClient/LichSuHoaDon";
     public static final String SELL_CLIENT_GET_LICH_SU_HOA_DON = BASE_CLIENT + "/sellClient/getLichSuHoaDon/{id}";
     public static final String SELL_CLIENT_GET_PHUONG_THUC_THANH_TOAN = BASE_CLIENT + "/sellClient/getPhuongThucThanhToan/{id}";
+    public static final String SELL_CLIENT_HOAN_LAI_SO_LUONG_SP = BASE_CLIENT + "/sellClient/hoanLaiSoLuongSP";
 }
