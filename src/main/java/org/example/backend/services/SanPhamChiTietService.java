@@ -1,13 +1,19 @@
 package org.example.backend.services;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.example.backend.common.PageResponse;
+import org.example.backend.dto.request.sanPhamV2.SanPhamChiTietRequest;
 import org.example.backend.dto.response.NhanVien.NhanVienRespon;
 import org.example.backend.dto.response.banHang.banHangClientResponse;
 import org.example.backend.dto.response.dotGiamGia.DotGiamGiaResponse;
+import org.example.backend.dto.response.sanPhamV2.SanPhamChiTietDTO;
+import org.example.backend.dto.response.sanPhamV2.SanPhamChiTietResponse;
+import org.example.backend.models.MauSac;
 import org.example.backend.models.PhieuGiamGia;
+import org.example.backend.models.SanPham;
 import org.example.backend.models.SanPhamChiTiet;
-import org.example.backend.repositories.PhieuGiamGiaRepository;
-import org.example.backend.repositories.SanPhamChiTietRepository;
+import org.example.backend.repositories.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -16,8 +22,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class SanPhamChiTietService extends GenericServiceImpl<SanPhamChiTiet, UUID> {
@@ -72,6 +80,98 @@ public class SanPhamChiTietService extends GenericServiceImpl<SanPhamChiTiet, UU
 
     public List<banHangClientResponse> getSanPhamGiamGia(List<String> trangThais, UUID id) {
         return SPCTRepository.showGiamGiaTheoSp(trangThais, id);
+    }
+
+    @Autowired
+    private SanPhamChiTietRepository sanPhamChiTietRepository;
+    @Autowired
+    private SanPhamRepository sanPhamRepository;
+    @Autowired
+    private MauSacRepository mauSacRepository;
+    @Autowired
+    private KichThuocRepository kichThuocRepository;
+
+    public List<SanPhamChiTiet> generateSanPhamChiTiet(SanPhamChiTietRequest request) {
+        List<SanPhamChiTiet> sanPhamChiTiets = new ArrayList<>();
+        MauSac mauSac = new MauSac();
+        for (UUID mauSacId : request.getMauSacIds()) {
+            for (UUID kichThuocId : request.getKichThuocIds()) {
+                SanPhamChiTiet chiTiet = new SanPhamChiTiet();
+                chiTiet.setIdSanPham(sanPhamRepository.findById(request.getIdSanPham()).orElse(null));
+                chiTiet.setIdMauSac(mauSacRepository.findById(mauSacId).orElse(null));
+                chiTiet.setIdKichThuoc(kichThuocRepository.findById(kichThuocId).orElse(null));
+//                chiTiet.setGiaBan(request.getGiaBan());
+//                chiTiet.setGiaNhap(request.getGiaNhap());
+                chiTiet.setMoTa(request.getMoTa());
+                chiTiet.setTen(chiTiet.getIdSanPham().getTen()+" "+chiTiet.getIdKichThuoc().getTen()+" "+chiTiet.getIdMauSac().getTen());
+                sanPhamChiTiets.add(chiTiet);
+            }
+        }
+        return sanPhamChiTietRepository.saveAll(sanPhamChiTiets);
+    }
+
+    public SanPhamChiTietResponse getSanPhamChiTietById(UUID idSanPham) {
+        // Tìm sản phẩm từ repository
+        SanPham sanPham = sanPhamRepository.findById(idSanPham).orElseThrow(() ->
+                new EntityNotFoundException("Sản phẩm không tồn tại.")
+        );
+
+
+
+        // Tìm các sản phẩm chi tiết liên quan
+        List<SanPhamChiTiet> chiTietList = sanPhamChiTietRepository.findByIdSanPham(sanPham);
+
+        if (chiTietList.isEmpty()) {
+            throw new EntityNotFoundException("Không có sản phẩm chi tiết cho sản phẩm này.");
+        }
+
+        // Chuyển đổi dữ liệu để trả về
+        return new SanPhamChiTietResponse(
+                sanPham.getId(),
+                sanPham.getTen(),
+                sanPham.getIdChatLieu() != null ? sanPham.getIdChatLieu().getTen() : "Chưa có",
+                sanPham.getIdLopLot() != null ? sanPham.getIdLopLot().getTen() : "Chưa có",
+                chiTietList.stream()
+                        .map(item -> new SanPhamChiTietResponse.Variant(
+                                item.getId(),
+                                item.getTen(),
+                                item.getIdMauSac() != null ? item.getIdMauSac().getTen() : "Chưa có",
+                                item.getIdKichThuoc() != null ? item.getIdKichThuoc().getTen() : "Chưa có",
+                                item.getIdDeGiay() != null ? item.getIdDeGiay().getTen() : "Chưa có",
+                                item.getIdDanhMuc() != null ? item.getIdDanhMuc().getTen() : "Chưa có",
+                                item.getIdHang() != null ? item.getIdHang().getTen() : "Chưa có",
+                                item.getGiaBan(),
+                                item.getSoLuong(),
+                                item.getHinhAnh(),
+                                item.getDeleted()
+                        ))
+                        .collect(Collectors.toList())
+        );
+    }
+
+    public List<SanPham> getAllSanPham(){
+        return sanPhamRepository.findAll();
+    }
+
+    public List<SanPhamChiTietDTO> mapToDTO(List<SanPhamChiTiet> entities) {
+        return entities.stream().map(spct -> new SanPhamChiTietDTO(
+                spct.getId(),
+                spct.getIdSanPham().getTen(),
+                spct.getIdMauSac() != null ? spct.getIdMauSac().getTen() : null,
+                spct.getIdKichThuoc() != null ? spct.getIdKichThuoc().getTen() : null,
+                spct.getIdDanhMuc() != null ? spct.getIdDanhMuc().getTen() : null,
+                spct.getIdHang() != null ? spct.getIdHang().getTen() : null,
+                spct.getIdDeGiay() != null ? spct.getIdDeGiay().getTen() : null,
+                spct.getGiaBan(),
+                spct.getSoLuong(),
+                spct.getHinhAnh()
+        )).collect(Collectors.toList());
+    }
+
+
+    public List<SanPhamChiTietDTO> getVariantsBySanPhamId(UUID idSanPham) {
+        List<SanPhamChiTiet> variants = sanPhamChiTietRepository.findAllBySanPhamId(idSanPham);
+        return mapToDTO(variants);
     }
 
 }

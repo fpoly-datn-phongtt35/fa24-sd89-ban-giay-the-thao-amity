@@ -7,6 +7,7 @@ import org.example.backend.dto.response.SanPham.SanPhamChiTietRespon;
 import org.example.backend.dto.response.SanPham.SanPhamClientResponse;
 import org.example.backend.dto.response.banHang.banHangClientResponse;
 import org.example.backend.dto.response.dotGiamGia.DotGiamGiaResponse;
+import org.example.backend.models.SanPham;
 import org.example.backend.models.SanPhamChiTiet;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -200,8 +201,10 @@ public interface SanPhamChiTietRepository extends JpaRepository<SanPhamChiTiet, 
 
                 )
                 from SanPhamChiTiet s
+               
                 left join DotGiamGiaSpct ds on s.id = ds.idSpct.id
                 left join DotGiamGia d on d.id = ds.idDotGiamGia.id
+                where s.soLuong > 0
             """)
     Page<banHangClientResponse> getBanHangClient(Pageable pageable);
 
@@ -375,6 +378,21 @@ public interface SanPhamChiTietRepository extends JpaRepository<SanPhamChiTiet, 
             where  d.trangThai in :trangThais and d.id =:id
             """)
     List<banHangClientResponse> showGiamGiaTheoSp(List<String> trangThais, UUID id);
+
+    List<SanPhamChiTiet> findByIdSanPham(SanPham idSanPham);
+
+
+    @Query("""
+        SELECT spct FROM SanPhamChiTiet spct
+        JOIN FETCH spct.idSanPham sp
+        LEFT JOIN FETCH spct.idMauSac ms
+        LEFT JOIN FETCH spct.idKichThuoc kt
+        LEFT JOIN FETCH spct.idDanhMuc dm
+        LEFT JOIN FETCH spct.idHang h
+        LEFT JOIN FETCH spct.idDeGiay dg
+        WHERE sp.id = :idSanPham
+    """)
+    List<SanPhamChiTiet> findAllBySanPhamId(UUID idSanPham);
 
 
 }
