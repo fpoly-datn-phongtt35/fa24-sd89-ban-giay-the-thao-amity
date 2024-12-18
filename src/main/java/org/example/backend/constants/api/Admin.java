@@ -119,6 +119,7 @@ public class Admin {
     public static final String VOUCHER_UPDATE_STATUS = VOUCHER + "/updateStatus/{id}";
     public static final String VOUCHER_SEARCH = VOUCHER + "/search/{find}&{filterType}";
     public static final String VOUCHER_EXCEL = VOUCHER + "/excel";
+    public static final String VOUCHER_CREATE_PGG_KH = VOUCHER + "/create-phieu-giam-gia-nguoi-dung";
 
     // Endpoint SALE
     public static final String SALE = BASE + "/sale";
@@ -318,4 +319,5 @@ public class Admin {
     public static final String SELL_CLIENT_SET_PHUONG_THUC_THANH_TOAN =  BASE_CLIENT + "/sellClient/PhuongThucThanhToan";
     public static final String SELL_CLIENT_SET_LICH_SU_HOA_DON = BASE_CLIENT + "/sellClient/LichSuHoaDon";
     public static final String SELL_CLIENT_GET_LICH_SU_HOA_DON = BASE_CLIENT + "/sellClient/getLichSuHoaDon/{id}";
+    public static final String SELL_CLIENT_GET_PHUONG_THUC_THANH_TOAN = BASE_CLIENT + "/sellClient/getPhuongThucThanhToan/{id}";
 }

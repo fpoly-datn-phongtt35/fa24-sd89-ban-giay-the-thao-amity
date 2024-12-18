@@ -85,4 +85,14 @@ public interface PhieuGiamGiaRepository extends JpaRepository<PhieuGiamGia, UUID
                 """)
     Page<phieuGiamGiaReponse> searchPhieuGiamGia(Pageable pageable, String keyFind, String trangThai,
                                                  Instant minNgay, Instant maxNgay, BigDecimal minGia, BigDecimal maxGia);
+
+    List<PhieuGiamGia> findByNgayKetThucBeforeAndTrangThaiNot(Instant now, String trangThai);
+    
+    List<PhieuGiamGia> findByNgayBatDauBeforeAndNgayKetThucAfterAndTrangThaiNot(
+        Instant now, 
+        Instant now2, 
+        String trangThai
+    );
+    
+    List<PhieuGiamGia> findByNgayBatDauAfterAndTrangThaiNot(Instant now, String trangThai);
 }
