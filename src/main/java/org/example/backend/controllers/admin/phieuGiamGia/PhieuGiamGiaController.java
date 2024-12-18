@@ -56,7 +56,8 @@ public class PhieuGiamGiaController {
 
     final phieuGiamGiaMapper PGGMapper;
 
-    public PhieuGiamGiaController(PhieuGiamGiaService PGGService, phieuGiamGiaMapper PGGMapper, KhachHangService khachHangService, PhieuGiamGiaNguoiDungService phieuGiamGiaNguoiDungService) {
+    public PhieuGiamGiaController(PhieuGiamGiaService PGGService, phieuGiamGiaMapper PGGMapper,
+            KhachHangService khachHangService, PhieuGiamGiaNguoiDungService phieuGiamGiaNguoiDungService) {
         this.PGGService = PGGService;
         this.PGGMapper = PGGMapper;
         this.khachHangService = khachHangService;
@@ -227,7 +228,7 @@ public class PhieuGiamGiaController {
             return ResponseEntity.status(500).build();
         }
     }
-    
+
     @PostMapping(Admin.VOUCHER_CREATE_PGG_KH)
     public ResponseEntity<?> createPhieuGiamGiaNguoiDung(
             @RequestParam UUID idKhachHang,
@@ -237,9 +238,9 @@ public class PhieuGiamGiaController {
             if (!khachHangService.existsById(idKhachHang)) {
                 return ResponseEntity.badRequest().body("Khách hàng không tồn tại");
             }
-            
+
             if (!PGGService.existsById(idPhieuGiamGia)) {
-                return ResponseEntity.badRequest().body("Phiếu giảm giá không tồn tại"); 
+                return ResponseEntity.badRequest().body("Phiếu giảm giá không tồn tại");
             }
 
             // Tạo phiếu giảm giá người dùng mới
@@ -248,7 +249,7 @@ public class PhieuGiamGiaController {
             phieuGiamGiaNguoiDung.setIdPhieuGiamGia(PGGService.findById(idPhieuGiamGia).get());
             phieuGiamGiaNguoiDung.setTrangThai("Chưa sử dụng");
             phieuGiamGiaNguoiDung.setDeleted(false);
-            // Lưu vào database 
+            // Lưu vào database
             phieuGiamGiaNguoiDungService.save(phieuGiamGiaNguoiDung);
 
             return ResponseEntity.ok("Tạo phiếu giảm giá người dùng thành công");
@@ -257,5 +258,14 @@ public class PhieuGiamGiaController {
             e.printStackTrace();
             return ResponseEntity.status(500).body("Lỗi khi tạo phiếu giảm giá người dùng");
         }
+    }
+
+    @GetMapping(Admin.VOUCHER_SET_DA_SU_DUNG)
+    public ResponseEntity<?> setDaSuDung(
+        @RequestParam UUID idKhachHang,
+            @RequestParam UUID idPhieuGiamGia) {
+        PhieuGiamGiaNguoiDung pgg = phieuGiamGiaNguoiDungService.findByIdNguoiDungIdAndIdPhieuGiamGiaId(idKhachHang,
+                idPhieuGiamGia);
+        return ResponseEntity.ok(pgg);
     }
 }

@@ -8,5 +8,5 @@ import java.util.UUID;
 
 @Repository
 public interface PhieuGiamGiaNguoiDungRepository extends JpaRepository<PhieuGiamGiaNguoiDung, UUID> {
-    // Các phương thức tùy chỉnh có thể được thêm vào đây nếu cần
+    PhieuGiamGiaNguoiDung findByIdNguoiDungIdAndIdPhieuGiamGiaId(UUID idNguoiDung, UUID idPhieuGiamGia);
 } 

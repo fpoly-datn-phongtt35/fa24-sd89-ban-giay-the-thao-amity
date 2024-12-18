@@ -120,6 +120,7 @@ public class Admin {
     public static final String VOUCHER_SEARCH = VOUCHER + "/search/{find}&{filterType}";
     public static final String VOUCHER_EXCEL = VOUCHER + "/excel";
     public static final String VOUCHER_CREATE_PGG_KH = VOUCHER + "/create-phieu-giam-gia-nguoi-dung";
+    public static final String VOUCHER_SET_DA_SU_DUNG = VOUCHER + "/set-da-su-dung";
 
     // Endpoint SALE
     public static final String SALE = BASE + "/sale";
