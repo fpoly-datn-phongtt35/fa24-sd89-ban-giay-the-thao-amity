@@ -30,6 +30,7 @@ public interface PhieuGiamGiaRepository extends JpaRepository<PhieuGiamGia, UUID
                 from PhieuGiamGia p where p.deleted=false 
             """)
     List<phieuGiamGiaReponse> getAllPhieuGiamGia();
+    
     @Query("""
                 select new org.example.backend.dto.response.phieuGiamGia.phieuGiamGiaReponse(
                 p.id, p.ma, p.ten, p.loai, p.giaTri, p.giamToiDa, p.mucDo,
@@ -37,6 +38,12 @@ public interface PhieuGiamGiaRepository extends JpaRepository<PhieuGiamGia, UUID
                 from PhieuGiamGia p
                 left join PhieuGiamGiaChiTiet pgct on p.id = pgct.idPhieuGiamGia.id
                 where p.deleted = false 
+                and p.id not in (
+                    select pgct2.idPhieuGiamGia.id 
+                    from PhieuGiamGiaChiTiet pgct2 
+                    where pgct2.idNguoiDung.id = :id 
+                    and pgct2.trangThai = :daSuDung
+                )
                 and (p.mucDo = 'public' 
                      or (pgct.idNguoiDung.id = :id and p.mucDo = 'private'))
                 and p.trangThai in (:dangDienRa, :sapDienRa)
@@ -50,7 +57,7 @@ public interface PhieuGiamGiaRepository extends JpaRepository<PhieuGiamGia, UUID
                     case when p.trangThai =:dangDienRa then p.giamToiDa else 0 end desc,
                     case when p.trangThai =:sapDienRa then p.ngayBatDau end asc
             """)
-    List<phieuGiamGiaReponse> getAllPhieuGiamGiabyIDKH(UUID id , String dangDienRa , String sapDienRa);
+    List<phieuGiamGiaReponse> getAllPhieuGiamGiabyIDKH(UUID id , String dangDienRa , String sapDienRa , String daSuDung);
 
     @Query("""
                 update PhieuGiamGia p 

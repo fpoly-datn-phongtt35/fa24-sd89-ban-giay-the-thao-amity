@@ -229,7 +229,11 @@ public ResponseEntity<?> create() {
         if(pgg.getSoLuong() < SLpgg) {
             throw new RuntimeException("het phieu");
         }
-        pgg.setSoLuong(pgg.getSoLuong()-SLpgg);
+        int soLuongPGGconlai = pgg.getSoLuong()-SLpgg;
+        if(soLuongPGGconlai == 0) {
+            pgg.setTrangThai("Hết Số Lượng");
+        }
+        pgg.setSoLuong(soLuongPGGconlai);
         phieuGiamGiaRepository.save(pgg);
         return ResponseEntity.ok(pgg);
     }

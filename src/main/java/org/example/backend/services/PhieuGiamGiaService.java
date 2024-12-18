@@ -58,7 +58,8 @@ public class PhieuGiamGiaService extends GenericServiceImpl<PhieuGiamGia , UUID>
     public List<phieuGiamGiaReponse> getPGGGetAllbyIDKH(UUID id) {
         String dangDienRa = "Đang Diễn Ra";
         String sapDienRa = "Sắp Diễn Ra";
-        return PGGrepository.getAllPhieuGiamGiabyIDKH(id,dangDienRa,sapDienRa);
+        String daSuDung = "Đã sử dụng";
+        return PGGrepository.getAllPhieuGiamGiabyIDKH(id,dangDienRa,sapDienRa,daSuDung);
     }
 
     public void setDeletedPhieuGiamGia(Boolean deleted, UUID id){
