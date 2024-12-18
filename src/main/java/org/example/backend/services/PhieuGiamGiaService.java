@@ -9,16 +9,24 @@ import org.example.backend.dto.response.dotGiamGia.DotGiamGiaResponse;
 import org.example.backend.dto.response.phieuGiamGia.phieuGiamGiaReponse;
 import org.example.backend.models.PhieuGiamGia;
 import org.example.backend.repositories.PhieuGiamGiaRepository;
+import org.quartz.JobBuilder;
+import org.quartz.JobDetail;
+import org.quartz.Trigger;
+import org.quartz.TriggerBuilder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+
+import jakarta.annotation.PostConstruct;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.sql.Date;
 import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
@@ -145,5 +153,45 @@ public class PhieuGiamGiaService extends GenericServiceImpl<PhieuGiamGia , UUID>
         workbook.close();
 
         return outputStream.toByteArray();
+    }
+
+    @Scheduled(fixedDelay = 60000)
+    public void capNhatTrangThaiPhieuGiamGia() {
+        // Lấy thời gian hiện tại
+        Instant thoiGianHienTai = Instant.now();
+        
+        // Lấy tất cả phiếu giảm giá
+        List<phieuGiamGiaReponse> danhSachPhieu = PGGrepository.getAllPhieuGiamGia();
+        
+        for (phieuGiamGiaReponse phieu : danhSachPhieu) {
+            // Kiểm tra số lượng
+            if (phieu.getSoLuong() != null && 
+                phieu.getSoLuong() == 0 && 
+                !phieu.getTrangThai().equals("Hết số lượng")) {
+                
+                // Cập nhật trạng thái thành "Hết Số Lượng"
+                updateTrangThaiAndNgayKetThuc("Hết số lượng", phieu.getNgayKetThuc(), phieu.getId());
+                continue; // Bỏ qua các kiểm tra khác nếu đã hết số lượng
+            }
+            
+            // Kiểm tra phiếu đến thời gian bắt đầu
+            if (phieu.getNgayBatDau() != null && 
+                phieu.getNgayBatDau().isBefore(thoiGianHienTai) && 
+                phieu.getNgayKetThuc().isAfter(thoiGianHienTai) && 
+                !phieu.getTrangThai().equals("Đang diễn ra")) {
+                
+                // Cập nhật trạng thái thành "Đang diễn ra"
+                updateTrangThaiAndNgayKetThuc("Đang diễn ra", phieu.getNgayKetThuc(), phieu.getId());
+            }
+            
+            // Kiểm tra phiếu đến thời gian kết thúc
+            if (phieu.getNgayKetThuc() != null && 
+                phieu.getNgayKetThuc().isBefore(thoiGianHienTai) && 
+                !phieu.getTrangThai().equals("Đã kết thúc")) {
+                
+                // Cập nhật trạng thái thành "Đã kết thúc"
+                updateTrangThaiAndNgayKetThuc("Đã kết thúc", phieu.getNgayKetThuc(), phieu.getId());
+            }
+        }
     }
 }

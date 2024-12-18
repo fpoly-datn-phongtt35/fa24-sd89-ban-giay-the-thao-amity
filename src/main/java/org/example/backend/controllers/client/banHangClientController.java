@@ -234,4 +234,15 @@ public class banHangClientController {
         return ResponseEntity.ok(lichSuHoaDon);
     }
 
+    @GetMapping(SELL_CLIENT_GET_PHUONG_THUC_THANH_TOAN)
+    public ResponseEntity<ThanhToan> getPhuongThucThanhToan(
+            @PathVariable UUID id
+    ) {
+        ThanhToan thanhToan = thanhToanService.getPhuongThucThanhToanByIdHoaDon(id);
+        if (thanhToan == null) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(thanhToan);
+    }
+
 }

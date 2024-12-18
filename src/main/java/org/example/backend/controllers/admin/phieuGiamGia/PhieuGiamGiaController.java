@@ -11,7 +11,10 @@ import org.example.backend.dto.request.phieuGiamGia.phieuGiamGiaRequestUpdate;
 import org.example.backend.dto.response.phieuGiamGia.phieuGiamGiaReponse;
 import org.example.backend.mapper.phieuGiamGia.phieuGiamGiaMapper;
 import org.example.backend.models.PhieuGiamGia;
+import org.example.backend.models.PhieuGiamGiaNguoiDung;
+import org.example.backend.services.KhachHangService;
 import org.example.backend.services.PhieuGiamGiaService;
+import org.example.backend.services.PhieuGiamGiaNguoiDungService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -48,12 +51,16 @@ public class PhieuGiamGiaController {
 
     // @Autowired
     final PhieuGiamGiaService PGGService;
+    final KhachHangService khachHangService;
+    final PhieuGiamGiaNguoiDungService phieuGiamGiaNguoiDungService;
 
     final phieuGiamGiaMapper PGGMapper;
 
-    public PhieuGiamGiaController(PhieuGiamGiaService PGGService, phieuGiamGiaMapper PGGMapper) {
+    public PhieuGiamGiaController(PhieuGiamGiaService PGGService, phieuGiamGiaMapper PGGMapper, KhachHangService khachHangService, PhieuGiamGiaNguoiDungService phieuGiamGiaNguoiDungService) {
         this.PGGService = PGGService;
         this.PGGMapper = PGGMapper;
+        this.khachHangService = khachHangService;
+        this.phieuGiamGiaNguoiDungService = phieuGiamGiaNguoiDungService;
     }
 
     @GetMapping(Admin.VOUCHER_GET_ALL)
@@ -218,6 +225,37 @@ public class PhieuGiamGiaController {
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(500).build();
+        }
+    }
+    
+    @PostMapping(Admin.VOUCHER_CREATE_PGG_KH)
+    public ResponseEntity<?> createPhieuGiamGiaNguoiDung(
+            @RequestParam UUID idKhachHang,
+            @RequestParam UUID idPhieuGiamGia) {
+        try {
+            // Kiểm tra xem khách hàng và phiếu giảm giá có tồn tại không
+            if (!khachHangService.existsById(idKhachHang)) {
+                return ResponseEntity.badRequest().body("Khách hàng không tồn tại");
+            }
+            
+            if (!PGGService.existsById(idPhieuGiamGia)) {
+                return ResponseEntity.badRequest().body("Phiếu giảm giá không tồn tại"); 
+            }
+
+            // Tạo phiếu giảm giá người dùng mới
+            PhieuGiamGiaNguoiDung phieuGiamGiaNguoiDung = new PhieuGiamGiaNguoiDung();
+            phieuGiamGiaNguoiDung.setIdNguoiDung(khachHangService.findById(idKhachHang).get());
+            phieuGiamGiaNguoiDung.setIdPhieuGiamGia(PGGService.findById(idPhieuGiamGia).get());
+            phieuGiamGiaNguoiDung.setTrangThai("Chưa sử dụng");
+            phieuGiamGiaNguoiDung.setDeleted(false);
+            // Lưu vào database 
+            phieuGiamGiaNguoiDungService.save(phieuGiamGiaNguoiDung);
+
+            return ResponseEntity.ok("Tạo phiếu giảm giá người dùng thành công");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).body("Lỗi khi tạo phiếu giảm giá người dùng");
         }
     }
 }

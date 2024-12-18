@@ -1,6 +1,7 @@
 package org.example.backend.services;
 
 import org.example.backend.models.HoaDon;
+import org.example.backend.models.LichSuHoaDon;
 import org.example.backend.models.ThanhToan;
 import org.example.backend.repositories.HoaDonRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -8,7 +9,9 @@ import org.springframework.stereotype.Service;
 
 
 import java.time.Instant;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class ThanhToanService extends GenericServiceImpl<ThanhToan , UUID> {
@@ -28,4 +31,12 @@ public class ThanhToanService extends GenericServiceImpl<ThanhToan , UUID> {
         thanhToan.setDeleted(false);
         return repository.save(thanhToan);
     }
+
+    public ThanhToan getPhuongThucThanhToanByIdHoaDon(UUID idHoaDon) {
+        return repository.findAll().stream()
+                .filter(tt -> tt.getIdHoaDon().getId().equals(idHoaDon))
+                .findFirst()
+                .orElse(null);
+    }
+
 }
