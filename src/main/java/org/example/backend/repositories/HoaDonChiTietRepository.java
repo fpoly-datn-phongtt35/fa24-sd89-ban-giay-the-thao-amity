@@ -39,14 +39,16 @@ public interface HoaDonChiTietRepository extends JpaRepository<HoaDonChiTiet, UU
     SELECT new org.example.backend.dto.response.thongKe.ThongKeResponse(
         hd.id,
         SUM(hdct.soLuong),
-        SUM(hdct.soLuong * (hdct.gia - COALESCE(hdct.giaGiam, 0))),
+        SUM(hdct.idHoaDon.tongTien-  COALESCE(hdct.giaGiam, 0)),
         SUM(hdct.soLuong * spct.giaNhap),
-        (SUM(hdct.soLuong * (hdct.gia - COALESCE(hdct.giaGiam, 0)))) - (SUM(hdct.soLuong * spct.giaNhap)),
+        (SUM(hdct.idHoaDon.tongTien-  COALESCE(hdct.giaGiam, 0))) - (SUM(hdct.soLuong * spct.giaNhap)),
         hd.trangThai,
         hd.deleted)
     FROM HoaDonChiTiet hdct
     JOIN HoaDon hd ON hdct.idHoaDon.id = hd.id
     JOIN SanPhamChiTiet spct ON hdct.idSpct.id = spct.id
+    LEFT JOIN PhieuGiamGia pg ON hdct.idHoaDon.idPhieuGiamGia.id = pg.id
+    LEFT JOIN DotGiamGia dg ON hdct.idHoaDon.idDotGiamGia.id = dg.id
     WHERE hd.trangThai = :trangThai
       AND hd.deleted = false
       AND FUNCTION('YEAR', hd.ngayTao) = :year
@@ -58,9 +60,9 @@ public interface HoaDonChiTietRepository extends JpaRepository<HoaDonChiTiet, UU
     SELECT new org.example.backend.dto.response.thongKe.ThongKeResponse(
         hd.id,
         SUM(hdct.soLuong),
-        SUM(hdct.soLuong * (hdct.gia - COALESCE(hdct.giaGiam, 0))),
+        SUM(hdct.idHoaDon.tongTien),
         SUM(hdct.soLuong * spct.giaNhap),
-        (SUM(hdct.soLuong * (hdct.gia - COALESCE(hdct.giaGiam, 0)))) - (SUM(hdct.soLuong * spct.giaNhap)),
+        (SUM(hdct.idHoaDon.tongTien-  COALESCE(hdct.giaGiam, 0))) - (SUM(hdct.soLuong * spct.giaNhap)),
         hd.trangThai,
         hd.deleted)
     FROM HoaDonChiTiet hdct
@@ -78,9 +80,9 @@ public interface HoaDonChiTietRepository extends JpaRepository<HoaDonChiTiet, UU
     SELECT new org.example.backend.dto.response.thongKe.ThongKeResponse(
         hd.id,
         SUM(hdct.soLuong),
-        SUM(hdct.soLuong * (hdct.gia - COALESCE(hdct.giaGiam, 0))),
+        SUM(hdct.idHoaDon.tongTien),
         SUM(hdct.soLuong * spct.giaNhap),
-        (SUM(hdct.soLuong * (hdct.gia - COALESCE(hdct.giaGiam, 0)))) - (SUM(hdct.soLuong * spct.giaNhap)),
+        (SUM(hdct.idHoaDon.tongTien-  COALESCE(hdct.giaGiam, 0))) - (SUM(hdct.soLuong * spct.giaNhap)),
         hd.trangThai,
         hd.deleted)
     FROM HoaDonChiTiet hdct
