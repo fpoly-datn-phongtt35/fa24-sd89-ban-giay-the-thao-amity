@@ -85,7 +85,7 @@
 
         @PostMapping(USER_CREATE)
         public ResponseEntity<?> createNhanVien(
-                @RequestParam("ma") String ma,
+//                @RequestParam("ma") String ma,
                 @RequestParam("email") String email,
                 @RequestParam("sdt") String sdt,
                 @RequestParam("matKhau") String matKhau,
@@ -98,9 +98,10 @@
                 @RequestParam("chucVu") String chucVu,
                 @RequestParam("trangThai") String trangThai
         ) throws IOException {
-            if (ma.trim().isEmpty()) {
-                return ResponseEntity.badRequest().body("Mã không được để trống.");
-            }
+//            if (ma.trim().isEmpty()) {
+//                return ResponseEntity.badRequest().body("Mã không được để trống.");
+//            }
+            String ma = "NV" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
             if (email.trim().isEmpty()) {
                 return ResponseEntity.badRequest().body("Email không được để trống.");
             }

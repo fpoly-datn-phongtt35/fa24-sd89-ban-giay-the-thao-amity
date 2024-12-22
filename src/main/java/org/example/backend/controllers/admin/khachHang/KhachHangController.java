@@ -85,7 +85,7 @@ public KhachHangController(KhachHangService khachHangService, NguoiDungRepositor
 
     @PostMapping(CUSTOMER_CREATE)
     public ResponseEntity<?> createCustomer(
-            @RequestParam("ma") String ma,
+//            @RequestParam("ma") String ma,
             @RequestParam("email") String email,
             @RequestParam("sdt") String sdt,
             @RequestParam("matKhau") String matKhau,
@@ -93,13 +93,14 @@ public KhachHangController(KhachHangService khachHangService, NguoiDungRepositor
             @RequestParam("ngaySinh") Instant ngaySinh,
             @RequestParam("gioiTinh") String gioiTinh,
             @RequestParam("diaChi") String diaChi,
-            @RequestParam("hinhAnh") MultipartFile fileHinhAnh,
+            @RequestParam(value = "hinhAnh",required = false) MultipartFile fileHinhAnh,
             @RequestParam("chucVu") String chucVu,
              @RequestParam("trangThai") String trangThai
     ) throws IOException {
-        if (ma.trim().isEmpty()) {
-            return ResponseEntity.badRequest().body("Mã không được để trống.");
-        }
+//        if (ma.trim().isEmpty()) {
+//            return ResponseEntity.badRequest().body("Mã không được để trống.");
+//        }
+        String ma = "KH" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
         if (email.trim().isEmpty()) {
             return ResponseEntity.badRequest().body("Email không được để trống.");
         }
@@ -150,10 +151,14 @@ public KhachHangController(KhachHangService khachHangService, NguoiDungRepositor
         nguoiDung.setNgaySinh(ngaySinh);
         nguoiDung.setGioiTinh(gioiTinh);
         nguoiDung.setDiaChi(diaChi);
+        if ( !fileHinhAnh.isEmpty()) {
+            Map<String, Object> uploadResult = cloudinary.uploader().upload(fileHinhAnh.getBytes(), ObjectUtils.emptyMap());
+            String imageUrl = (String) uploadResult.get("secure_url");
+            nguoiDung.setHinhAnh(imageUrl);
+        } else {
+            nguoiDung.setHinhAnh("https://res.cloudinary.com/dlwrhv088/image/upload/v1732383852/q0i7hxborl3yi0pmmswa.jpg");
+        }
 
-        Map<String, Object> uploadResult = cloudinary.uploader().upload(fileHinhAnh.getBytes(), ObjectUtils.emptyMap());
-        String imageUrl = (String) uploadResult.get("secure_url");
-        nguoiDung.setHinhAnh(imageUrl);
         nguoiDung.setChucVu(chucVu);
         nguoiDung.setTrangThai(trangThai);
         return ResponseEntity.ok(nguoiDungRepository.save(nguoiDung));
@@ -162,19 +167,20 @@ public KhachHangController(KhachHangService khachHangService, NguoiDungRepositor
     }
     @PostMapping(CUSTOMER_CREATE_SELL)
     public ResponseEntity<?> createCustomerSell(
-            @RequestParam("ma") String ma,
+            @RequestParam("email") String email,
             @RequestParam("sdt") String sdt,
             @RequestParam("ten") String ten,
             @RequestParam("ngaySinh") Instant ngaySinh,
             @RequestParam("gioiTinh") String gioiTinh,
             @RequestParam("diaChi") String diaChi
     ) throws IOException {
-
+        String ma = "KH" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
         NguoiDung nguoiDung = new NguoiDung();
         nguoiDung.setMa(ma);
         nguoiDung.setSdt(sdt);
-        nguoiDung.setMatKhau(passwordEncoder.encode("a1234bb5c"));
+        nguoiDung.setMatKhau(passwordEncoder.encode("a1234b5c"));
         nguoiDung.setTen(ten);
+        nguoiDung.setEmail(email);
         nguoiDung.setNgaySinh(ngaySinh);
         nguoiDung.setGioiTinh(gioiTinh);
         nguoiDung.setDiaChi(diaChi);
@@ -186,6 +192,7 @@ public KhachHangController(KhachHangService khachHangService, NguoiDungRepositor
 
 
     }
+
 
     @PutMapping(CUSTOMER_UPDATE_SELL)
     public ResponseEntity<?> updateCustomerSell(
