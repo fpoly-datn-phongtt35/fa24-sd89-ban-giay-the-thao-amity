@@ -98,6 +98,8 @@ public class Admin {
     public static final String BILL_EXCEL = BILL + "/excel";
     public static final String THONG_KE = BILL + "/thongke";
     public static final String THONG_KE_MONTH = BILL + "/month";
+    public static final String TOP_5_SP = BILL + "/top5";
+    public static final String SP_SAP_HET = BILL + "/sp50";
 
 
     // Endpoint BILL_DETAIL
