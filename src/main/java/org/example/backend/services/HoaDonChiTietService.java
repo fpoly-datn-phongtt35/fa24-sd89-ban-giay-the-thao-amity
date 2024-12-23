@@ -8,6 +8,7 @@ import org.example.backend.dto.response.thongKe.ThongKeResponse;
 
 import org.example.backend.dto.response.quanLyDonHang.hoaDonChiTietReponse;
 
+import org.example.backend.dto.response.thongKe.Top5SanPhamResponse;
 import org.example.backend.models.HoaDonChiTiet;
 import org.example.backend.repositories.HoaDonChiTietRepository;
 import org.springframework.data.domain.Page;
@@ -66,6 +67,13 @@ public class HoaDonChiTietService extends GenericServiceImpl<HoaDonChiTiet, UUID
 //    }
     public List<hoaDonChiTietReponse> getHoaDonChiTietByMa(String maHD) {
         return hoaDonChiTietRepository.getByMaHoaDonChiTiet(maHD);
+    }
+    public List<Object[]>  getTop5SanPham(Pageable pageable) {
+        return hoaDonChiTietRepository.top5SanPham();
+    }
+
+    public List<Object[]>  getSanPhamSapHet(Pageable pageable) {
+        return hoaDonChiTietRepository.sanPhamSapHet();
     }
 
 

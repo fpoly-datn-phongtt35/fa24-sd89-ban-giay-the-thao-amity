@@ -2,7 +2,10 @@ package org.example.backend.controllers.admin.thongKe;
 
 import org.example.backend.constants.api.Admin;
 import org.example.backend.dto.response.thongKe.ThongKeResponse;
+import org.example.backend.dto.response.thongKe.Top5SanPhamResponse;
 import org.example.backend.services.HoaDonChiTietService;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -53,6 +56,18 @@ public class ThongKeController {
         }
         List<ThongKeResponse> thongKeData = hoaDonChiTietService.getThongKeDataMonth(trangThai,year,month);
         return ResponseEntity.ok(thongKeData);
+    }
+    @GetMapping(Admin.TOP_5_SP)
+    public List<Object[]>  getTop5SanPhamPaged(@RequestParam(defaultValue = "0") int page,
+                                                         @RequestParam(defaultValue = "5") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return hoaDonChiTietService.getTop5SanPham(pageable);
+    }
+    @GetMapping(Admin.SP_SAP_HET)
+    public List<Object[]>  getSanPhamSapHet(@RequestParam(defaultValue = "0") int page,
+                                               @RequestParam(defaultValue = "5") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return hoaDonChiTietService.getSanPhamSapHet(pageable);
     }
 
 

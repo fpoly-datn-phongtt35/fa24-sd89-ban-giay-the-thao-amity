@@ -6,6 +6,7 @@ import org.example.backend.dto.response.thongKe.ThongKeResponse;
 
 import org.example.backend.dto.response.quanLyDonHang.hoaDonChiTietReponse;
 
+import org.example.backend.dto.response.thongKe.Top5SanPhamResponse;
 import org.example.backend.models.HoaDonChiTiet;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -60,7 +61,7 @@ public interface HoaDonChiTietRepository extends JpaRepository<HoaDonChiTiet, UU
     SELECT new org.example.backend.dto.response.thongKe.ThongKeResponse(
         hd.id,
         SUM(hdct.soLuong),
-        SUM(hdct.idHoaDon.tongTien),
+        SUM(hdct.idHoaDon.tongTien-  COALESCE(hdct.giaGiam, 0)),
         SUM(hdct.soLuong * spct.giaNhap),
         (SUM(hdct.idHoaDon.tongTien-  COALESCE(hdct.giaGiam, 0))) - (SUM(hdct.soLuong * spct.giaNhap)),
         hd.trangThai,
@@ -80,7 +81,7 @@ public interface HoaDonChiTietRepository extends JpaRepository<HoaDonChiTiet, UU
     SELECT new org.example.backend.dto.response.thongKe.ThongKeResponse(
         hd.id,
         SUM(hdct.soLuong),
-        SUM(hdct.idHoaDon.tongTien),
+        SUM(hdct.idHoaDon.tongTien-  COALESCE(hdct.giaGiam, 0)),
         SUM(hdct.soLuong * spct.giaNhap),
         (SUM(hdct.idHoaDon.tongTien-  COALESCE(hdct.giaGiam, 0))) - (SUM(hdct.soLuong * spct.giaNhap)),
         hd.trangThai,
@@ -130,6 +131,35 @@ public interface HoaDonChiTietRepository extends JpaRepository<HoaDonChiTiet, UU
     where hdct.deleted = false and hd.ma = :ma
 """)
     List<hoaDonChiTietReponse> getByMaHoaDonChiTiet(String ma);
+
+    @Query(value = "SELECT TOP 5 sp.ten,spct.hinh_anh ,ms.ten,kt.ten,spct.gia_ban ,hdct.so_luong AS tong_so_luong\n" +
+            "FROM hoa_don_chi_tiet hdct\n" +
+            "JOIN san_pham_chi_tiet spct ON hdct.id_spct = spct.id\n" +
+            "JOIN san_pham sp ON spct.id_san_pham = sp.id\n" +
+            "join mau_sac ms on spct.id_mau_sac = ms.id\n" +
+            "join kich_thuoc kt on spct.id_kich_thuoc = kt.id\n" +
+            "ORDER BY tong_so_luong DESC;\n", nativeQuery = true)
+    List<Object[]> top5SanPham();
+
+    @Query(value = "select sp.ten,spct.hinh_anh,spct.gia_ban,spct.so_luong\n" +
+            "from san_pham_chi_tiet spct \n" +
+            "JOIN san_pham sp ON spct.id_san_pham = sp.id\n" +
+            "where spct.so_luong <50\n"+
+            "ORDER BY spct.so_luong DESC;\n", nativeQuery = true)
+    List<Object[]> sanPhamSapHet();
+
+
+//    @Query("""
+//    SELECT TOP 5 sp.ten, SUM(hdct.soLuong) AS tong_so_luong
+//    FROM HoaDonChiTiet hdct
+//    JOIN SanPhamChiTiet spct ON hdct.idSpct = spct.id
+//    JOIN SanPham sp ON spct.idSanPham = sp.id
+//    GROUP BY sp.ten
+//    ORDER BY tong_so_luong DESC
+//""", nativeQuery = true)
+//    List<Object[]> top5SanPham();
+
+
 
 
 
