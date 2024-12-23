@@ -8,6 +8,9 @@ import org.example.backend.dto.response.banHang.banHangClientResponse;
 import org.example.backend.dto.response.dotGiamGia.DotGiamGiaResponse;
 import org.example.backend.dto.response.sanPhamV2.SanPhamChiTietDTO;
 import org.example.backend.dto.response.sanPhamV2.SanPhamChiTietResponse;
+import org.example.backend.models.DanhMuc;
+import org.example.backend.models.DeGiay;
+import org.example.backend.models.Hang;
 import org.example.backend.models.MauSac;
 import org.example.backend.models.PhieuGiamGia;
 import org.example.backend.models.SanPham;
@@ -29,6 +32,13 @@ import java.util.stream.Collectors;
 
 @Service
 public class SanPhamChiTietService extends GenericServiceImpl<SanPhamChiTiet, UUID> {
+    @Autowired
+    private HangRepository hangRepository;
+    @Autowired
+    private DeGiayRepository deGiayRepository;
+    @Autowired
+    private DanhMucRepository danhMucRepository;
+
     public SanPhamChiTietService(JpaRepository<SanPhamChiTiet, UUID> repository, SanPhamChiTietRepository SPCTRepository) {
         super(repository);
         this.SPCTRepository = SPCTRepository;
@@ -93,15 +103,20 @@ public class SanPhamChiTietService extends GenericServiceImpl<SanPhamChiTiet, UU
 
     public List<SanPhamChiTiet> generateSanPhamChiTiet(SanPhamChiTietRequest request) {
         List<SanPhamChiTiet> sanPhamChiTiets = new ArrayList<>();
-        MauSac mauSac = new MauSac();
+        Hang hang = hangRepository.findById(request.getHang()).orElse(null);
+        DeGiay deGiay = deGiayRepository.findById(request.getDeGiay()).orElse(null);
+        DanhMuc danhMuc = danhMucRepository.findById(request.getDanhMuc()).orElse(null);
         for (UUID mauSacId : request.getMauSacIds()) {
             for (UUID kichThuocId : request.getKichThuocIds()) {
                 SanPhamChiTiet chiTiet = new SanPhamChiTiet();
                 chiTiet.setIdSanPham(sanPhamRepository.findById(request.getIdSanPham()).orElse(null));
                 chiTiet.setIdMauSac(mauSacRepository.findById(mauSacId).orElse(null));
                 chiTiet.setIdKichThuoc(kichThuocRepository.findById(kichThuocId).orElse(null));
-//                chiTiet.setGiaBan(request.getGiaBan());
-//                chiTiet.setGiaNhap(request.getGiaNhap());
+                chiTiet.setGiaBan(request.getGiaBan());
+                chiTiet.setSoLuong(request.getSoLuong());
+                chiTiet.setIdHang(hang);
+                chiTiet.setIdDeGiay(deGiay);
+                chiTiet.setIdDanhMuc(danhMuc);
                 chiTiet.setMoTa(request.getMoTa());
                 chiTiet.setTen(chiTiet.getIdSanPham().getTen()+" "+chiTiet.getIdKichThuoc().getTen()+" "+chiTiet.getIdMauSac().getTen());
                 sanPhamChiTiets.add(chiTiet);
